@@ -5,16 +5,18 @@ import (
 	"log"
 	"math"
 	"math/big"
+	"strings"
 
 	"github.com/gitchander/gobal3/bal3"
 	"github.com/gitchander/gobal3/bal3/utils/random"
 )
 
 func main() {
-	testInc()
-	testBounds()
-	testQuoRemT32Random()
-	testToString()
+	// testInc()
+	// testBounds()
+	// testQuoRemT32Random()
+	// testToString()
+	testLogicTable()
 }
 
 func checkError(err error) {
@@ -253,4 +255,104 @@ func bitsOpAdd3(a, b, c int) (hi, lo int) {
 	_ = hi3
 
 	return lo3, lo2
+}
+
+var (
+	amin = bal3.AntiMin
+	amax = bal3.AntiMax
+)
+
+func testLogicTable() {
+
+	f := func(a, b int) int {
+
+		//return bal3.Neg(a)
+		//return bal3.AminCore{}.Neg(a)
+		//return bal3.AmaxCore{}.Neg(a)
+
+		//return bal3.Min(a, b)
+		//return bal3.AminCore{}.Min(a, b)
+		//return bal3.AmaxCore{}.Min(a, b)
+
+		//return bal3.Max(a, b)
+		//return bal3.AminCore{}.Max(a, b)
+		//return bal3.AmaxCore{}.Max(a, b)
+
+		//return bal3.Xor(a, b)
+		//return bal3.AminCore{}.Xor(a, b)
+		return bal3.AmaxCore{}.Xor(a, b)
+	}
+
+	s := formatLogicTable("// ", f)
+	fmt.Println(s)
+}
+
+// // Use only Nand:
+// func Not(a bool) bool {
+// 	return Nand(a, a)
+// }
+
+// func Or(a, b bool) bool {
+// 	return Nand(Nand(a, a), Nand(b, b))
+// }
+
+// func And(a, b bool) bool {
+// 	return Nand(Nand(a, b), Nand(a, b))
+// }
+
+// func Xor(a, b bool) bool {
+// 	return Nand(Nand(Nand(a, a), b), Nand(a, Nand(b, b)))
+// }
+
+func formatLogicTable(prefix string, f bal3.BinaryFunc) string {
+
+	const n = 3
+
+	var (
+		vs    = [n]int{-1, 0, 1}
+		chars = []byte("T01")
+	)
+	tritChar := func(t int) byte {
+		return chars[t+1]
+	}
+
+	var br strings.Builder
+	var frameLine string
+
+	// make frameLine
+	{
+		fmt.Fprintf(&br, "%s+---+", prefix)
+		for j := 0; j < n; j++ {
+			fmt.Fprintf(&br, "---+")
+		}
+		br.WriteByte('\n')
+		frameLine = br.String()
+		br.Reset()
+	}
+
+	// write b values
+	{
+		br.WriteString(frameLine)
+		fmt.Fprintf(&br, "%s| %c |", prefix, ' ')
+		for j := 0; j < n; j++ {
+			b := vs[j]
+			fmt.Fprintf(&br, " %c |", tritChar(b))
+		}
+		br.WriteByte('\n')
+		br.WriteString(frameLine)
+	}
+
+	for i := 0; i < n; i++ {
+		a := vs[i]
+		fmt.Fprintf(&br, "%s| %c |", prefix, tritChar(a))
+		for j := 0; j < n; j++ {
+			b := vs[j]
+			c := f(a, b)
+			fmt.Fprintf(&br, " %c |", tritChar(c))
+		}
+		br.WriteByte('\n')
+		br.WriteString(frameLine)
+	}
+
+	return br.String()
 }

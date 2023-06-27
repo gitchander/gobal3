@@ -72,7 +72,32 @@ var _ UnaryFunc = Neg
 
 //------------------------------------------------------------------------------
 
-// Max table
+// "Min" or "And"
+
+// Min table:
+
+// +---+---+---+---+
+// |   | T | 0 | 1 |
+// +---+---+---+---+
+// | T | T | T | T |
+// +---+---+---+---+
+// | 0 | T | 0 | 0 |
+// +---+---+---+---+
+// | 1 | T | 0 | 1 |
+// +---+---+---+---+
+
+func Min(a, b int) int {
+	checkTrits(a, b)
+	return minInt(a, b)
+}
+
+var _ BinaryFunc = Min
+
+//------------------------------------------------------------------------------
+
+// "Max" or "Or"
+
+// Max table:
 
 // +---+---+---+---+
 // |   | T | 0 | 1 |
@@ -93,21 +118,123 @@ var _ BinaryFunc = Max
 
 //------------------------------------------------------------------------------
 
-// Min table
+// AntiMin table:
 
 // +---+---+---+---+
 // |   | T | 0 | 1 |
 // +---+---+---+---+
-// | T | T | T | T |
+// | T | 1 | 1 | 1 |
 // +---+---+---+---+
-// | 0 | T | 0 | 0 |
+// | 0 | 1 | 0 | 0 |
+// +---+---+---+---+
+// | 1 | 1 | 0 | T |
+// +---+---+---+---+
+
+func AntiMin(a, b int) int {
+	return Neg(Min(a, b))
+}
+
+var _ BinaryFunc = AntiMin
+
+//------------------------------------------------------------------------------
+
+// AntiMax table
+
+// +---+---+---+---+
+// |   | T | 0 | 1 |
+// +---+---+---+---+
+// | T | 1 | 0 | T |
+// +---+---+---+---+
+// | 0 | 0 | 0 | T |
+// +---+---+---+---+
+// | 1 | T | T | T |
+// +---+---+---+---+
+
+func AntiMax(a, b int) int {
+	return Neg(Max(a, b))
+}
+
+var _ BinaryFunc = AntiMax
+
+//------------------------------------------------------------------------------
+
+// Exclusive Or
+
+// +---+---+---+---+
+// |   | T | 0 | 1 |
+// +---+---+---+---+
+// | T | T | 0 | 1 |
+// +---+---+---+---+
+// | 0 | 0 | 0 | 0 |
+// +---+---+---+---+
+// | 1 | 1 | 0 | T |
+// +---+---+---+---+
+
+// For binary logic: XOR = Nand(Nand(Nand(a, a), b), Nand(a, Nand(b, b)))
+
+func Xor(a, b int) int {
+	amin := AntiMin
+	return amin(amin(amin(a, a), b), amin(a, amin(b, b)))
+}
+
+//------------------------------------------------------------------------------
+
+// Implication for Kleene logic
+
+// +---+---+---+---+
+// |   | T | 0 | 1 |
+// +---+---+---+---+
+// | T | 1 | 1 | 1 |
+// +---+---+---+---+
+// | 0 | 0 | 0 | 1 |
 // +---+---+---+---+
 // | 1 | T | 0 | 1 |
 // +---+---+---+---+
 
-func Min(a, b int) int {
-	checkTrits(a, b)
-	return minInt(a, b)
+func Imp(a, b int) int {
+	return Max(Neg(a), b)
 }
 
-var _ BinaryFunc = Min
+//------------------------------------------------------------------------------
+
+type AminCore struct{}
+
+var amin = AntiMin
+
+func (AminCore) Neg(a int) int {
+	return amin(a, a)
+}
+
+func (AminCore) Min(a, b int) int {
+	return amin(amin(a, b), amin(a, b))
+}
+
+func (AminCore) Max(a, b int) int {
+	return amin(amin(a, a), amin(b, b))
+}
+
+func (AminCore) Xor(a, b int) int {
+	return amin(amin(amin(a, a), b), amin(a, amin(b, b)))
+}
+
+//------------------------------------------------------------------------------
+
+type AmaxCore struct{}
+
+var amax = AntiMax
+
+func (AmaxCore) Neg(a int) int {
+	return amax(a, a)
+}
+
+func (AmaxCore) Min(a, b int) int {
+	return amax(amax(a, a), amax(b, b))
+}
+
+func (AmaxCore) Max(a, b int) int {
+	return amax(amax(a, b), amax(a, b))
+}
+
+func (AmaxCore) Xor(a, b int) int {
+	return amax(amax(a, b), amax(amax(a, a), amax(b, b)))
+}
