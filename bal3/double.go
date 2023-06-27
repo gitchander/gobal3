@@ -2,12 +2,12 @@ package bal3
 
 //------------------------------------------------------------------------------
 
-type Double[T Unsigned] struct {
+type double[T Unsigned] struct {
 	Hi, Lo T
 }
 
-func MakeDouble[T Unsigned](hi, lo T) Double[T] {
-	return Double[T]{
+func makeDouble[T Unsigned](hi, lo T) double[T] {
+	return double[T]{
 		Hi: hi,
 		Lo: lo,
 	}
@@ -15,12 +15,12 @@ func MakeDouble[T Unsigned](hi, lo T) Double[T] {
 
 //------------------------------------------------------------------------------
 
-type DoubleCore[T Unsigned] struct {
+type doubleCore[T Unsigned] struct {
 	tc TryteCore[T]
 }
 
-func MakeDoubleCore[T Unsigned](tc TryteCore[T]) DoubleCore[T] {
-	return DoubleCore[T]{
+func makeDoubleCore[T Unsigned](tc TryteCore[T]) doubleCore[T] {
+	return doubleCore[T]{
 		tc: tc,
 	}
 }
@@ -28,33 +28,33 @@ func MakeDoubleCore[T Unsigned](tc TryteCore[T]) DoubleCore[T] {
 //------------------------------------------------------------------------------
 
 // TotalTrits returns the total number of trits.
-func (dc DoubleCore[T]) TotalTrits() int {
+func (dc doubleCore[T]) TotalTrits() int {
 	return 2 * dc.tc.n
 }
 
 //------------------------------------------------------------------------------
 
-func (dc DoubleCore[T]) wantShl(a Double[T], i int) Double[T] {
+func (dc doubleCore[T]) wantShl(a double[T], i int) double[T] {
 	checkShiftAmount(i)
 	m := dc.TotalTrits()
-	var b Double[T]
+	var b double[T]
 	for j := i; j < m; j++ {
 		b = dc.SetTrit(b, j, dc.GetTrit(a, j-i))
 	}
 	return b
 }
 
-func (dc DoubleCore[T]) wantShr(a Double[T], i int) Double[T] {
+func (dc doubleCore[T]) wantShr(a double[T], i int) double[T] {
 	checkShiftAmount(i)
 	m := dc.TotalTrits()
-	var b Double[T]
+	var b double[T]
 	for j := m - 1 - i; j >= 0; j-- {
 		b = dc.SetTrit(b, j, dc.GetTrit(a, j+i))
 	}
 	return b
 }
 
-func (dc DoubleCore[T]) Shl(a Double[T], i int) Double[T] {
+func (dc doubleCore[T]) Shl(a double[T], i int) double[T] {
 	checkShiftAmount(i)
 	var (
 		tc = dc.tc
@@ -71,10 +71,10 @@ func (dc DoubleCore[T]) Shl(a Double[T], i int) Double[T] {
 	default:
 		// set zero
 	}
-	return MakeDouble(hi, lo)
+	return makeDouble(hi, lo)
 }
 
-func (dc DoubleCore[T]) Shr(a Double[T], i int) Double[T] {
+func (dc doubleCore[T]) Shr(a double[T], i int) double[T] {
 	checkShiftAmount(i)
 	var (
 		tc = dc.tc
@@ -91,12 +91,12 @@ func (dc DoubleCore[T]) Shr(a Double[T], i int) Double[T] {
 	default:
 		// set zero
 	}
-	return MakeDouble(hi, lo)
+	return makeDouble(hi, lo)
 }
 
 //------------------------------------------------------------------------------
 
-func (dc DoubleCore[T]) SetTrit(a Double[T], i int, t int) Double[T] {
+func (dc doubleCore[T]) SetTrit(a double[T], i int, t int) double[T] {
 	var (
 		tc = dc.tc
 		n  = tc.n
@@ -110,7 +110,7 @@ func (dc DoubleCore[T]) SetTrit(a Double[T], i int, t int) Double[T] {
 	return a
 }
 
-func (dc DoubleCore[T]) GetTrit(a Double[T], i int) int {
+func (dc doubleCore[T]) GetTrit(a double[T], i int) int {
 	var (
 		tc = dc.tc
 		n  = tc.n
@@ -125,15 +125,15 @@ func (dc DoubleCore[T]) GetTrit(a Double[T], i int) int {
 	return t
 }
 
-func (dc DoubleCore[T]) FromInt(v int) Double[T] {
+func (dc doubleCore[T]) FromInt(v int) double[T] {
 	tc := dc.tc
 	var lo, hi T
 	lo, v = tc.FromIntRest(v)
 	hi, v = tc.FromIntRest(v)
-	return MakeDouble(hi, lo)
+	return makeDouble(hi, lo)
 }
 
-func (dc DoubleCore[T]) ToInt(a Double[T]) int {
+func (dc doubleCore[T]) ToInt(a double[T]) int {
 	tc := dc.tc
 	var (
 		hi = tc.ToInt(a.Hi)
@@ -142,7 +142,7 @@ func (dc DoubleCore[T]) ToInt(a Double[T]) int {
 	return hi*powersOfThree[tc.n] + lo
 }
 
-func (dc DoubleCore[T]) ToStringAll(a Double[T]) string {
+func (dc doubleCore[T]) ToStringAll(a double[T]) string {
 	tc := dc.tc
 	var (
 		hi = tc.FormatAllTrits(a.Hi)
@@ -151,9 +151,9 @@ func (dc DoubleCore[T]) ToStringAll(a Double[T]) string {
 	return hi + "_" + lo
 }
 
-func (dc DoubleCore[T]) Invert(a Double[T]) Double[T] {
+func (dc doubleCore[T]) Invert(a double[T]) double[T] {
 	tc := dc.tc
-	return Double[T]{
+	return double[T]{
 		Hi: tc.Invert(a.Hi),
 		Lo: tc.Invert(a.Lo),
 	}
@@ -161,7 +161,7 @@ func (dc DoubleCore[T]) Invert(a Double[T]) Double[T] {
 
 //------------------------------------------------------------------------------
 
-func (dc DoubleCore[T]) Compare(a, b Double[T]) int {
+func (dc doubleCore[T]) Compare(a, b double[T]) int {
 	tc := dc.tc
 	c := tc.Compare(a.Hi, b.Hi)
 	if c != 0 {
@@ -171,23 +171,23 @@ func (dc DoubleCore[T]) Compare(a, b Double[T]) int {
 }
 
 // a == n
-func (dc DoubleCore[T]) Equal(a, b Double[T]) bool {
+func (dc doubleCore[T]) Equal(a, b double[T]) bool {
 	return dc.Compare(a, b) == 0
 }
 
 // a < b
-func (dc DoubleCore[T]) Less(a, b Double[T]) bool {
+func (dc doubleCore[T]) Less(a, b double[T]) bool {
 	return dc.Compare(a, b) == -1
 }
 
 // a > b
-func (dc DoubleCore[T]) Greater(a, b Double[T]) bool {
+func (dc doubleCore[T]) Greater(a, b double[T]) bool {
 	return dc.Compare(a, b) == 1
 }
 
 //------------------------------------------------------------------------------
 
-func (dc DoubleCore[T]) Sign(x Double[T]) int {
+func (dc doubleCore[T]) Sign(x double[T]) int {
 	tc := dc.tc
 	sign := tc.Sign(x.Hi)
 	if sign != 0 {
@@ -198,40 +198,44 @@ func (dc DoubleCore[T]) Sign(x Double[T]) int {
 
 //------------------------------------------------------------------------------
 
-func (dc DoubleCore[T]) Rand(r *Rand) Double[T] {
+func (dc doubleCore[T]) Rand(r *Rand) double[T] {
 	tc := dc.tc
-	return Double[T]{
+	return double[T]{
 		Hi: tc.RandSh(r),
 		Lo: tc.RandSh(r),
 	}
 }
 
-func (dc DoubleCore[T]) RandSh(r *Rand) Double[T] {
+func (dc doubleCore[T]) RandSh(r *Rand) double[T] {
 	a := dc.Rand(r)
 	return dc.Shr(a, r.Intn(dc.TotalTrits()))
 }
 
 //------------------------------------------------------------------------------
 
-func (dc DoubleCore[T]) Add(a, b Double[T], carryIn int) (c Double[T], carryOut int) {
+func (dc doubleCore[T]) Add(a, b double[T], carryIn int) (c double[T], carryOut int) {
 	tc := dc.tc
 	var lo, hi T
 	carry := carryIn
 	lo, carry = tc.Add(a.Lo, b.Lo, carry)
 	hi, carry = tc.Add(a.Hi, b.Hi, carry)
-	return MakeDouble(hi, lo), carry
+	return makeDouble(hi, lo), carry
 }
 
-func (dc DoubleCore[T]) Sub(a, b Double[T], carryIn int) (c Double[T], carryOut int) {
+func (dc doubleCore[T]) Sub(a, b double[T], carryIn int) (c double[T], carryOut int) {
 	tc := dc.tc
 	var lo, hi T
 	carry := carryIn
 	lo, carry = tc.Sub(a.Lo, b.Lo, carry)
 	hi, carry = tc.Sub(a.Hi, b.Hi, carry)
-	return MakeDouble(hi, lo), carry
+	return makeDouble(hi, lo), carry
 }
 
-func (dc DoubleCore[T]) Mul(a, b Double[T]) (hi, lo Double[T]) {
+func (dc doubleCore[T]) Bounds() (min, max int) {
+	return tryteBounds(dc.TotalTrits())
+}
+
+func (dc doubleCore[T]) Mul(a, b double[T]) (hi, lo double[T]) {
 
 	tc := dc.tc
 
@@ -259,12 +263,8 @@ func (dc DoubleCore[T]) Mul(a, b Double[T]) (hi, lo Double[T]) {
 	a2, carry = tc.Add(a2, lo_11, carry)
 	a3, carry = tc.Add(a3, 0, carry)
 
-	hi = MakeDouble(a3, a2)
-	lo = MakeDouble(a1, a0)
+	hi = makeDouble(a3, a2)
+	lo = makeDouble(a1, a0)
 
 	return
-}
-
-func (dc DoubleCore[T]) Bounds() (min, max int) {
-	return tryteBounds(dc.TotalTrits())
 }

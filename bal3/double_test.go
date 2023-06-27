@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func testDoubleAdd[T Unsigned](dc DoubleCore[T], a, b Double[T], carryIn int) error {
+func testDoubleAdd[T Unsigned](dc doubleCore[T], a, b double[T], carryIn int) error {
 
 	hiFactor := powersOfThree[2*dc.tc.n]
 
@@ -22,7 +22,7 @@ func testDoubleAdd[T Unsigned](dc DoubleCore[T], a, b Double[T], carryIn int) er
 	return nil
 }
 
-func testDoubleSub[T Unsigned](dc DoubleCore[T], a, b Double[T], carryIn int) error {
+func testDoubleSub[T Unsigned](dc doubleCore[T], a, b double[T], carryIn int) error {
 
 	hiFactor := powersOfThree[2*dc.tc.n]
 
@@ -39,7 +39,7 @@ func testDoubleSub[T Unsigned](dc DoubleCore[T], a, b Double[T], carryIn int) er
 	return nil
 }
 
-func testDoubleAddSub[T Unsigned](dc DoubleCore[T], a, b Double[T], carryIn int) error {
+func testDoubleAddSub[T Unsigned](dc doubleCore[T], a, b double[T], carryIn int) error {
 	err := testDoubleAdd(dc, a, b, carryIn)
 	if err != nil {
 		return err
@@ -53,7 +53,7 @@ func TestDoubleShl(t *testing.T) {
 
 	var (
 		tc = T8C
-		dc = MakeDoubleCore(tc)
+		dc = makeDoubleCore(tc)
 	)
 
 	r := newRandNext()
@@ -77,7 +77,7 @@ func TestDoubleShr(t *testing.T) {
 
 	var (
 		tc = T8C
-		dc = MakeDoubleCore(tc)
+		dc = makeDoubleCore(tc)
 	)
 
 	r := newRandNext()
@@ -103,7 +103,7 @@ func TestDoubleAddT8(t *testing.T) {
 
 	var (
 		tc = T8C
-		dc = MakeDoubleCore(tc)
+		dc = makeDoubleCore(tc)
 	)
 
 	for i := 0; i < 1000; i++ {
@@ -125,7 +125,7 @@ func TestDoubleSubT8(t *testing.T) {
 
 	var (
 		tc = T8C
-		dc = MakeDoubleCore(tc)
+		dc = makeDoubleCore(tc)
 	)
 
 	for i := 0; i < 1000; i++ {
@@ -147,7 +147,7 @@ func TestDoubleAddSubT8Samples(t *testing.T) {
 
 	var (
 		tc = T8C
-		dc = MakeDoubleCore(tc)
+		dc = makeDoubleCore(tc)
 	)
 
 	minInt, maxInt := dc.Bounds()
@@ -157,8 +157,8 @@ func TestDoubleAddSubT8Samples(t *testing.T) {
 	)
 
 	type sample[T Unsigned] struct {
-		a Double[T]
-		b Double[T]
+		a double[T]
+		b double[T]
 	}
 	samples := []sample[tritsType]{
 		{a: min, b: min},
@@ -177,7 +177,7 @@ func TestDoubleAddSubT8Samples(t *testing.T) {
 	}
 }
 
-func testDoubleMul[T Unsigned](dc DoubleCore[T], a, b Double[T]) error {
+func testDoubleMul[T Unsigned](dc doubleCore[T], a, b double[T]) error {
 
 	hi, lo := dc.Mul(a, b)
 
@@ -195,7 +195,7 @@ func testDoubleMul[T Unsigned](dc DoubleCore[T], a, b Double[T]) error {
 }
 
 func testDoubleMulRand[T Unsigned](tc TryteCore[T]) error {
-	dc := MakeDoubleCore(tc)
+	dc := makeDoubleCore(tc)
 	r := newRandNext()
 	for i := 0; i < 1000; i++ {
 		var (

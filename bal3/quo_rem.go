@@ -219,37 +219,37 @@ func tryteQuoRem[T Unsigned](tc TryteCore[T], a, b T) (q, r T) {
 //------------------------------------------------------------------------------
 
 type divParams[T Unsigned] struct {
-	dc DoubleCore[T]
+	dc doubleCore[T]
 
-	d   Double[T] // d - divisor: { hi: 0, lo: b }
-	hd  Double[T] // hd - half divisor (d/2)
-	hdi Double[T] // hdi - half divisor invert (-d/2)
+	d   double[T] // d - divisor: { hi: 0, lo: b }
+	hd  double[T] // hd - half divisor (d/2)
+	hdi double[T] // hdi - half divisor invert (-d/2)
 
 	signD int
 
-	r Double[T]
+	r double[T]
 }
 
 func makeDivParams[T Unsigned](tc TryteCore[T], a, b T) *divParams[T] {
 
-	dc := MakeDoubleCore[T](tc)
+	dc := makeDoubleCore[T](tc)
 
 	var (
-		r = MakeDouble[T](0, a)
-		d = MakeDouble[T](0, b)
+		r = makeDouble[T](0, a)
+		d = makeDouble[T](0, b)
 	)
 
 	var (
 		//		d   Double[T] // d - divisor: { hi: 0, lo: b }
-		hd  Double[T] // hd - half divisor (d/2)
-		hdi Double[T] // hdi - half divisor invert (-d/2)
+		hd  double[T] // hd - half divisor (d/2)
+		hdi double[T] // hdi - half divisor invert (-d/2)
 	)
 
 	// 0.5_base10 = (0.1111111...)_bal3
 
 	// |<---n--->|<---n--->|
 	// |000...000,111...111|
-	factor := MakeDouble(0, tc.SetAllTrits(1)) // set lo n trits.
+	factor := makeDouble(0, tc.SetAllTrits(1)) // set lo n trits.
 
 	//      |<---n--->|
 	// d * 0,111...111|000...
@@ -381,21 +381,21 @@ func correctionQuoRemV1[T Unsigned](tc TryteCore[T], a, b T, q, r T) (cq, cr T) 
 	)
 	if (signA == 1) && (signR == -1) { // (a > 0) && (r < 0)
 		if signB == 1 { // b > 0
-			q, _ = tc.Sub(q, one, 0)
+			q, _ = tc.Sub(q, one, 0) // q -= 1
 			r, _ = tc.Add(r, b, 0)
 		}
 		if signB == -1 { // b < 0
-			q, _ = tc.Add(q, one, 0)
+			q, _ = tc.Add(q, one, 0) // q += 1
 			r, _ = tc.Sub(r, b, 0)
 		}
 	}
 	if (signA == -1) && (signR == 1) { // (a < 0) && (r > 0)
 		if signB == 1 { // b > 0
-			q, _ = tc.Add(q, one, 0)
+			q, _ = tc.Add(q, one, 0) // q += 1
 			r, _ = tc.Sub(r, b, 0)
 		}
 		if signB == -1 { // b < 0
-			q, _ = tc.Sub(q, one, 0)
+			q, _ = tc.Sub(q, one, 0) // q -= 1
 			r, _ = tc.Add(r, b, 0)
 		}
 	}
@@ -412,7 +412,7 @@ func correctionQuoRemV2[T Unsigned](tc TryteCore[T], a, b T, q, r T) (cq, cr T) 
 
 	if (signA == 1) && (signR == -1) { // (a > 0) && (r < 0)
 		if signB == 1 { // b > 0
-			q, _ = tc.Add(q, 0, -1) // q -= 1
+			q, _ = tc.Sub(q, 0, -1) // q -= 1
 			r, _ = tc.Add(r, b, 0)
 		}
 		if signB == -1 { // b < 0
@@ -427,81 +427,15 @@ func correctionQuoRemV2[T Unsigned](tc TryteCore[T], a, b T, q, r T) (cq, cr T) 
 			r, _ = tc.Sub(r, b, 0)
 		}
 		if signB == -1 { // b < 0
-			q, _ = tc.Add(q, 0, -1) // q -= 1
+			q, _ = tc.Sub(q, 0, -1) // q -= 1
 			r, _ = tc.Add(r, b, 0)
 		}
 	}
-
-	return q, r
-}
-
-func correctionQuoRemV3[T Unsigned](tc TryteCore[T], a, b T, q, r T) (cq, cr T) {
-
-	one := tc.FromInt(1)
-
-	var (
-		signA = tc.Sign(a)
-		signB = tc.Sign(b)
-		signR = tc.Sign(r)
-	)
-
-	// if (signA == 1) && (signR == -1) { // (a > 0) && (r < 0)
-	// 	if signB == 1 { // b > 0
-	// 		q, _ = tc.Sub(q, one, 0) // q -= 1
-	// 		r, _ = tc.Add(r, b, 0)
-	// 	}
-	// 	if signB == -1 { // b < 0
-	// 		q, _ = tc.Add(q, one, 0) // q += 1
-	// 		r, _ = tc.Sub(r, b, 0)
-	// 	}
-	// }
-
-	// if (signA == -1) && (signR == 1) { // (a < 0) && (r > 0)
-	// 	if signB == 1 { // b > 0
-	// 		q, _ = tc.Add(q, one, 0) // q += 1
-	// 		r, _ = tc.Sub(r, b, 0)
-	// 	}
-	// 	if signB == -1 { // b < 0
-	// 		q, _ = tc.Sub(q, one, 0) // q -= 1
-	// 		r, _ = tc.Add(r, b, 0)
-	// 	}
-	// }
-	// return q, r
-
-	//--------------------------------------------------------------------------
-
-	var dq, dr T
-
-	if (signA == 1) && (signR == -1) { // (a > 0) && (r < 0)
-		if signB == 1 { // b > 0
-			dq = tc.Invert(one) // -1
-			dr = b
-		}
-		if signB == -1 { // b < 0
-			dq = one
-			dr = tc.Invert(b)
-		}
-	}
-
-	if (signA == -1) && (signR == 1) { // (a < 0) && (r > 0)
-		if signB == 1 { // b > 0
-			dq = one
-			dr = tc.Invert(b)
-		}
-		if signB == -1 { // b < 0
-			dq = tc.Invert(one) // -1
-			dr = b
-		}
-	}
-
-	q, _ = tc.Add(q, dq, 0)
-	r, _ = tc.Add(r, dr, 0)
 
 	return q, r
 }
 
 func correctionQuoRem[T Unsigned](tc TryteCore[T], a, b T, q, r T) (cq, cr T) {
-	//return correctionQuoRemV1(tc, a, b, q, r)
+	return correctionQuoRemV1(tc, a, b, q, r)
 	//return correctionQuoRemV2(tc, a, b, q, r)
-	return correctionQuoRemV3(tc, a, b, q, r)
 }

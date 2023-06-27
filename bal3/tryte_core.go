@@ -266,15 +266,13 @@ func (tc TryteCore[T]) Sub(x, y T, carryIn int) (res T, carryOut int) {
 	return res, carry
 }
 
-//------------------------------------------------------------------------------
-
 func (tc TryteCore[T]) Mul(a, b T) (hi, lo T) {
 	for i := 0; i < tc.n; i++ {
 		ai := tc.getTrit(a, i)
 		var w T
 		for j := 0; j < tc.n; j++ {
 			bj := tc.getTrit(b, j)
-			w = tc.setTrit(w, j, tritsOpMul(ai, bj))
+			w = tc.setTrit(w, j, tritsMul(ai, bj))
 		}
 		var (
 			wLo   = tc.Shl(w, i)          // w << i
@@ -293,7 +291,7 @@ func (tc TryteCore[T]) MulLo(a, b T) (lo T) {
 		var w T
 		for j := 0; j < tc.n; j++ {
 			bj := tc.getTrit(b, j)
-			w = tc.setTrit(w, j, tritsOpMul(ai, bj))
+			w = tc.setTrit(w, j, tritsMul(ai, bj))
 		}
 		var (
 			wLo   = tc.Shl(w, i) // w << i
@@ -325,7 +323,7 @@ func (tc TryteCore[T]) RandSh(r *Rand) T {
 	return tc.Shr(a, r.Intn(tc.n))
 }
 
-// ------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 // big.BitLen(), TritLen()
 
@@ -342,6 +340,33 @@ func (tc TryteCore[T]) Len(x T) int {
 
 func (tc TryteCore[T]) Bounds() (min, max int) {
 	return tryteBounds(tc.TotalTrits())
+}
+
+//------------------------------------------------------------------------------
+
+func (tc TryteCore[T]) DoUnary(a T, f UnaryFunc) T {
+	var b T
+	for i := 0; i < tc.n; i++ {
+		var (
+			ai = tc.getTrit(a, i)
+			t  = f(ai)
+		)
+		b = tc.setTrit(b, i, t)
+	}
+	return b
+}
+
+func (tc TryteCore[T]) DoBinary(a, b T, f BinaryFunc) T {
+	var c T
+	for i := 0; i < tc.n; i++ {
+		var (
+			ai = tc.getTrit(a, i)
+			bi = tc.getTrit(b, i)
+			t  = f(ai, bi)
+		)
+		c = tc.setTrit(c, i, t)
+	}
+	return c
 }
 
 //------------------------------------------------------------------------------
