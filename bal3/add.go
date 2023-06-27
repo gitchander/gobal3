@@ -53,12 +53,7 @@ func tritsSumSplit(v int) (hi, lo int) {
 // +----+----+----+----+
 
 func halfAdd(a, b int) (s, c int) {
-
-	hi, lo := tritsSumSplit(a + b)
-
-	s = lo
-	c = hi
-
+	c, s = tritsSumSplit(a + b)
 	return
 }
 
@@ -77,34 +72,25 @@ func halfAdd(a, b int) (s, c int) {
 // +----+----+----+----+
 
 func halfSub(a, b int) (s, c int) {
-
-	hi, lo := tritsSumSplit(a - b)
-
-	s = lo
-	c = hi
-
+	c, s = tritsSumSplit(a - b)
 	return
 }
 
 //------------------------------------------------------------------------------
 
-func tritsAdd_v1(a, b int, c0 int) (s, c1 int) {
-	hi, lo := tritsSumSplit((a + b) + c0)
-	s = lo
-	c1 = hi
+func tritsAddV1(a, b int, c0 int) (s, c1 int) {
+	c1, s = tritsSumSplit((a + b) + c0)
 	return
 }
 
-func tritsSub_v1(a, b int, c0 int) (s, c1 int) {
-	hi, lo := tritsSumSplit((a - b) + c0)
-	s = lo
-	c1 = hi
+func tritsSubV1(a, b int, c0 int) (s, c1 int) {
+	c1, s = tritsSumSplit((a - b) + c0)
 	return
 }
 
 //------------------------------------------------------------------------------
 
-func tritsAdd_v2(a, b int, c0 int) (s, c1 int) {
+func tritsAddV2(a, b int, c0 int) (s, c1 int) {
 
 	var (
 		s1, x1 = halfAdd(a, b)
@@ -120,7 +106,7 @@ func tritsAdd_v2(a, b int, c0 int) (s, c1 int) {
 	return
 }
 
-func tritsSub_v2(a, b int, c0 int) (s, c1 int) {
+func tritsSubV2(a, b int, c0 int) (s, c1 int) {
 
 	var (
 		s1, x1 = halfSub(a, b)
@@ -138,14 +124,28 @@ func tritsSub_v2(a, b int, c0 int) (s, c1 int) {
 
 //------------------------------------------------------------------------------
 
+func tritsAddV3(a, b int, c0 int) (s, c1 int) {
+	return fullAdder(a, b, c0)
+}
+
+func tritsSubV3(a, b int, c0 int) (s, c1 int) {
+	b = invertTrit(b)
+	return fullAdder(a, b, c0)
+}
+
+//------------------------------------------------------------------------------
+
 // tritsAdd: (a + b) + carry
 // tritsSub: (a - b) + carry
 var (
-	// tritsAdd_ = tritsAdd_v1
-	// tritsSub_ = tritsSub_v1
+	// tritsAdd = tritsAddV1
+	// tritsSub = tritsSubV1
 
-	tritsAdd = tritsAdd_v2
-	tritsSub = tritsSub_v2
+	// tritsAdd = tritsAddV2
+	// tritsSub = tritsSubV2
+
+	tritsAdd = tritsAddV3
+	tritsSub = tritsSubV3
 )
 
 //------------------------------------------------------------------------------
@@ -179,7 +179,11 @@ var (
 // +---+---+---+---+
 
 func sum(a, b int) int {
-	return 0
+
+	// todo
+
+	_, lo := tritsSumSplit(a + b)
+	return lo
 }
 
 //------------------------------------------------------------------------------
@@ -197,7 +201,28 @@ func sum(a, b int) int {
 // +---+---+---+---+
 
 func cons(a, b int) int {
-	return 0
+
+	//---------------------------------------------------
+
+	// if (a == -1) && (b == -1) {
+	// 	return -1
+	// }
+
+	// if (a == 1) && (b == 1) {
+	// 	return 1
+	// }
+
+	//return 0
+
+	//---------------------------------------------------
+
+	// & - MIN or AND
+	// | - MAX or OR
+	// (a & b) | ((a != -1) & 0) | ((b != -1) & 0)
+
+	return Max(Min(a, b), Max(Min(TritIsNot(a, -1), 0), Min(TritIsNot(b, -1), 0)))
+
+	//---------------------------------------------------
 }
 
 //------------------------------------------------------------------------------
@@ -221,17 +246,12 @@ func halfAdder(a, c0 int) (s, c1 int) {
 // c1 - carryOut
 
 func fullAdder(a, b, c0 int) (s, c1 int) {
-
 	var (
 		s1, x1 = halfAdder(a, b)
 		s2, x2 = halfAdder(s1, c0)
-		s3, x3 = halfAdder(x1, x2)
+		s3, _  = halfAdder(x1, x2)
 	)
-
-	_ = x3
-
 	s = s2
 	c1 = s3
-
 	return
 }

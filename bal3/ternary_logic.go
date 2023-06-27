@@ -138,7 +138,7 @@ var _ BinaryFunc = AntiMin
 
 //------------------------------------------------------------------------------
 
-// AntiMax table
+// AntiMax table:
 
 // +---+---+---+---+
 // |   | T | 0 | 1 |
@@ -158,6 +158,24 @@ var _ BinaryFunc = AntiMax
 
 //------------------------------------------------------------------------------
 
+// Decoders
+
+func TritIs(a int, v int) int {
+	if a == v {
+		return 1
+	}
+	return -1
+}
+
+func TritIsNot(a int, v int) int {
+	if a != v {
+		return 1
+	}
+	return -1
+}
+
+//------------------------------------------------------------------------------
+
 // Exclusive Or
 
 // +---+---+---+---+
@@ -173,8 +191,8 @@ var _ BinaryFunc = AntiMax
 // For binary logic: XOR = Nand(Nand(Nand(a, a), b), Nand(a, Nand(b, b)))
 
 func Xor(a, b int) int {
-	amin := AntiMin
-	return amin(amin(amin(a, a), b), amin(a, amin(b, b)))
+	return AminCore{}.Xor(a, b)
+	//return AmaxCore{}.Xor(a, b)
 }
 
 //------------------------------------------------------------------------------

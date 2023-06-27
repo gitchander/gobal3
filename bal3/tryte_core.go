@@ -249,6 +249,7 @@ func (tc TryteCore[T]) Shr(a T, i int) T {
 func (tc TryteCore[T]) Add(x, y T, carryIn int) (res T, carryOut int) {
 	var s int
 	carry := carryIn
+
 	for i := 0; i < tc.n; i++ {
 		s, carry = tritsAdd(tc.getTrit(x, i), tc.getTrit(y, i), carry)
 		res = tc.setTrit(res, i, s)
@@ -259,6 +260,7 @@ func (tc TryteCore[T]) Add(x, y T, carryIn int) (res T, carryOut int) {
 func (tc TryteCore[T]) Sub(x, y T, carryIn int) (res T, carryOut int) {
 	var s int
 	carry := carryIn
+
 	for i := 0; i < tc.n; i++ {
 		s, carry = tritsSub(tc.getTrit(x, i), tc.getTrit(y, i), carry)
 		res = tc.setTrit(res, i, s)

@@ -258,13 +258,41 @@ func bitsOpAdd3(a, b, c int) (hi, lo int) {
 }
 
 var (
+	neg  = bal3.Neg
+	min  = bal3.Min
+	max  = bal3.Max
 	amin = bal3.AntiMin
 	amax = bal3.AntiMax
 )
 
+// Decoders:
+
+func tritIsT(a int) int {
+	if a == -1 {
+		return 1
+	}
+	return -1
+}
+
+func tritIs0(a int) int {
+	if a == 0 {
+		return 1
+	}
+	return -1
+}
+
+func tritIs1(a int) int {
+	if a == 1 {
+		return 1
+	}
+	return -1
+}
+
 func testLogicTable() {
 
 	f := func(a, b int) int {
+
+		return max(min(a, b), max(min(neg(tritIsT(a)), 0), min(neg(tritIsT(b)), 0)))
 
 		//return bal3.Neg(a)
 		//return bal3.AminCore{}.Neg(a)
@@ -280,7 +308,7 @@ func testLogicTable() {
 
 		//return bal3.Xor(a, b)
 		//return bal3.AminCore{}.Xor(a, b)
-		return bal3.AmaxCore{}.Xor(a, b)
+		//return bal3.AmaxCore{}.Xor(a, b)
 	}
 
 	s := formatLogicTable("// ", f)
