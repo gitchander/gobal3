@@ -1,6 +1,10 @@
 package bal3
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/gitchander/gobal3/ternary"
+)
 
 // split sum of 4 trits
 
@@ -125,12 +129,12 @@ func tritsSubV2(a, b int, c0 int) (s, c1 int) {
 //------------------------------------------------------------------------------
 
 func tritsAddV3(a, b int, c0 int) (s, c1 int) {
-	return fullAdder(a, b, c0)
+	return ternary.FullAdder(a, b, c0)
 }
 
 func tritsSubV3(a, b int, c0 int) (s, c1 int) {
-	b = invertTrit(b)
-	return fullAdder(a, b, c0)
+	b = ternary.Neg(b)
+	return ternary.FullAdder(a, b, c0)
 }
 
 //------------------------------------------------------------------------------
@@ -149,109 +153,3 @@ var (
 )
 
 //------------------------------------------------------------------------------
-
-// http://homepage.divms.uiowa.edu/%7Ejones/ternary/arith.shtml
-
-// Add table
-
-// +----+----+----+----+
-// |    |  T |  0 |  1 |
-// +----+----+----+----+
-// |  T | T1 |  T |  0 |
-// +----+----+----+----+
-// |  0 |  T |  0 |  1 |
-// +----+----+----+----+
-// |  1 |  0 |  1 | 1T |
-// +----+----+----+----+
-
-//------------------------------------------------------------------------------
-
-// Sum table:
-
-// +---+---+---+---+
-// |   | T | 0 | 1 |
-// +---+---+---+---+
-// | T | 1 | T | 0 |
-// +---+---+---+---+
-// | 0 | T | 0 | 1 |
-// +---+---+---+---+
-// | 1 | 0 | 1 | T |
-// +---+---+---+---+
-
-func sum(a, b int) int {
-
-	// todo
-
-	_, lo := tritsSumSplit(a + b)
-	return lo
-}
-
-//------------------------------------------------------------------------------
-
-// Consider table:
-
-// +---+---+---+---+
-// |   | T | 0 | 1 |
-// +---+---+---+---+
-// | T | T | 0 | 0 |
-// +---+---+---+---+
-// | 0 | 0 | 0 | 0 |
-// +---+---+---+---+
-// | 1 | 0 | 0 | 1 |
-// +---+---+---+---+
-
-func cons(a, b int) int {
-
-	//---------------------------------------------------
-
-	// if (a == -1) && (b == -1) {
-	// 	return -1
-	// }
-
-	// if (a == 1) && (b == 1) {
-	// 	return 1
-	// }
-
-	//return 0
-
-	//---------------------------------------------------
-
-	// & - MIN or AND
-	// | - MAX or OR
-	// (a & b) | ((a != -1) & 0) | ((b != -1) & 0)
-
-	return Max(Min(a, b), Max(Min(TritIsNot(a, -1), 0), Min(TritIsNot(b, -1), 0)))
-
-	//---------------------------------------------------
-}
-
-//------------------------------------------------------------------------------
-
-// A balanced ternary half adder
-
-// c0 - carryIn
-// c1 - carryOut
-
-func halfAdder(a, c0 int) (s, c1 int) {
-	s = sum(a, c0)
-	c1 = cons(a, c0)
-	return
-}
-
-//------------------------------------------------------------------------------
-
-// Balanced Full Adder
-
-// c0 - carryIn
-// c1 - carryOut
-
-func fullAdder(a, b, c0 int) (s, c1 int) {
-	var (
-		s1, x1 = halfAdder(a, b)
-		s2, x2 = halfAdder(s1, c0)
-		s3, _  = halfAdder(x1, x2)
-	)
-	s = s2
-	c1 = s3
-	return
-}

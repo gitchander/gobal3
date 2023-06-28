@@ -2,6 +2,8 @@ package bal3
 
 import (
 	"fmt"
+
+	"github.com/gitchander/gobal3/ternary"
 )
 
 type TryteCore[T Unsigned] struct {
@@ -221,7 +223,7 @@ func (tc TryteCore[T]) MustParse(s string) T {
 func (tc TryteCore[T]) Invert(a T) (b T) {
 	for i := 0; i < tc.n; i++ {
 		t := tc.getTrit(a, i)
-		t = invertTrit(t)
+		t = ternary.Neg(t)
 		b = tc.setTrit(b, i, t)
 	}
 	return b
@@ -346,7 +348,7 @@ func (tc TryteCore[T]) Bounds() (min, max int) {
 
 //------------------------------------------------------------------------------
 
-func (tc TryteCore[T]) DoUnary(a T, f UnaryFunc) T {
+func (tc TryteCore[T]) DoUnary(a T, f ternary.UnaryFunc) T {
 	var b T
 	for i := 0; i < tc.n; i++ {
 		var (
@@ -358,7 +360,7 @@ func (tc TryteCore[T]) DoUnary(a T, f UnaryFunc) T {
 	return b
 }
 
-func (tc TryteCore[T]) DoBinary(a, b T, f BinaryFunc) T {
+func (tc TryteCore[T]) DoBinary(a, b T, f ternary.BinaryFunc) T {
 	var c T
 	for i := 0; i < tc.n; i++ {
 		var (

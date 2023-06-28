@@ -1,5 +1,9 @@
 package bal3
 
+import (
+	"github.com/gitchander/gobal3/ternary"
+)
+
 // Mul table
 
 // +---+---+---+---+
@@ -13,7 +17,6 @@ package bal3
 // +---+---+---+---+
 
 func tritsMul(a, b int) int {
-	return a * b
+	// return a * b
+	return ternary.NotXor(a, b)
 }
-
-var _ BinaryFunc = tritsMul

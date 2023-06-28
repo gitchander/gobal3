@@ -5,10 +5,10 @@ import (
 	"log"
 	"math"
 	"math/big"
-	"strings"
 
 	"github.com/gitchander/gobal3/bal3"
 	"github.com/gitchander/gobal3/bal3/utils/random"
+	"github.com/gitchander/gobal3/ternary"
 )
 
 func main() {
@@ -258,31 +258,24 @@ func bitsOpAdd3(a, b, c int) (hi, lo int) {
 }
 
 var (
-	neg  = bal3.Neg
-	min  = bal3.Min
-	max  = bal3.Max
-	amin = bal3.AntiMin
-	amax = bal3.AntiMax
+	neg  = ternary.Neg
+	min  = ternary.Min
+	max  = ternary.Max
+	amin = ternary.Amin
+	amax = ternary.Amax
 )
 
 // Decoders:
 
-func tritIsT(a int) int {
-	if a == -1 {
+func tritIs(a, v int) int {
+	if a == v {
 		return 1
 	}
 	return -1
 }
 
-func tritIs0(a int) int {
-	if a == 0 {
-		return 1
-	}
-	return -1
-}
-
-func tritIs1(a int) int {
-	if a == 1 {
+func tritIsNot(a, v int) int {
+	if a != v {
 		return 1
 	}
 	return -1
@@ -291,96 +284,9 @@ func tritIs1(a int) int {
 func testLogicTable() {
 
 	f := func(a, b int) int {
-
-		return max(min(a, b), max(min(neg(tritIsT(a)), 0), min(neg(tritIsT(b)), 0)))
-
-		//return bal3.Neg(a)
-		//return bal3.AminCore{}.Neg(a)
-		//return bal3.AmaxCore{}.Neg(a)
-
-		//return bal3.Min(a, b)
-		//return bal3.AminCore{}.Min(a, b)
-		//return bal3.AmaxCore{}.Min(a, b)
-
-		//return bal3.Max(a, b)
-		//return bal3.AminCore{}.Max(a, b)
-		//return bal3.AmaxCore{}.Max(a, b)
-
-		//return bal3.Xor(a, b)
-		//return bal3.AminCore{}.Xor(a, b)
-		//return bal3.AmaxCore{}.Xor(a, b)
+		return max(min(a, b), max(min(neg(tritIs(a, -1)), 0), min(neg(tritIs(b, -1)), 0)))
 	}
 
-	s := formatLogicTable("// ", f)
+	s := ternary.PrintableLogicTable("// ", f)
 	fmt.Println(s)
-}
-
-// // Use only Nand:
-// func Not(a bool) bool {
-// 	return Nand(a, a)
-// }
-
-// func Or(a, b bool) bool {
-// 	return Nand(Nand(a, a), Nand(b, b))
-// }
-
-// func And(a, b bool) bool {
-// 	return Nand(Nand(a, b), Nand(a, b))
-// }
-
-// func Xor(a, b bool) bool {
-// 	return Nand(Nand(Nand(a, a), b), Nand(a, Nand(b, b)))
-// }
-
-func formatLogicTable(prefix string, f bal3.BinaryFunc) string {
-
-	const n = 3
-
-	var (
-		vs    = [n]int{-1, 0, 1}
-		chars = []byte("T01")
-	)
-	tritChar := func(t int) byte {
-		return chars[t+1]
-	}
-
-	var br strings.Builder
-	var frameLine string
-
-	// make frameLine
-	{
-		fmt.Fprintf(&br, "%s+---+", prefix)
-		for j := 0; j < n; j++ {
-			fmt.Fprintf(&br, "---+")
-		}
-		br.WriteByte('\n')
-		frameLine = br.String()
-		br.Reset()
-	}
-
-	// write b values
-	{
-		br.WriteString(frameLine)
-		fmt.Fprintf(&br, "%s| %c |", prefix, ' ')
-		for j := 0; j < n; j++ {
-			b := vs[j]
-			fmt.Fprintf(&br, " %c |", tritChar(b))
-		}
-		br.WriteByte('\n')
-		br.WriteString(frameLine)
-	}
-
-	for i := 0; i < n; i++ {
-		a := vs[i]
-		fmt.Fprintf(&br, "%s| %c |", prefix, tritChar(a))
-		for j := 0; j < n; j++ {
-			b := vs[j]
-			c := f(a, b)
-			fmt.Fprintf(&br, " %c |", tritChar(c))
-		}
-		br.WriteByte('\n')
-		br.WriteString(frameLine)
-	}
-
-	return br.String()
 }

@@ -1,0 +1,19 @@
+http://homepage.divms.uiowa.edu/%7Ejones/ternary/logic.shtml
+https://en.wikipedia.org/wiki/Three-valued_logic#Kleene_logic
+
+// // Use only Nand:
+// func Not(a bool) bool {
+// 	return Nand(a, a)
+// }
+
+// func Or(a, b bool) bool {
+// 	return Nand(Nand(a, a), Nand(b, b))
+// }
+
+// func And(a, b bool) bool {
+// 	return Nand(Nand(a, b), Nand(a, b))
+// }
+
+// func Xor(a, b bool) bool {
+// 	return Nand(Nand(Nand(a, a), b), Nand(a, Nand(b, b)))
+// }
