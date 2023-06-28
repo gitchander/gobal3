@@ -196,6 +196,17 @@ func TestCons(t *testing.T) {
 			name:     "cons",
 			testFunc: cons,
 		},
+		{
+			name: "consV2",
+			testFunc: func(a, b int) int {
+				var (
+					v1 = min(a, b)
+					v2 = min(TritIsNot(a, -1), 0)
+					v3 = min(TritIsNot(b, -1), 0)
+				)
+				return max(v1, max(v2, v3))
+			},
+		},
 	}
 
 	wantFunc := func(a, b int) int {

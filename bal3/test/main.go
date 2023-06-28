@@ -8,15 +8,13 @@ import (
 
 	"github.com/gitchander/gobal3/bal3"
 	"github.com/gitchander/gobal3/bal3/utils/random"
-	"github.com/gitchander/gobal3/ternary"
 )
 
 func main() {
-	// testInc()
+	testInc()
 	// testBounds()
 	// testQuoRemT32Random()
 	// testToString()
-	testLogicTable()
 }
 
 func checkError(err error) {
@@ -27,7 +25,7 @@ func checkError(err error) {
 
 func testToString() {
 	tc := bal3.T6C
-	fmt.Println(tc.FromInt(238))
+	fmt.Println(tc.FromInt(-238))
 }
 
 func testInc() {
@@ -255,38 +253,4 @@ func bitsOpAdd3(a, b, c int) (hi, lo int) {
 	_ = hi3
 
 	return lo3, lo2
-}
-
-var (
-	neg  = ternary.Neg
-	min  = ternary.Min
-	max  = ternary.Max
-	amin = ternary.Amin
-	amax = ternary.Amax
-)
-
-// Decoders:
-
-func tritIs(a, v int) int {
-	if a == v {
-		return 1
-	}
-	return -1
-}
-
-func tritIsNot(a, v int) int {
-	if a != v {
-		return 1
-	}
-	return -1
-}
-
-func testLogicTable() {
-
-	f := func(a, b int) int {
-		return max(min(a, b), max(min(neg(tritIs(a, -1)), 0), min(neg(tritIs(b, -1)), 0)))
-	}
-
-	s := ternary.PrintableLogicTable("// ", f)
-	fmt.Println(s)
 }
