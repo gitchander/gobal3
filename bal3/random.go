@@ -3,7 +3,7 @@ package bal3
 import (
 	"math/rand"
 
-	"github.com/gitchander/gobal3/bal3/utils/random"
+	"github.com/gitchander/gobal3/utils/random"
 )
 
 type Rand = rand.Rand

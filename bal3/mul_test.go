@@ -55,42 +55,42 @@ func testMulRand[T Unsigned](tc TryteCore[T]) error {
 }
 
 func TestMulT4Bounds(t *testing.T) {
-	err := testMulBounds(T4C)
+	err := testMulBounds(TC4)
 	if err != nil {
 		t.Fatal(err)
 	}
 }
 
 func TestMulT8Rand(t *testing.T) {
-	err := testMulRand(T8C)
+	err := testMulRand(TC8)
 	if err != nil {
 		t.Fatal(err)
 	}
 }
 
 func TestMulT16Rand(t *testing.T) {
-	err := testMulRand(T16C)
+	err := testMulRand(TC16)
 	if err != nil {
 		t.Fatal(err)
 	}
 }
 
 func TestMulT32Rand(t *testing.T) {
-	err := testMulRand(T32C)
+	err := testMulRand(TC32)
 	if err != nil {
 		t.Fatal(err)
 	}
 }
 
 func TestMulT6Rand(t *testing.T) {
-	err := testMulRand(T6C)
+	err := testMulRand(TC6)
 	if err != nil {
 		t.Fatal(err)
 	}
 }
 
 func TestMulT9Rand(t *testing.T) {
-	err := testMulRand(T9C)
+	err := testMulRand(TC9)
 	if err != nil {
 		t.Fatal(err)
 	}

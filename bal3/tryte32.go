@@ -3,61 +3,61 @@ package bal3
 // 32 trits
 type Tryte32 uint64
 
-var t32c = MakeTryteCore[Tryte32](32)
-var T32C = t32c
+var tc32 = MakeTryteCore[Tryte32](32)
+var TC32 = tc32
 
 func (a Tryte32) Int() int {
-	return t32c.ToInt(a)
+	return tc32.ToInt(a)
 }
 
 func (a Tryte32) String() string {
-	return t32c.Format(a)
+	return tc32.Format(a)
 }
 
 func (a Tryte32) Invert() (b Tryte32) {
-	return t32c.Invert(a)
+	return tc32.Invert(a)
 }
 
 func (a Tryte32) Add(b Tryte32) (c Tryte32) {
-	sum, _ := t32c.Add(a, b, 0)
+	sum, _ := tc32.Add(a, b, 0)
 	return sum
 }
 
 func (a Tryte32) Sub(b Tryte32) (c Tryte32) {
-	sum, _ := t32c.Sub(a, b, 0)
+	sum, _ := tc32.Sub(a, b, 0)
 	return sum
 }
 
 func (a Tryte32) Mul(b Tryte32) Tryte32 {
-	_, lo := t32c.Mul(a, b)
+	_, lo := tc32.Mul(a, b)
 	return lo
 }
 
 func (a Tryte32) Div(b Tryte32) Tryte32 {
-	quo, _ := t32c.QuoRem(a, b)
+	quo, _ := tc32.QuoRem(a, b)
 	return quo
 }
 
 func (a Tryte32) Compare(b Tryte32) int {
-	return t32c.Compare(a, b)
+	return tc32.Compare(a, b)
 }
 
 func (a Tryte32) Equal(b Tryte32) bool {
-	return t32c.Equal(a, b)
+	return tc32.Equal(a, b)
 }
 
 func (a Tryte32) Less(b Tryte32) bool {
-	return t32c.Less(a, b)
+	return tc32.Less(a, b)
 }
 
 func (a Tryte32) Shl(i int) Tryte32 {
-	return t32c.Shl(a, i)
+	return tc32.Shl(a, i)
 }
 
 func (a Tryte32) Shr(i int) Tryte32 {
-	return t32c.Shr(a, i)
+	return tc32.Shr(a, i)
 }
 
 func (a Tryte32) IsZero() bool {
-	return t32c.IsZero(a)
+	return tc32.IsZero(a)
 }

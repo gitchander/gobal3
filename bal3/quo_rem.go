@@ -39,7 +39,7 @@ func quoRemT16_v1(a, b Tryte16) (quo, rem Tryte16) {
 		da = Tryte32(a) // double 'a'
 		db = Tryte32(b) // double 'b'
 	)
-	tc := T32C
+	tc := TC32
 	q, r := tryteQuoRemLo(tc, da, db)
 	quo = Tryte16(q)
 	rem = Tryte16(r)
@@ -47,7 +47,7 @@ func quoRemT16_v1(a, b Tryte16) (quo, rem Tryte16) {
 }
 
 func quoRemT16_v2(a, b Tryte16) (quo, rem Tryte16) {
-	tc := T16C
+	tc := TC16
 	return tc.QuoRem(a, b)
 }
 

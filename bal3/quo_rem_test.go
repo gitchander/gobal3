@@ -9,7 +9,7 @@ func TestQuoRemT16Samples(t *testing.T) {
 
 	type tritsType = Tryte16
 	type sampleType [2]tritsType
-	tc := T16C
+	tc := TC16
 
 	var (
 		fromStr = func(as, bs string) sampleType {
@@ -54,7 +54,7 @@ func TestQuoRemT16Samples(t *testing.T) {
 }
 
 func TestQuoRemT4All(t *testing.T) {
-	tc := T4C
+	tc := TC4
 	min, max := tc.Bounds()
 	for ai := min; ai <= max; ai++ {
 		a := tc.FromInt(ai)
@@ -72,7 +72,7 @@ func TestQuoRemT4All(t *testing.T) {
 }
 
 func TestQuoRemT16Random(t *testing.T) {
-	tc := T16C
+	tc := TC16
 	r := newRandNext()
 	for i := 0; i < 1000; i++ {
 
@@ -92,7 +92,7 @@ func TestQuoRemT16Random(t *testing.T) {
 func TestQuoRemT32Random(t *testing.T) {
 
 	type tritsType = Tryte32
-	tc := T32C
+	tc := TC32
 
 	err := testQuoRemRange[tritsType](tc)
 	if err != nil {
@@ -103,7 +103,7 @@ func TestQuoRemT32Random(t *testing.T) {
 func TestQuoRemT32Samples(t *testing.T) {
 
 	type tritsType = Tryte32
-	tc := T32C
+	tc := TC32
 
 	minInt, maxInt := tc.Bounds()
 

@@ -7,7 +7,7 @@ import (
 	"math/big"
 
 	"github.com/gitchander/gobal3/bal3"
-	"github.com/gitchander/gobal3/bal3/utils/random"
+	"github.com/gitchander/gobal3/utils/random"
 )
 
 func main() {
@@ -24,14 +24,14 @@ func checkError(err error) {
 }
 
 func testToString() {
-	tc := bal3.T6C
+	tc := bal3.TC6
 	fmt.Println(tc.FromInt(-238))
 }
 
 func testInc() {
-	tc := bal3.T6C
+	tc := bal3.TC4
 	min, max := tc.Bounds()
-	var a bal3.Tryte6
+	var a bal3.Tryte4
 	a = tc.FromInt(min)
 	for i := min; i <= max; i++ {
 		fmt.Printf("%4d: %6s\n", a.Int(), a)
@@ -45,22 +45,22 @@ func testBounds() {
 	}
 	var min, max int
 
-	min, max = bal3.T4C.Bounds()
+	min, max = bal3.TC4.Bounds()
 	printBounds("tryte4", min, max)
 
-	min, max = bal3.T8C.Bounds()
+	min, max = bal3.TC8.Bounds()
 	printBounds("tryte8", min, max)
 
-	min, max = bal3.T16C.Bounds()
+	min, max = bal3.TC16.Bounds()
 	printBounds("tryte16", min, max)
 
-	min, max = bal3.T32C.Bounds()
+	min, max = bal3.TC32.Bounds()
 	printBounds("tryte32", min, max)
 
-	min, max = bal3.T6C.Bounds()
+	min, max = bal3.TC6.Bounds()
 	printBounds("tryte6", min, max)
 
-	min, max = bal3.T9C.Bounds()
+	min, max = bal3.TC9.Bounds()
 	printBounds("tryte9", min, max)
 
 	printBounds("int32", math.MinInt32, math.MaxInt32)
@@ -69,11 +69,9 @@ func testBounds() {
 
 func testQuoRemT16Samples() {
 
-	type tryteType = bal3.Tryte16
+	tc := bal3.TC16
 
-	tc := bal3.T16C
-
-	samples := [][2]tryteType{
+	samples := [][2]bal3.Tryte16{
 		{tc.MustParse("T0000T10T"), tc.MustParse("T11T1")},
 		{tc.MustParse("1T01T"), tc.MustParse("11")},
 		{tc.MustParse("111T"), tc.MustParse("11")},
@@ -110,7 +108,7 @@ func testQuoRemT16Samples() {
 
 func testQuoRemT32Random() {
 
-	tc := bal3.T32C
+	tc := bal3.TC32
 
 	r := random.NewRandNow()
 
@@ -149,7 +147,7 @@ func testTryte4() {
 		bv = 40
 	)
 
-	tc := bal3.T4C
+	tc := bal3.TC4
 
 	a := tc.FromInt(av)
 	b := tc.FromInt(bv)
@@ -164,7 +162,7 @@ func testTryte4() {
 }
 
 func testTryte8() {
-	tc := bal3.T8C
+	tc := bal3.TC8
 
 	x := tc.FromInt(7)
 	y := tc.FromInt(7)
@@ -180,7 +178,7 @@ func testTryte8() {
 
 func testQuoRemT16() {
 
-	tc := bal3.T8C
+	tc := bal3.TC8
 
 	var (
 		a = tc.FromInt(-21523360)

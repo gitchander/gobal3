@@ -52,7 +52,7 @@ func testDoubleAddSub[T Unsigned](dc doubleCore[T], a, b double[T], carryIn int)
 func TestDoubleShl(t *testing.T) {
 
 	var (
-		tc = T8C
+		tc = TC8
 		dc = makeDoubleCore(tc)
 	)
 
@@ -76,7 +76,7 @@ func TestDoubleShl(t *testing.T) {
 func TestDoubleShr(t *testing.T) {
 
 	var (
-		tc = T8C
+		tc = TC8
 		dc = makeDoubleCore(tc)
 	)
 
@@ -102,7 +102,7 @@ func TestDoubleAddT8(t *testing.T) {
 	r := newRandNext()
 
 	var (
-		tc = T8C
+		tc = TC8
 		dc = makeDoubleCore(tc)
 	)
 
@@ -124,7 +124,7 @@ func TestDoubleSubT8(t *testing.T) {
 	r := newRandNext()
 
 	var (
-		tc = T8C
+		tc = TC8
 		dc = makeDoubleCore(tc)
 	)
 
@@ -146,7 +146,7 @@ func TestDoubleAddSubT8Samples(t *testing.T) {
 	type tritsType = Tryte8
 
 	var (
-		tc = T8C
+		tc = TC8
 		dc = makeDoubleCore(tc)
 	)
 
@@ -211,28 +211,28 @@ func testDoubleMulRand[T Unsigned](tc TryteCore[T]) error {
 }
 
 func TestDoubleMulTryte6(t *testing.T) {
-	err := testDoubleMulRand(T6C)
+	err := testDoubleMulRand(TC6)
 	if err != nil {
 		t.Fatal(err)
 	}
 }
 
 func TestDoubleMulTryte9(t *testing.T) {
-	err := testDoubleMulRand(T9C)
+	err := testDoubleMulRand(TC9)
 	if err != nil {
 		t.Fatal(err)
 	}
 }
 
 func TestDoubleMulT8(t *testing.T) {
-	err := testDoubleMulRand(T8C)
+	err := testDoubleMulRand(TC8)
 	if err != nil {
 		t.Fatal(err)
 	}
 }
 
 func TestDoubleMulT16(t *testing.T) {
-	err := testDoubleMulRand(T16C)
+	err := testDoubleMulRand(TC16)
 	if err != nil {
 		t.Fatal(err)
 	}

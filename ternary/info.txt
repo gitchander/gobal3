@@ -1,19 +1,40 @@
 http://homepage.divms.uiowa.edu/%7Ejones/ternary/logic.shtml
 https://en.wikipedia.org/wiki/Three-valued_logic#Kleene_logic
 
-// // Use only Nand:
-// func Not(a bool) bool {
-// 	return Nand(a, a)
-// }
+--------------------------------------------------------------------------------
 
-// func Or(a, b bool) bool {
-// 	return Nand(Nand(a, a), Nand(b, b))
-// }
+Ternary logic axioms:
 
-// func And(a, b bool) bool {
-// 	return Nand(Nand(a, b), Nand(a, b))
-// }
+Involution Property:
 
-// func Xor(a, b bool) bool {
-// 	return Nand(Nand(Nand(a, a), b), Nand(a, Nand(b, b)))
-// }
+-(-(a)) = a
+neg(neg(a)) = a
+
+Idempotent Property:
+
+min(a, a) = a
+max(a, a) = a
+
+Commutative Property:
+
+min(a, b) = min(b, a)
+max(a, b) = max(b, a)
+
+
+min(a, -1) = -1
+min(a, 0) <= 0
+min(a, 1) = a
+
+max(a, -1) = a
+max(a, 0) >= 0
+max(a, 1) = 1
+
+
+min(a, -a) <= 0
+max(a, -a) >= 0
+
+min(a, b) = -max(-a, -b)
+max(a, b) = -min(-a, -b)
+
+xor(a, b) = min(max(a, b), max(-a, -b))
+xor(a, b) = max(min(a, -b), min(-a, b))

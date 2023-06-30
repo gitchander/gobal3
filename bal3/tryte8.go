@@ -3,61 +3,61 @@ package bal3
 // 8 trits
 type Tryte8 uint16
 
-var t8c = MakeTryteCore[Tryte8](8)
-var T8C = t8c
+var tc8 = MakeTryteCore[Tryte8](8)
+var TC8 = tc8
 
 func (a Tryte8) Int() int {
-	return t8c.ToInt(a)
+	return tc8.ToInt(a)
 }
 
 func (a Tryte8) String() string {
-	return t8c.Format(a)
+	return tc8.Format(a)
 }
 
 func (a Tryte8) Invert() (b Tryte8) {
-	return t8c.Invert(a)
+	return tc8.Invert(a)
 }
 
 func (a Tryte8) Add(b Tryte8) (c Tryte8) {
-	sum, _ := t8c.Add(a, b, 0)
+	sum, _ := tc8.Add(a, b, 0)
 	return sum
 }
 
 func (a Tryte8) Sub(b Tryte8) (c Tryte8) {
-	sum, _ := t8c.Sub(a, b, 0)
+	sum, _ := tc8.Sub(a, b, 0)
 	return sum
 }
 
 func (a Tryte8) Mul(b Tryte8) Tryte8 {
-	_, lo := t8c.Mul(a, b)
+	_, lo := tc8.Mul(a, b)
 	return lo
 }
 
 func (a Tryte8) Div(b Tryte8) Tryte8 {
-	quo, _ := t8c.QuoRem(a, b)
+	quo, _ := tc8.QuoRem(a, b)
 	return quo
 }
 
 func (a Tryte8) Compare(b Tryte8) int {
-	return t8c.Compare(a, b)
+	return tc8.Compare(a, b)
 }
 
 func (a Tryte8) Equal(b Tryte8) bool {
-	return t8c.Equal(a, b)
+	return tc8.Equal(a, b)
 }
 
 func (a Tryte8) Less(b Tryte8) bool {
-	return t8c.Less(a, b)
+	return tc8.Less(a, b)
 }
 
 func (a Tryte8) Shl(i int) Tryte8 {
-	return t8c.Shl(a, i)
+	return tc8.Shl(a, i)
 }
 
 func (a Tryte8) Shr(i int) Tryte8 {
-	return t8c.Shr(a, i)
+	return tc8.Shr(a, i)
 }
 
 func (a Tryte8) IsZero() bool {
-	return t8c.IsZero(a)
+	return tc8.IsZero(a)
 }

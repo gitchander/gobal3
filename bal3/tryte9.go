@@ -3,61 +3,61 @@ package bal3
 // 9 trits
 type Tryte9 uint32
 
-var t9c = MakeTryteCore[Tryte9](9)
-var T9C = t9c
+var tc9 = MakeTryteCore[Tryte9](9)
+var TC9 = tc9
 
 func (a Tryte9) Int() int {
-	return t9c.ToInt(a)
+	return tc9.ToInt(a)
 }
 
 func (a Tryte9) String() string {
-	return t9c.Format(a)
+	return tc9.Format(a)
 }
 
 func (a Tryte9) Invert() (b Tryte9) {
-	return t9c.Invert(a)
+	return tc9.Invert(a)
 }
 
 func (a Tryte9) Add(b Tryte9) (c Tryte9) {
-	sum, _ := t9c.Add(a, b, 0)
+	sum, _ := tc9.Add(a, b, 0)
 	return sum
 }
 
 func (a Tryte9) Sub(b Tryte9) (c Tryte9) {
-	sum, _ := t9c.Sub(a, b, 0)
+	sum, _ := tc9.Sub(a, b, 0)
 	return sum
 }
 
 func (a Tryte9) Mul(b Tryte9) Tryte9 {
-	_, lo := t9c.Mul(a, b)
+	_, lo := tc9.Mul(a, b)
 	return lo
 }
 
 func (a Tryte9) Div(b Tryte9) Tryte9 {
-	quo, _ := t9c.QuoRem(a, b)
+	quo, _ := tc9.QuoRem(a, b)
 	return quo
 }
 
 func (a Tryte9) Compare(b Tryte9) int {
-	return t9c.Compare(a, b)
+	return tc9.Compare(a, b)
 }
 
 func (a Tryte9) Equal(b Tryte9) bool {
-	return t9c.Equal(a, b)
+	return tc9.Equal(a, b)
 }
 
 func (a Tryte9) Less(b Tryte9) bool {
-	return t9c.Less(a, b)
+	return tc9.Less(a, b)
 }
 
 func (a Tryte9) Shl(i int) Tryte9 {
-	return t9c.Shl(a, i)
+	return tc9.Shl(a, i)
 }
 
 func (a Tryte9) Shr(i int) Tryte9 {
-	return t9c.Shr(a, i)
+	return tc9.Shr(a, i)
 }
 
 func (a Tryte9) IsZero() bool {
-	return t9c.IsZero(a)
+	return tc9.IsZero(a)
 }

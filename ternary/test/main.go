@@ -16,29 +16,53 @@ var (
 	max  = ternary.Max
 	amin = ternary.Amin
 	amax = ternary.Amax
+	xor  = ternary.Xor
+	nxor = ternary.NotXor
 )
 
 // Decoders:
 
-func tritIs(a, v int) int {
+func TritIs(a, v int) int {
 	if a == v {
 		return 1
 	}
 	return -1
 }
 
-func tritIsNot(a, v int) int {
+func TritIsNot(a, v int) int {
 	if a != v {
 		return 1
 	}
 	return -1
 }
 
+func tritDec(a int) int {
+	switch a {
+	case -1:
+		return 1
+	case 0:
+		return -1
+	case 1:
+		return 0
+	default:
+		return 0
+	}
+}
+
 func testLogicTable() {
 
+	// +---+---+---+---+
+	// |   | T | 0 | 1 |
+	// +---+---+---+---+
+	// | T | 1 | 0 | T |
+	// +---+---+---+---+
+	// | 0 | 0 | 0 | 0 |
+	// +---+---+---+---+
+	// | 1 | T | 0 | 1 |
+	// +---+---+---+---+
+
 	f := func(a, b int) int {
-		return max(min(0, max(a, b)), min(a, b))
-		//return max(min(a, b), max(min(neg(tritIs(a, -1)), 0), min(neg(tritIs(b, -1)), 0)))
+		return min(xor(a, b), 1)
 	}
 
 	s := ternary.PrintableLogicTable("// ", f)

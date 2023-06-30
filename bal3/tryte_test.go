@@ -64,7 +64,7 @@ func testAddSubRand[T Unsigned](tc TryteCore[T]) error {
 }
 
 func TestAddTryte4(t *testing.T) {
-	tc := T4C
+	tc := TC4
 	min, max := tc.Bounds()
 	for av := min; av <= max; av++ {
 		a := tc.FromInt(av)
@@ -81,21 +81,21 @@ func TestAddTryte4(t *testing.T) {
 }
 
 func TestAddT6Rand(t *testing.T) {
-	err := testAddSubRand(T6C)
+	err := testAddSubRand(TC6)
 	if err != nil {
 		t.Fatal(err)
 	}
 }
 
 func TestAddT9Rand(t *testing.T) {
-	err := testAddSubRand(T9C)
+	err := testAddSubRand(TC9)
 	if err != nil {
 		t.Fatal(err)
 	}
 }
 
 func TestAddTryte8(t *testing.T) {
-	err := testAddSubRand(T8C)
+	err := testAddSubRand(TC8)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -104,7 +104,7 @@ func TestAddTryte8(t *testing.T) {
 func TestAddT8Samples(t *testing.T) {
 
 	type tritsType = Tryte8
-	tc := T8C
+	tc := TC8
 
 	minInt, maxInt := tc.Bounds()
 	var (
@@ -138,7 +138,7 @@ func TestAddT8Samples(t *testing.T) {
 }
 
 func TestSubTryte8(t *testing.T) {
-	tc := T8C
+	tc := TC8
 	r := newRandNext()
 	for i := 0; i < 1000; i++ {
 		var (
@@ -155,7 +155,7 @@ func TestSubTryte8(t *testing.T) {
 
 func TestCompareTryte4(t *testing.T) {
 
-	tc := T4C
+	tc := TC4
 
 	test := func(av, bv int) {
 
@@ -188,7 +188,7 @@ func TestCompareTryte4(t *testing.T) {
 }
 
 func TestShiftT6(t *testing.T) {
-	tc := T6C
+	tc := TC6
 	a := tc.SetAllTrits(1) // all trits set 1.
 	b := a.Shl(1)          // b = a << 1
 	b = b.Shr(1)           // b = b >> 1
