@@ -11,7 +11,11 @@ import (
 )
 
 func main() {
-	testInc()
+	//testIncTC4()
+	//testIncTC6()
+	//testIncTC9()
+	testParseBase27()
+
 	// testBounds()
 	// testQuoRemT32Random()
 	// testToString()
@@ -28,15 +32,48 @@ func testToString() {
 	fmt.Println(tc.FromInt(-238))
 }
 
-func testInc() {
+func testIncTC4() {
 	tc := bal3.TC4
 	min, max := tc.Bounds()
 	var a bal3.Tryte4
 	a = tc.FromInt(min)
 	for i := min; i <= max; i++ {
-		fmt.Printf("%4d: %6s\n", a.Int(), a)
+		s := bal3.FormatBase27(tc, a)
+		fmt.Printf("%3d %4s %2s\n", a.Int(), a, s)
 		a, _ = tc.Add(a, 0, 1) // inc 1 trit
 	}
+}
+
+func testIncTC6() {
+	tc := bal3.TC6
+	min, max := tc.Bounds()
+	var a bal3.Tryte6
+	a = tc.FromInt(min)
+	for i := min; i <= max; i++ {
+		s := bal3.FormatBase27(tc, a)
+		fmt.Printf("%4d %6s %2s\n", a.Int(), a, s)
+		a, _ = tc.Add(a, 0, 1) // inc 1 trit
+	}
+}
+
+func testIncTC9() {
+	tc := bal3.TC9
+	min, max := tc.Bounds()
+	var a bal3.Tryte9
+	a = tc.FromInt(min)
+	for i := min; i <= max; i++ {
+		s := bal3.FormatBase27(tc, a)
+		fmt.Printf("%5d %9s %3s\n", a.Int(), a, s)
+		a, _ = tc.Add(a, 0, 1) // inc 1 trit
+	}
+}
+
+func testParseBase27() {
+	tc := bal3.TC4
+	a, err := bal3.ParseBase27(tc, "1D")
+	checkError(err)
+	s := bal3.FormatBase27(tc, a)
+	fmt.Println(a, s)
 }
 
 func testBounds() {

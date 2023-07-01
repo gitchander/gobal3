@@ -133,3 +133,33 @@ func maxInt(a, b int) int {
 	}
 	return b
 }
+
+// inInterval returns true if (min <= a < max).
+func inInterval(a int, min, max int) bool {
+	// Check empty interval
+	if min >= max {
+		return false
+	}
+	return (min <= a) && (a < max)
+}
+
+func hasDuplicate[T comparable](as []T) bool {
+	m := make(map[T]struct{})
+	for _, a := range as {
+		if _, ok := m[a]; ok {
+			return true
+		}
+		m[a] = struct{}{}
+	}
+	return false
+}
+
+func setAllInts(as []int, v int) {
+	for i := range as {
+		as[i] = v
+	}
+}
+
+func ceilDiv(a, b int) int {
+	return (a + (b - 1)) / b
+}
