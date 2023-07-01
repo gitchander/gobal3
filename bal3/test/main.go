@@ -14,6 +14,8 @@ func main() {
 	//testIncTC4()
 	//testIncTC6()
 	//testIncTC9()
+
+	testFormatBase27()
 	testParseBase27()
 
 	// testBounds()
@@ -68,12 +70,39 @@ func testIncTC9() {
 	}
 }
 
+func testFormatBase27() {
+	tc := bal3.TC32
+
+	const (
+		min = 10000000
+		max = 10000100
+	)
+
+	for i := min; i <= max; i++ {
+		a := tc.FromInt(i)
+		s := bal3.FormatBase27(tc, a)
+		fmt.Println(i, a, s)
+	}
+}
+
 func testParseBase27() {
-	tc := bal3.TC4
-	a, err := bal3.ParseBase27(tc, "1D")
+
+	// -41  T1111 SD
+	// -40   TTTT TX
+	//  40   1111 1D
+	//  41  1TTTT 2X
+
+	// -3281 NDD
+	// -3280 PXX
+	//  3280 4DD
+	//  3281 5XX
+
+	tc := bal3.TC8
+
+	a, err := bal3.ParseBase27(tc, "4DD")
 	checkError(err)
 	s := bal3.FormatBase27(tc, a)
-	fmt.Println(a, s)
+	fmt.Println(a.Int(), a, s)
 }
 
 func testBounds() {

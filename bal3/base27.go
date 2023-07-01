@@ -29,16 +29,16 @@ const (
 	positiveChars = "123456789ABCD"
 )
 
-var globalCharCoder = mustMakeCharCoder(negativeChars + "0" + positiveChars)
+var coderB27 = mustMakeBase27Coder(negativeChars + "0" + positiveChars)
 
 //------------------------------------------------------------------------------
 
-type charCoder struct {
+type base27Coder struct {
 	enc [27]byte
 	dec [256]byte
 }
 
-func makeCharCoder(s string) (*charCoder, error) {
+func makeBase27Coder(s string) (*base27Coder, error) {
 	const n = 27
 	bs := []byte(s)
 	if len(bs) != n {
@@ -55,7 +55,7 @@ func makeCharCoder(s string) (*charCoder, error) {
 		dt[b] = (byte(i) << 1) | 1
 	}
 
-	c := &charCoder{
+	c := &base27Coder{
 		enc: et,
 		dec: dt,
 	}
@@ -63,15 +63,15 @@ func makeCharCoder(s string) (*charCoder, error) {
 	return c, nil
 }
 
-func mustMakeCharCoder(s string) *charCoder {
-	t, err := makeCharCoder(s)
+func mustMakeBase27Coder(s string) *base27Coder {
+	t, err := makeBase27Coder(s)
 	if err != nil {
 		panic(err)
 	}
 	return t
 }
 
-func (p *charCoder) digitToChar(digit int) (char byte, ok bool) {
+func (p *base27Coder) digitToChar(digit int) (char byte, ok bool) {
 	if inInterval(digit, -13, (13 + 1)) {
 		char = p.enc[digit+13]
 		return char, true
@@ -79,7 +79,7 @@ func (p *charCoder) digitToChar(digit int) (char byte, ok bool) {
 	return 0, false
 }
 
-func (p *charCoder) charToDigit(char byte) (digit int, ok bool) {
+func (p *base27Coder) charToDigit(char byte) (digit int, ok bool) {
 	x := p.dec[char]
 	if (x & 1) == 1 {
 		digit = int(x>>1) - 13
@@ -91,29 +91,24 @@ func (p *charCoder) charToDigit(char byte) (digit int, ok bool) {
 //------------------------------------------------------------------------------
 
 func FormatBase27[T Unsigned](tc TryteCore[T], a T) string {
+
+	const tritsPerDigit = 3
+
 	var (
-		ps = powersOfThree
-		dn = ceilDiv(tc.n, 3) // number of digits
+		dn = ceilDiv(tc.n, tritsPerDigit) // number of digits
 		cs = make([]byte, dn)
 
 		j = dn - 1
 		k = j
 	)
-	for i := 0; i < dn; i++ {
 
-		var (
-			t0 = tc.getTrit(a, 0)
-			t1 = tc.getTrit(a, 1)
-			t2 = tc.getTrit(a, 2)
-		)
-		a = tc.Shr(a, 3)
+	writeDigit := func(digit int) {
 
-		digit := t2*ps[2] + t1*ps[1] + t0*ps[0]
 		if digit != 0 {
 			k = j
 		}
 
-		char, ok := globalCharCoder.digitToChar(digit)
+		char, ok := coderB27.digitToChar(digit)
 		if !ok {
 			err := fmt.Errorf("invalid digit %d", digit)
 			panic(err)
@@ -122,44 +117,61 @@ func FormatBase27[T Unsigned](tc TryteCore[T], a T) string {
 		j--
 	}
 
+	var b T
+	count := 0 // count of trits in 'b'.
+
+	for i := 0; i < tc.n; i++ {
+
+		t := tc.getTrit(a, i)       // t = a[i]
+		b = tc.setTrit(b, count, t) // b[count] = t
+		count++
+
+		if count == tritsPerDigit {
+			digit := tc.ToInt(b)
+			writeDigit(digit)
+
+			// reset all
+			b = 0
+			count = 0
+		}
+	}
+
+	if count > 0 {
+		digit := tc.ToInt(b)
+		writeDigit(digit)
+	}
+
 	return string(cs[k:])
 }
 
 func ParseBase27[T Unsigned](tc TryteCore[T], s string) (T, error) {
 
-	bs := []byte(s)
+	const tritsPerDigit = 3
 
 	var a T
-	countTrits := 0
+	count := 0 // count of trits in 'a'.
 
-	digits := make([]int, len(bs))
-
-	for i, char := range bs {
-		digit, ok := globalCharCoder.charToDigit(char)
+	bs := []byte(s)
+	for _, char := range bs {
+		if char == '_' {
+			continue
+		}
+		digit, ok := coderB27.charToDigit(char)
 		if !ok {
 			return 0, fmt.Errorf("invalid char %c", char)
 		}
-		digits[i] = digit
-	}
-
-	for i := len(digits); i > 0; i-- {
-		digit := digits[i-1]
 		b := tc.FromInt(digit)
-		fmt.Println("digit:", digit)
-
-		for j := 3; j > 0; j-- {
-			t := tc.getTrit(b, j-1)
-
-			if (t != 0) && (countTrits >= tc.n) {
-				fmt.Println(t, countTrits, tc.n)
-				return 0, fmt.Errorf("trits are more than need")
+		for j := tritsPerDigit; j > 0; j-- {
+			if count >= tc.n {
+				return 0, fmt.Errorf("number of trits more than %d", tc.n)
 			}
-			countTrits++
-
-			a = tc.Shl(a, 1)
+			t := tc.getTrit(b, j-1)
+			if (count > 0) || (t != 0) {
+				count++
+			}
+			a = tc.Shl(a, 1) // a = a << 1
 			a = tc.setTrit(a, 0, t)
 		}
 	}
-
 	return a, nil
 }
