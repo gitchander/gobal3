@@ -12,10 +12,6 @@ func newRandNext() *rand.Rand {
 	return random.NewRandNext()
 }
 
-func randIntByCorpus(r *random.Rand, corpus []int) int {
-	return corpus[r.Intn(len(corpus))]
-}
-
 func randTrit(r *random.Rand) int {
-	return randIntByCorpus(r, tritValues[:])
+	return random.RandIntByCorpus(r, tritValues[:])
 }

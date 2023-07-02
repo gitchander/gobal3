@@ -59,7 +59,7 @@ func TestNeg(t *testing.T) {
 	vs := []sampleUnaryFunc{
 		{
 			name:     "Neg",
-			testFunc: neg,
+			testFunc: Neg,
 		},
 		{
 			name:     "amin_neg",
@@ -86,7 +86,7 @@ func TestMin(t *testing.T) {
 	vs := []sampleBinaryFunc{
 		{
 			name:     "Min",
-			testFunc: min,
+			testFunc: Min,
 		},
 		{
 			name:     "amin_min",
@@ -113,7 +113,7 @@ func TestMax(t *testing.T) {
 	vs := []sampleBinaryFunc{
 		{
 			name:     "Max",
-			testFunc: max,
+			testFunc: Max,
 		},
 		{
 			name:     "amin_max",
@@ -162,20 +162,20 @@ func TestXor(t *testing.T) {
 	}
 }
 
-func TestNotXor(t *testing.T) {
+func TestNegXor(t *testing.T) {
 
 	vs := []sampleBinaryFunc{
 		{
-			name:     "NotXor",
-			testFunc: NotXor,
+			name:     "NegXor",
+			testFunc: NegXor,
 		},
 		{
-			name:     "amin_not_xor",
-			testFunc: aminCore{}.NotXor,
+			name:     "amin_neg_xor",
+			testFunc: aminCore{}.NegXor,
 		},
 		{
-			name:     "amax_not_xor",
-			testFunc: amaxCore{}.NotXor,
+			name:     "amax_nex_xor",
+			testFunc: amaxCore{}.NegXor,
 		},
 	}
 
@@ -194,17 +194,17 @@ func TestCons(t *testing.T) {
 	vs := []sampleBinaryFunc{
 		{
 			name:     "cons",
-			testFunc: cons,
+			testFunc: addCons,
 		},
 		{
 			name: "consV2",
 			testFunc: func(a, b int) int {
 				var (
-					v1 = min(a, b)
-					v2 = min(TritIsNot(a, -1), 0)
-					v3 = min(TritIsNot(b, -1), 0)
+					v1 = Min(a, b)
+					v2 = Min(NegIs(a, -1), 0)
+					v3 = Min(NegIs(b, -1), 0)
 				)
-				return max(v1, max(v2, v3))
+				return Max(v1, Max(v2, v3))
 			},
 		},
 	}

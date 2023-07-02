@@ -1,4 +1,4 @@
-package main
+package bools
 
 func Nand(a, b bool) bool {
 	return !(a && b)

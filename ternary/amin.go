@@ -15,7 +15,7 @@ package ternary
 // +---+---+---+---+
 
 func Amin(a, b int) int {
-	return neg(min(a, b))
+	return Neg(Min(a, b))
 }
 
 var _ BinaryFunc = Amin
@@ -39,6 +39,6 @@ func (aminCore) Xor(a, b int) int {
 	return Amin(Amin(Amin(a, a), b), Amin(a, Amin(b, b)))
 }
 
-func (aminCore) NotXor(a, b int) int {
+func (aminCore) NegXor(a, b int) int {
 	return Amin(Amin(a, b), Amin(Amin(a, a), Amin(b, b)))
 }

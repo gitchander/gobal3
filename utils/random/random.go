@@ -13,3 +13,7 @@ func RandBool(r *Rand) bool {
 func RandIntMinMax(r *Rand, min, max int) int {
 	return min + r.Intn(max-min)
 }
+
+func RandIntByCorpus(r *Rand, corpus []int) int {
+	return corpus[r.Intn(len(corpus))]
+}

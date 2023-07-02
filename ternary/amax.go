@@ -15,7 +15,7 @@ package ternary
 // +---+---+---+---+
 
 func Amax(a, b int) int {
-	return neg(max(a, b))
+	return Neg(Max(a, b))
 }
 
 var _ BinaryFunc = Amax
@@ -39,6 +39,6 @@ func (amaxCore) Xor(a, b int) int {
 	return Amax(Amax(a, b), Amax(Amax(a, a), Amax(b, b)))
 }
 
-func (amaxCore) NotXor(a, b int) int {
+func (amaxCore) NegXor(a, b int) int {
 	return Amax(Amax(Amax(a, a), b), Amax(a, Amax(b, b)))
 }

@@ -18,5 +18,5 @@ import (
 
 func tritsMul(a, b int) int {
 	// return a * b
-	return ternary.NotXor(a, b)
+	return ternary.NegXor(a, b)
 }

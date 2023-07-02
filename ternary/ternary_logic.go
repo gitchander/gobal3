@@ -30,27 +30,25 @@ func checkTrits(ts ...int) {
 // | 1 | T |
 // +---+---+
 
-func invertTrit(t int) int {
-	switch t {
-	case -1:
-		return 1
-	case 0:
-		return 0
-	case 1:
-		return -1
-	default:
-		panic(errInvalidTrit(t))
-	}
-}
-
-func neg(a int) int {
-	return -a
-}
+// func invertTrit(t int) int {
+// 	switch t {
+// 	case -1:
+// 		return 1
+// 	case 0:
+// 		return 0
+// 	case 1:
+// 		return -1
+// 	default:
+// 		panic(errInvalidTrit(t))
+// 	}
+// }
 
 // NEG - NEGATIVE
+// Anti
+
 func Neg(a int) int {
-	checkTrit(a)
-	return neg(a)
+	// checkTrit(a)
+	return -a
 }
 
 var _ UnaryFunc = Neg
@@ -69,17 +67,24 @@ var _ UnaryFunc = Neg
 // | 1 | T |
 // +---+---+
 
-func tritInc(a int) int {
-	switch a {
-	case -1:
-		return 0
-	case 0:
-		return 1
-	case 1:
-		return -1
-	default:
-		panic(errInvalidTrit(a))
+func Inc(a int) int {
+
+	// switch a {
+	// case -1:
+	// 	return 0
+	// case 0:
+	// 	return 1
+	// case 1:
+	// 	return -1
+	// default:
+	// 	panic(errInvalidTrit(a))
+	// }
+
+	a++
+	if a > 1 {
+		a -= 3
 	}
+	return a
 }
 
 //------------------------------------------------------------------------------
@@ -96,17 +101,24 @@ func tritInc(a int) int {
 // | 1 | 0 |
 // +---+---+
 
-func tritDec(a int) int {
-	switch a {
-	case -1:
-		return 1
-	case 0:
-		return -1
-	case 1:
-		return 0
-	default:
-		panic(errInvalidTrit(a))
+func Dec(a int) int {
+
+	// switch a {
+	// case -1:
+	// 	return 1
+	// case 0:
+	// 	return -1
+	// case 1:
+	// 	return 0
+	// default:
+	// 	panic(errInvalidTrit(a))
+	// }
+
+	a--
+	if a < -1 {
+		a += 3
 	}
+	return a
 }
 
 //------------------------------------------------------------------------------
@@ -125,16 +137,12 @@ func tritDec(a int) int {
 // | 1 | T | 0 | 1 |
 // +---+---+---+---+
 
-func min(a, b int) int {
+func Min(a, b int) int {
+	// checkTrits(a, b)
 	return minInt(a, b)
 }
 
-func Min(a, b int) int {
-	checkTrits(a, b)
-	return min(a, b)
-}
-
-var _ BinaryFunc = min
+var _ BinaryFunc = Min
 
 //------------------------------------------------------------------------------
 
@@ -152,29 +160,25 @@ var _ BinaryFunc = min
 // | 1 | 1 | 1 | 1 |
 // +---+---+---+---+
 
-func max(a, b int) int {
+func Max(a, b int) int {
+	// checkTrits(a, b)
 	return maxInt(a, b)
 }
 
-func Max(a, b int) int {
-	checkTrits(a, b)
-	return max(a, b)
-}
-
-var _ BinaryFunc = max
+var _ BinaryFunc = Max
 
 //------------------------------------------------------------------------------
 
 // Decoders
 
-func TritIs(a int, v int) int {
+func Is(a int, v int) int {
 	if a == v {
 		return 1 // true
 	}
 	return -1 // false
 }
 
-func TritIsNot(a int, v int) int {
+func NegIs(a int, v int) int {
 	if a != v {
 		return 1 // true
 	}
@@ -198,12 +202,12 @@ func TritIsNot(a int, v int) int {
 // For binary logic: XOR = Nand(Nand(Nand(a, a), b), Nand(a, Nand(b, b)))
 
 func Xor(a, b int) int {
-	return max(min(a, neg(b)), min(neg(a), b))
+	return Max(Min(a, Neg(b)), Min(Neg(a), b))
 }
 
 //------------------------------------------------------------------------------
 
-// Not Xor - Not Exclusive Or
+// Neg Xor - Not Exclusive Or
 
 // +---+---+---+---+
 // |   | T | 0 | 1 |
@@ -215,8 +219,8 @@ func Xor(a, b int) int {
 // | 1 | T | 0 | 1 |
 // +---+---+---+---+
 
-func NotXor(a, b int) int {
-	return min(max(a, neg(b)), max(neg(a), b))
+func NegXor(a, b int) int {
+	return Min(Max(a, Neg(b)), Max(Neg(a), b))
 }
 
 //------------------------------------------------------------------------------

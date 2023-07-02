@@ -48,16 +48,16 @@ func makeBase27Coder(s string) (*base27Coder, error) {
 	if hasDuplicate(bs) {
 		return nil, errors.New("table has duplicates")
 	}
-	var et [n]byte
-	var dt [256]byte
+	var enc [n]byte
+	var dec [256]byte
 	for i, b := range bs {
-		et[i] = b
-		dt[b] = (byte(i) << 1) | 1
+		enc[i] = b
+		dec[b] = (byte(i) << 1) | 1
 	}
 
 	c := &base27Coder{
-		enc: et,
-		dec: dt,
+		enc: enc,
+		dec: dec,
 	}
 
 	return c, nil
