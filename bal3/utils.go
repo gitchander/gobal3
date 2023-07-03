@@ -2,6 +2,7 @@ package bal3
 
 import (
 	"errors"
+	"fmt"
 )
 
 var powersOfThree = [...]int{
@@ -162,4 +163,67 @@ func setAllInts(as []int, v int) {
 
 func ceilDiv(a, b int) int {
 	return (a + (b - 1)) / b
+}
+
+// sum 4 trits: [-4..4]
+func splitTrits2(v int) (t1, t0 int) {
+	switch v {
+	case -4:
+		return tv_T, tv_T
+	case -3:
+		return tv_T, tv_0
+	case -2:
+		return tv_T, tv_1
+	case -1:
+		return tv_0, tv_T
+	case 0:
+		return tv_0, tv_0
+	case 1:
+		return tv_0, tv_1
+	case 2:
+		return tv_1, tv_T
+	case 3:
+		return tv_1, tv_0
+	case 4:
+		return tv_1, tv_1
+	default:
+		panic(fmt.Errorf("splitTrits2: invalid value %d", v))
+	}
+}
+
+//------------------------------------------------------------------------------
+
+func parseTable(sss ...string) ([][]int, error) {
+	cols := 0
+	for _, ss := range sss {
+		cols = maxInt(cols, len(ss))
+	}
+	ttt := make([][]int, len(sss))
+	for i, ss := range sss {
+		var (
+			chars = []byte(ss)
+			tt    = make([]int, cols)
+		)
+		for j, char := range chars {
+			t, ok := charToTrit(char)
+			if !ok {
+				return nil, fmt.Errorf("invalid trit char %q", char)
+			}
+			tt[j] = t
+		}
+		ttt[i] = tt
+	}
+	return ttt, nil
+}
+
+func mustParseTable(sss ...string) [][]int {
+	table, err := parseTable(sss...)
+	if err != nil {
+		panic(err)
+	}
+	return table
+}
+
+func tritByTable(table [][]int, a, b int) int {
+	return table[a+1][b+1]
 }

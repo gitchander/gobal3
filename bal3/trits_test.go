@@ -1,8 +1,10 @@
-package ternary
+package bal3
 
 import (
 	"fmt"
 	"testing"
+
+	. "github.com/gitchander/gobal3/ternary"
 )
 
 type sampleUnaryFunc struct {
@@ -54,52 +56,34 @@ func testBinaryFunc(vs []sampleBinaryFunc, wantFunc BinaryFunc) error {
 	return nil
 }
 
-func TestNeg(t *testing.T) {
-
-	vs := []sampleUnaryFunc{
-		{
-			name:     "Neg",
-			testFunc: Neg,
-		},
-		{
-			name:     "amin_neg",
-			testFunc: aminCore{}.Neg,
-		},
-		{
-			name:     "amax_neg",
-			testFunc: amaxCore{}.Neg,
-		},
-	}
-
-	wantFunc := func(a int) int {
-		return -a
-	}
-
-	err := testUnaryFunc(vs, wantFunc)
-	if err != nil {
-		t.Fatal(err)
-	}
-}
-
-func TestMin(t *testing.T) {
+func TestAddSum(t *testing.T) {
 
 	vs := []sampleBinaryFunc{
 		{
-			name:     "Min",
-			testFunc: Min,
+			name:     "addSum",
+			testFunc: addSum,
 		},
 		{
-			name:     "amin_min",
-			testFunc: aminCore{}.Min,
+			name:     "addSumV1",
+			testFunc: addSumV1,
 		},
 		{
-			name:     "amax_min",
-			testFunc: amaxCore{}.Min,
+			name:     "addSumV2",
+			testFunc: addSumV2,
+		},
+		{
+			name:     "addSumV3",
+			testFunc: addSumV3,
+		},
+		{
+			name:     "addSumV4",
+			testFunc: addSumV4,
 		},
 	}
 
 	wantFunc := func(a, b int) int {
-		return minInt(a, b)
+		_, t0 := splitTrits2(a + b)
+		return t0
 	}
 
 	err := testBinaryFunc(vs, wantFunc)
@@ -108,25 +92,38 @@ func TestMin(t *testing.T) {
 	}
 }
 
-func TestMax(t *testing.T) {
+func TestAddCons(t *testing.T) {
 
 	vs := []sampleBinaryFunc{
 		{
-			name:     "Max",
-			testFunc: Max,
+			name:     "addCons",
+			testFunc: addCons,
 		},
 		{
-			name:     "amin_max",
-			testFunc: aminCore{}.Max,
+			name:     "addConsV1",
+			testFunc: addConsV1,
 		},
 		{
-			name:     "amax_max",
-			testFunc: amaxCore{}.Max,
+			name:     "addConsV2",
+			testFunc: addConsV2,
+		},
+		{
+			name:     "addConsV3",
+			testFunc: addConsV3,
+		},
+		{
+			name:     "addConsV4",
+			testFunc: addConsV4,
+		},
+		{
+			name:     "addConsV5",
+			testFunc: addConsV5,
 		},
 	}
 
 	wantFunc := func(a, b int) int {
-		return maxInt(a, b)
+		t1, _ := splitTrits2(a + b)
+		return t1
 	}
 
 	err := testBinaryFunc(vs, wantFunc)
@@ -135,47 +132,24 @@ func TestMax(t *testing.T) {
 	}
 }
 
-func TestXor(t *testing.T) {
+func TestTritsMul(t *testing.T) {
 
 	vs := []sampleBinaryFunc{
 		{
-			name:     "Xor",
-			testFunc: Xor,
+			name:     "tritsMul",
+			testFunc: tritsMul,
 		},
 		{
-			name:     "amin_xor",
-			testFunc: aminCore{}.Xor,
+			name:     "tritsMulV1",
+			testFunc: tritsMulV1,
 		},
 		{
-			name:     "amax_xor",
-			testFunc: amaxCore{}.Xor,
-		},
-	}
-
-	wantFunc := func(a, b int) int {
-		return -(a * b)
-	}
-
-	err := testBinaryFunc(vs, wantFunc)
-	if err != nil {
-		t.Fatal(err)
-	}
-}
-
-func TestNegXor(t *testing.T) {
-
-	vs := []sampleBinaryFunc{
-		{
-			name:     "NegXor",
-			testFunc: NegXor,
+			name:     "tritsMulV2",
+			testFunc: tritsMulV2,
 		},
 		{
-			name:     "amin_neg_xor",
-			testFunc: aminCore{}.NegXor,
-		},
-		{
-			name:     "amax_nex_xor",
-			testFunc: amaxCore{}.NegXor,
+			name:     "tritsMulV3",
+			testFunc: tritsMulV3,
 		},
 	}
 

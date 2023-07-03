@@ -16,7 +16,26 @@ import (
 // | 1 | T | 0 | 1 |
 // +---+---+---+---+
 
-func tritsMul(a, b int) int {
-	// return a * b
+var tableMul = mustParseTable(
+	"10T",
+	"000",
+	"T01",
+)
+
+func tritsMulV1(a, b int) int {
+	return tritByTable(tableMul, a, b)
+}
+
+func tritsMulV2(a, b int) int {
+	return a * b
+}
+
+func tritsMulV3(a, b int) int {
 	return ternary.NegXor(a, b)
 }
+
+var (
+	// tritsMul = tritsMulV1
+	tritsMul = tritsMulV2
+	//tritsMul = tritsMulV3
+)

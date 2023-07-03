@@ -11,16 +11,18 @@ import (
 )
 
 func main() {
+
+	testToString()
+
 	//testIncTC4()
 	//testIncTC6()
 	//testIncTC9()
 
-	testFormatBase27()
-	testParseBase27()
+	// testFormatBase27()
+	// testParseBase27()
 
 	// testBounds()
 	// testQuoRemT32Random()
-	// testToString()
 }
 
 func checkError(err error) {
@@ -31,7 +33,7 @@ func checkError(err error) {
 
 func testToString() {
 	tc := bal3.TC6
-	fmt.Println(tc.FromInt(-238))
+	fmt.Println(tc.FromInt(5))
 }
 
 func testIncTC4() {
