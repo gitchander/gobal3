@@ -73,40 +73,17 @@ func powN(a int, n int) int {
 	return p
 }
 
-func quoRemInt(a, b int) (quo, rem int) {
-	quo = a / b
-	rem = a % b
-	return
-}
-
-// min <= value < max
-func valueIn(value int, min, max int) bool {
-	return (min <= value) && (value < max)
+// inInterval returns true if (min <= a < max).
+func inInterval(a int, min, max int) bool {
+	// Check empty interval
+	if min >= max {
+		return false
+	}
+	return (min <= a) && (a < max)
 }
 
 func not(b bool) bool {
 	return !b
-}
-
-// min < 0 < max
-func bunchesN(x int, min, max int, ds []int) {
-
-	// radix
-	base := max - min + 1
-	var rem int
-
-	for i := range ds {
-		switch {
-		case x == 0:
-			ds[i] = 0
-		case x > 0:
-			x, rem = quoRemInt(x-min, base)
-			ds[i] = (rem + min)
-		case x < 0:
-			x, rem = quoRemInt(x-max, base)
-			ds[i] = (rem + max)
-		}
-	}
 }
 
 const bitsPerByte = 8
@@ -133,15 +110,6 @@ func maxInt(a, b int) int {
 		return a
 	}
 	return b
-}
-
-// inInterval returns true if (min <= a < max).
-func inInterval(a int, min, max int) bool {
-	// Check empty interval
-	if min >= max {
-		return false
-	}
-	return (min <= a) && (a < max)
 }
 
 func hasDuplicate[T comparable](as []T) bool {
@@ -226,4 +194,38 @@ func mustParseTable(sss ...string) [][]int {
 
 func tritByTable(table [][]int, a, b int) int {
 	return table[a+1][b+1]
+}
+
+//------------------------------------------------------------------------------
+
+func quoRemMinMax(x int, min, max int) (q, r int) {
+
+	if min > max {
+		panic("min > max")
+	}
+
+	// radix
+	base := max - min + 1
+
+	if (min <= x) && (x <= max) {
+		q, r = 0, x
+	}
+
+	if x < min {
+		q, r = quoRem(x-max, base)
+		r += max
+	}
+
+	if x > max {
+		q, r = quoRem(x-min, base)
+		r += min
+	}
+
+	return q, r
+}
+
+func quoRem(a, b int) (quo, rem int) {
+	quo = a / b
+	rem = a % b
+	return
 }

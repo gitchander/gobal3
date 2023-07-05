@@ -167,7 +167,7 @@ func testQuoRemT16(a, b Tryte16) error {
 		haveRem = rem.Int()
 	)
 
-	wantQuo, wantRem := quoRemInt(av, bv)
+	wantQuo, wantRem := quoRem(av, bv)
 
 	printAll := func() {
 		fmt.Printf("have: quoRem(%d, %d) => { quo: %d, rem: %d }\n", av, bv, haveQuo, haveRem)
@@ -209,7 +209,7 @@ func testQuoRemDouble[T Unsigned](tc TryteCore[T], a, b T) error {
 		haveRem = tc.ToInt(rem)
 	)
 
-	wantQuo, wantRem := quoRemInt(av, bv)
+	wantQuo, wantRem := quoRem(av, bv)
 
 	printAll := func() {
 		fmt.Printf("have: quoRem(%d, %d) => { quo: %d, rem: %d }\n", av, bv, haveQuo, haveRem)

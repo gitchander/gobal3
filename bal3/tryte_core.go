@@ -123,18 +123,13 @@ func (tc TryteCore[T]) SetAllTrits(t int) T {
 //------------------------------------------------------------------------------
 
 func (tc TryteCore[T]) FromIntRest(v int) (a T, rest int) {
+	const (
+		min = -1
+		max = +1
+	)
+	var t int
 	for i := 0; i < tc.n; i++ {
-		var t, rem int
-		switch {
-		case v == 0:
-			t = 0
-		case v > 0:
-			v, rem = quoRemInt(v+1, base)
-			t = rem - 1 // rem: {0, 1, 2} -> (rem - 1): {-1, 0, 1}
-		case v < 0:
-			v, rem = quoRemInt(v-1, base)
-			t = rem + 1 // rem: {0,-1,-2} -> (rem + 1): {-1, 0, 1}
-		}
+		v, t = quoRemMinMax(v, min, max)
 		a = tc.setTrit(a, i, t)
 	}
 	rest = v
@@ -204,7 +199,7 @@ func (tc TryteCore[T]) Parse(s string) (T, error) {
 		v = tc.setTrit(v, 0, t) // v[0] = t
 		count++
 	}
-	if not(valueIn(count, 1, tc.n+1)) {
+	if not(inInterval(count, 1, tc.n+1)) {
 		return v, fmt.Errorf("invalid number of trits: have %d, want [%d..%d]", count, 1, tc.n)
 	}
 	return v, nil
