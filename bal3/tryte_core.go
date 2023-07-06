@@ -122,33 +122,17 @@ func (tc TryteCore[T]) SetAllTrits(t int) T {
 
 //------------------------------------------------------------------------------
 
-func (tc TryteCore[T]) FromIntRest(v int) (a T, rest int) {
-	const (
-		min = -1
-		max = +1
-	)
-	var t int
-	for i := 0; i < tc.n; i++ {
-		v, t = quoRemMinMax(v, min, max)
-		a = tc.setTrit(a, i, t)
-	}
-	rest = v
-	return
+func (tc TryteCore[T]) IntToTriteRest(v int) (a T, rest int) {
+	return intToTriteRest(tc, v)
 }
 
-func (tc TryteCore[T]) FromInt(v int) T {
-	a, _ := tc.FromIntRest(v)
+func (tc TryteCore[T]) IntToTrite(v int) T {
+	a, _ := intToTriteRest(tc, v)
 	return a
 }
 
-func (tc TryteCore[T]) ToInt(a T) int {
-	var v int
-	p := 1
-	for i := 0; i < tc.n; i++ {
-		v += p * tc.getTrit(a, i)
-		p *= base
-	}
-	return v
+func (tc TryteCore[T]) TryteToInt(a T) int {
+	return tryteToInt(tc, a)
 }
 
 //------------------------------------------------------------------------------

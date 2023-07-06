@@ -125,19 +125,19 @@ func (dc doubleCore[T]) GetTrit(a double[T], i int) int {
 	return t
 }
 
-func (dc doubleCore[T]) FromInt(v int) double[T] {
+func (dc doubleCore[T]) IntToDTryte(v int) double[T] {
 	tc := dc.tc
 	var lo, hi T
-	lo, v = tc.FromIntRest(v)
-	hi, v = tc.FromIntRest(v)
+	lo, v = tc.IntToTriteRest(v)
+	hi, v = tc.IntToTriteRest(v)
 	return makeDouble(hi, lo)
 }
 
-func (dc doubleCore[T]) ToInt(a double[T]) int {
+func (dc doubleCore[T]) DTryteToInt(a double[T]) int {
 	tc := dc.tc
 	var (
-		hi = tc.ToInt(a.Hi)
-		lo = tc.ToInt(a.Lo)
+		hi = tc.TryteToInt(a.Hi)
+		lo = tc.TryteToInt(a.Lo)
 	)
 	return hi*powersOfThree[tc.n] + lo
 }

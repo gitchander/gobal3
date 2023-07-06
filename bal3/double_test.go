@@ -12,8 +12,8 @@ func testDoubleAdd[T Unsigned](dc doubleCore[T], a, b double[T], carryIn int) er
 	res, carryOut := dc.Add(a, b, carryIn)
 
 	var (
-		have = dc.ToInt(res) + (carryOut * hiFactor)
-		want = (dc.ToInt(a) + dc.ToInt(b)) + carryIn
+		have = dc.DTryteToInt(res) + (carryOut * hiFactor)
+		want = (dc.DTryteToInt(a) + dc.DTryteToInt(b)) + carryIn
 	)
 
 	if have != want {
@@ -29,8 +29,8 @@ func testDoubleSub[T Unsigned](dc doubleCore[T], a, b double[T], carryIn int) er
 	res, carryOut := dc.Sub(a, b, carryIn)
 
 	var (
-		have = dc.ToInt(res) + (carryOut * hiFactor)
-		want = (dc.ToInt(a) - dc.ToInt(b)) + carryIn
+		have = dc.DTryteToInt(res) + (carryOut * hiFactor)
+		want = (dc.DTryteToInt(a) - dc.DTryteToInt(b)) + carryIn
 	)
 
 	if have != want {
@@ -68,7 +68,7 @@ func TestDoubleShl(t *testing.T) {
 		)
 
 		if dc.Compare(have, want) != 0 {
-			t.Fatalf("invalid value: have %d, want %d", dc.ToInt(have), dc.ToInt(want))
+			t.Fatalf("invalid value: have %d, want %d", dc.DTryteToInt(have), dc.DTryteToInt(want))
 		}
 	}
 }
@@ -92,7 +92,7 @@ func TestDoubleShr(t *testing.T) {
 		)
 
 		if dc.Compare(have, want) != 0 {
-			t.Fatalf("invalid value: have %d, want %d", dc.ToInt(have), dc.ToInt(want))
+			t.Fatalf("invalid value: have %d, want %d", dc.DTryteToInt(have), dc.DTryteToInt(want))
 		}
 	}
 }
@@ -152,8 +152,8 @@ func TestDoubleAddSubT8Samples(t *testing.T) {
 
 	minInt, maxInt := dc.Bounds()
 	var (
-		min = dc.FromInt(minInt)
-		max = dc.FromInt(maxInt)
+		min = dc.IntToDTryte(minInt)
+		max = dc.IntToDTryte(maxInt)
 	)
 
 	type sample[T Unsigned] struct {
@@ -184,8 +184,8 @@ func testDoubleMul[T Unsigned](dc doubleCore[T], a, b double[T]) error {
 	hiFactor := powersOfThree[2*dc.tc.n]
 
 	var (
-		have = dc.ToInt(hi)*hiFactor + dc.ToInt(lo)
-		want = dc.ToInt(a) * dc.ToInt(b)
+		have = dc.DTryteToInt(hi)*hiFactor + dc.DTryteToInt(lo)
+		want = dc.DTryteToInt(a) * dc.DTryteToInt(b)
 	)
 
 	if have != want {

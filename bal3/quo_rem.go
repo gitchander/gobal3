@@ -169,7 +169,7 @@ func tryteQuoRemLo[T Unsigned](tc TryteCore[T], a, b T) (q, r T) {
 
 	// correction
 	if true {
-		one := tc.FromInt(1)
+		one := tc.IntToTrite(1)
 
 		if (signA == 1) && tc.IsNegative(r) {
 			r, _ = tc.Add(r, b, 0)
@@ -373,7 +373,7 @@ func (p *divParams[T]) outRem() T {
 // correction q and r
 
 func correctionQuoRemV1[T Unsigned](tc TryteCore[T], a, b T, q, r T) (cq, cr T) {
-	one := tc.FromInt(1)
+	one := tc.IntToTrite(1)
 	var (
 		signA = tc.Sign(a)
 		signB = tc.Sign(b)

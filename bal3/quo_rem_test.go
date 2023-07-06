@@ -22,8 +22,8 @@ func TestQuoRemT16Samples(t *testing.T) {
 
 		fromInt = func(av, bv int) sampleType {
 			var (
-				a = tc.FromInt(av)
-				b = tc.FromInt(bv)
+				a = tc.IntToTrite(av)
+				b = tc.IntToTrite(bv)
 			)
 			return sampleType{a, b}
 		}
@@ -57,12 +57,12 @@ func TestQuoRemT4All(t *testing.T) {
 	tc := TC4
 	min, max := tc.Bounds()
 	for ai := min; ai <= max; ai++ {
-		a := tc.FromInt(ai)
+		a := tc.IntToTrite(ai)
 		for bi := min; bi <= max; bi++ {
 			if bi == 0 {
 				continue
 			}
-			b := tc.FromInt(bi)
+			b := tc.IntToTrite(bi)
 			err := testQuoRemDouble(tc, a, b)
 			if err != nil {
 				t.Fatal(err)
@@ -108,8 +108,8 @@ func TestQuoRemT32Samples(t *testing.T) {
 	minInt, maxInt := tc.Bounds()
 
 	var (
-		min = tc.FromInt(minInt)
-		max = tc.FromInt(maxInt)
+		min = tc.IntToTrite(minInt)
+		max = tc.IntToTrite(maxInt)
 	)
 
 	samples := [][2]tritsType{
@@ -199,14 +199,14 @@ func testQuoRemT16(a, b Tryte16) error {
 func testQuoRemDouble[T Unsigned](tc TryteCore[T], a, b T) error {
 
 	var (
-		av = tc.ToInt(a)
-		bv = tc.ToInt(b)
+		av = tc.TryteToInt(a)
+		bv = tc.TryteToInt(b)
 	)
 
 	quo, rem := tc.QuoRem(a, b)
 	var (
-		haveQuo = tc.ToInt(quo)
-		haveRem = tc.ToInt(rem)
+		haveQuo = tc.TryteToInt(quo)
+		haveRem = tc.TryteToInt(rem)
 	)
 
 	wantQuo, wantRem := quoRem(av, bv)

@@ -12,9 +12,9 @@ import (
 
 func main() {
 
-	testToString()
+	//testToString()
 
-	//testIncTC4()
+	testIncTC4()
 	//testIncTC6()
 	//testIncTC9()
 
@@ -33,14 +33,14 @@ func checkError(err error) {
 
 func testToString() {
 	tc := bal3.TC6
-	fmt.Println(tc.FromInt(5))
+	fmt.Println(tc.IntToTrite(5))
 }
 
 func testIncTC4() {
 	tc := bal3.TC4
 	min, max := tc.Bounds()
 	var a bal3.Tryte4
-	a = tc.FromInt(min)
+	a = tc.IntToTrite(min)
 	for i := min; i <= max; i++ {
 		s := bal3.FormatBase27(tc, a)
 		fmt.Printf("%3d %4s %2s\n", a.Int(), a, s)
@@ -52,7 +52,7 @@ func testIncTC6() {
 	tc := bal3.TC6
 	min, max := tc.Bounds()
 	var a bal3.Tryte6
-	a = tc.FromInt(min)
+	a = tc.IntToTrite(min)
 	for i := min; i <= max; i++ {
 		s := bal3.FormatBase27(tc, a)
 		fmt.Printf("%4d %6s %2s\n", a.Int(), a, s)
@@ -64,7 +64,7 @@ func testIncTC9() {
 	tc := bal3.TC9
 	min, max := tc.Bounds()
 	var a bal3.Tryte9
-	a = tc.FromInt(min)
+	a = tc.IntToTrite(min)
 	for i := min; i <= max; i++ {
 		s := bal3.FormatBase27(tc, a)
 		fmt.Printf("%5d %9s %3s\n", a.Int(), a, s)
@@ -81,7 +81,7 @@ func testFormatBase27() {
 	)
 
 	for i := min; i <= max; i++ {
-		a := tc.FromInt(i)
+		a := tc.IntToTrite(i)
 		s := bal3.FormatBase27(tc, a)
 		fmt.Println(i, a, s)
 	}
@@ -143,10 +143,10 @@ func testQuoRemT16Samples() {
 		{tc.MustParse("T0000T10T"), tc.MustParse("T11T1")},
 		{tc.MustParse("1T01T"), tc.MustParse("11")},
 		{tc.MustParse("111T"), tc.MustParse("11")},
-		{tc.FromInt(38), tc.FromInt(4)},
-		{tc.FromInt(6580), tc.FromInt(-47)},
-		{tc.FromInt(392771), tc.FromInt(-186)},
-		{tc.FromInt(280), tc.FromInt(8)},
+		{tc.IntToTrite(38), tc.IntToTrite(4)},
+		{tc.IntToTrite(6580), tc.IntToTrite(-47)},
+		{tc.IntToTrite(392771), tc.IntToTrite(-186)},
+		{tc.IntToTrite(280), tc.IntToTrite(8)},
 	}
 
 	for _, sample := range samples {
@@ -154,8 +154,8 @@ func testQuoRemT16Samples() {
 			a = sample[0]
 			b = sample[1]
 
-			av = tc.ToInt(a)
-			bv = tc.ToInt(b)
+			av = tc.TryteToInt(a)
+			bv = tc.TryteToInt(b)
 		)
 
 		quo, rem := tc.QuoRem(a, b)
@@ -189,8 +189,8 @@ func testQuoRemT32Random() {
 		}
 
 		var (
-			av = tc.ToInt(a)
-			bv = tc.ToInt(b)
+			av = tc.TryteToInt(a)
+			bv = tc.TryteToInt(b)
 		)
 
 		quo, rem := tc.QuoRem(a, b)
@@ -217,8 +217,8 @@ func testTryte4() {
 
 	tc := bal3.TC4
 
-	a := tc.FromInt(av)
-	b := tc.FromInt(bv)
+	a := tc.IntToTrite(av)
+	b := tc.IntToTrite(bv)
 
 	hi, lo := tc.Mul(a, b)
 	fmt.Println(hi, lo)
@@ -232,14 +232,14 @@ func testTryte4() {
 func testTryte8() {
 	tc := bal3.TC8
 
-	x := tc.FromInt(7)
-	y := tc.FromInt(7)
+	x := tc.IntToTrite(7)
+	y := tc.IntToTrite(7)
 
 	xyLo := x.Mul(y)
 	fmt.Println(xyLo, xyLo.Int())
 
 	for i := -3280; i <= 3280; i++ {
-		a := tc.FromInt(i)
+		a := tc.IntToTrite(i)
 		fmt.Printf("%3d: %5s\n", i, a)
 	}
 }
@@ -249,8 +249,8 @@ func testQuoRemT16() {
 	tc := bal3.TC8
 
 	var (
-		a = tc.FromInt(-21523360)
-		b = tc.FromInt(7)
+		a = tc.IntToTrite(-21523360)
+		b = tc.IntToTrite(7)
 	)
 
 	quo, rem := tc.QuoRem(a, b)

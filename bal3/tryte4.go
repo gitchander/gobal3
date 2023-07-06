@@ -7,7 +7,7 @@ var tc4 = MakeTryteCore[Tryte4](4)
 var TC4 = tc4
 
 func (a Tryte4) Int() int {
-	return tc4.ToInt(a)
+	return tc4.TryteToInt(a)
 }
 
 func (a Tryte4) String() string {

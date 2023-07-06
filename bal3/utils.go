@@ -129,6 +129,12 @@ func setAllInts(as []int, v int) {
 	}
 }
 
+func quoRem(a, b int) (quo, rem int) {
+	quo = a / b
+	rem = a % b
+	return
+}
+
 func ceilDiv(a, b int) int {
 	return (a + (b - 1)) / b
 }
@@ -194,38 +200,4 @@ func mustParseTable(sss ...string) [][]int {
 
 func tritByTable(table [][]int, a, b int) int {
 	return table[a+1][b+1]
-}
-
-//------------------------------------------------------------------------------
-
-func quoRemMinMax(x int, min, max int) (q, r int) {
-
-	if min > max {
-		panic("min > max")
-	}
-
-	// radix
-	base := max - min + 1
-
-	if (min <= x) && (x <= max) {
-		q, r = 0, x
-	}
-
-	if x < min {
-		q, r = quoRem(x-max, base)
-		r += max
-	}
-
-	if x > max {
-		q, r = quoRem(x-min, base)
-		r += min
-	}
-
-	return q, r
-}
-
-func quoRem(a, b int) (quo, rem int) {
-	quo = a / b
-	rem = a % b
-	return
 }
