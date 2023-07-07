@@ -7,28 +7,14 @@ package digits
 // rem: ... | a ... b | a ... b | a ... b | a ... b | a ... b | ...
 
 func QuoRemMinMax(x int, min, max int) (q, r int) {
-
-	if min > max {
-		panic("min > max")
-	}
-
-	// radix
 	base := max - min + 1
-
-	if (min <= x) && (x <= max) {
-		q, r = 0, x
-	}
-
 	if x < min {
 		q, r = quoRem(x-max, base)
 		r += max
-	}
-
-	if x > max {
+	} else {
 		q, r = quoRem(x-min, base)
 		r += min
 	}
-
 	return q, r
 }
 
@@ -46,6 +32,20 @@ func CalcDigits(v int, min, max int, ds []int) (rest int) {
 	}
 	rest = v
 	return rest
+}
+
+func CalcDigitsN(v int, min, max int, n int) (ds []int, rest int) {
+	var d int
+	ds = make([]int, 0, n)
+	for i := 0; i < n; i++ {
+		if (v == 0) && (len(ds) > 0) {
+			break
+		}
+		v, d = QuoRemMinMax(v, min, max)
+		ds = append(ds, d)
+	}
+	rest = v
+	return ds, rest
 }
 
 func CalcNumber(min, max int, ds []int, rest int) int {
