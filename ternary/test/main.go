@@ -8,8 +8,9 @@ import (
 )
 
 func main() {
+	testFunc()
 	//testModBal3()
-	testQuoRem()
+	//testQuoRem()
 }
 
 func testFunc() {
@@ -35,12 +36,85 @@ func testFunc() {
 	// | 1 | 0 | 1 | T |
 	// +---+---+---+---+
 
+	// http://homepage.divms.uiowa.edu/%7Ejones/ternary/logic.shtml#minimization
+
 	f := func(a, b int) int {
-		return dec(inc(a + b))
+
+		return maxN(
+			minInt3(ternary.Is(a, -1), ternary.Is(b, -1), 1),
+			minInt3(ternary.Is(a, -1), ternary.Is(b, 0), -1),
+			minInt3(ternary.Is(a, -1), ternary.Is(b, 1), 0),
+
+			minInt3(ternary.Is(a, 0), ternary.Is(b, -1), -1),
+			minInt3(ternary.Is(a, 0), ternary.Is(b, 0), 0),
+			minInt3(ternary.Is(a, 0), ternary.Is(b, 1), 1),
+
+			minInt3(ternary.Is(a, 1), ternary.Is(b, -1), 0),
+			minInt3(ternary.Is(a, 1), ternary.Is(b, 0), 1),
+			minInt3(ternary.Is(a, 1), ternary.Is(b, 1), -1),
+		)
+
+		// return maxN(
+		// 	minInt3(ternary.Is(a, -1), ternary.Is(b, -1), -1),
+		// 	minInt3(ternary.Is(a, -1), ternary.Is(b, 0), 0),
+		// 	minInt3(ternary.Is(a, -1), ternary.Is(b, 1), 0),
+		// 	minInt3(ternary.Is(a, 0), ternary.Is(b, -1), 0),
+		// 	minInt3(ternary.Is(a, 0), ternary.Is(b, 0), 0),
+		// 	minInt3(ternary.Is(a, 0), ternary.Is(b, 1), 0),
+		// 	minInt3(ternary.Is(a, 1), ternary.Is(b, -1), 0),
+		// 	minInt3(ternary.Is(a, 1), ternary.Is(b, 0), 0),
+		// 	minInt3(ternary.Is(a, 1), ternary.Is(b, 1), 1),
+		// )
 	}
 
 	s := ternary.PrintableBinaryTable("\t", f)
 	fmt.Print(s)
+}
+
+// OR
+func maxN(as ...int) int {
+	n := len(as)
+	if n == 0 {
+		return 0
+	}
+	m := as[0]
+	for i := 1; i < n; i++ {
+		m = maxInt(m, as[i])
+	}
+	return m
+}
+
+// And
+func minInt(a, b int) int {
+	if a < b {
+		return a
+	}
+	return b
+}
+
+// Or
+func maxInt(a, b int) int {
+	if a > b {
+		return a
+	}
+	return b
+}
+
+// And
+func minInt3(a, b, c int) int {
+	if a < b {
+		if a < c {
+			return a
+		} else {
+			return c
+		}
+	} else {
+		if b < c {
+			return b
+		} else {
+			return c
+		}
+	}
 }
 
 func testModBal3() {
