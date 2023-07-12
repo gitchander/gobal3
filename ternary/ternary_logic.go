@@ -30,24 +30,10 @@ func checkTrits(ts ...int) {
 // | 1 | T |
 // +---+---+
 
-// func invertTrit(t int) int {
-// 	switch t {
-// 	case -1:
-// 		return 1
-// 	case 0:
-// 		return 0
-// 	case 1:
-// 		return -1
-// 	default:
-// 		panic(errInvalidTrit(t))
-// 	}
-// }
-
 // NEG - NEGATIVE
 // Anti
 
 func Neg(a int) int {
-	// checkTrit(a)
 	return -a
 }
 
@@ -68,18 +54,6 @@ var _ UnaryFunc = Neg
 // +---+---+
 
 func Inc(a int) int {
-
-	// switch a {
-	// case -1:
-	// 	return 0
-	// case 0:
-	// 	return 1
-	// case 1:
-	// 	return -1
-	// default:
-	// 	panic(errInvalidTrit(a))
-	// }
-
 	a++
 	if a > 1 {
 		a -= 3
@@ -102,18 +76,6 @@ func Inc(a int) int {
 // +---+---+
 
 func Dec(a int) int {
-
-	// switch a {
-	// case -1:
-	// 	return 1
-	// case 0:
-	// 	return -1
-	// case 1:
-	// 	return 0
-	// default:
-	// 	panic(errInvalidTrit(a))
-	// }
-
 	a--
 	if a < -1 {
 		a += 3
@@ -138,7 +100,6 @@ func Dec(a int) int {
 // +---+---+---+---+
 
 func Min(a, b int) int {
-	// checkTrits(a, b)
 	return minInt(a, b)
 }
 
@@ -161,7 +122,6 @@ var _ BinaryFunc = Min
 // +---+---+---+---+
 
 func Max(a, b int) int {
-	// checkTrits(a, b)
 	return maxInt(a, b)
 }
 
@@ -171,6 +131,18 @@ var _ BinaryFunc = Max
 
 // Decoders
 
+// Is tables:
+
+// +---+---+---+---+
+// | is| T | 0 | 1 |
+// +---+---+---+---+
+// | T | 1 | T | T |
+// +---+---+---+---+
+// | 0 | T | 1 | T |
+// +---+---+---+---+
+// | 1 | T | T | 1 |
+// +---+---+---+---+
+
 func Is(a int, v int) int {
 	if a == v {
 		return 1 // true
@@ -178,11 +150,34 @@ func Is(a int, v int) int {
 	return -1 // false
 }
 
+// (a == -1)
+func IsNegative(a int) int {
+	return Is(a, -1)
+}
+
+// (a == 0)
+func IsZero(a int) int {
+	return Is(a, 0)
+}
+
+// (a == +1)
+func IsPositive(a int) int {
+	return Is(a, +1)
+}
+
+var (
+	_ UnaryFunc = IsNegative
+	_ UnaryFunc = IsZero
+	_ UnaryFunc = IsPositive
+)
+
+//------------------------------------------------------------------------------
+
 func NegIs(a int, v int) int {
 	if a != v {
-		return 1 // true
+		return 1
 	}
-	return -1 // false
+	return -1
 }
 
 //------------------------------------------------------------------------------

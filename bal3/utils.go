@@ -165,6 +165,29 @@ func splitTrits2(v int) (t1, t0 int) {
 	}
 }
 
+func quoRemBal3(a int) (q, r int) {
+
+	const (
+		min = -1
+		max = +1
+
+		base = max - min + 1
+	)
+
+	q, r = quoRem(a, base)
+
+	if r > max {
+		q++
+		r -= base
+	}
+	if r < min {
+		q--
+		r += base
+	}
+
+	return q, r
+}
+
 //------------------------------------------------------------------------------
 
 func parseTable(sss ...string) ([][]int, error) {

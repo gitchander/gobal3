@@ -23,9 +23,20 @@ func intToTriteV2[T Unsigned](tc TryteCore[T], v int) (a T, rest int) {
 	return
 }
 
+func intToTriteV3[T Unsigned](tc TryteCore[T], v int) (a T, rest int) {
+	var t int
+	for i := 0; i < tc.n; i++ {
+		v, t = quoRemBal3(v)
+		a = tc.setTrit(a, i, t)
+	}
+	rest = v
+	return
+}
+
 func intToTriteRest[T Unsigned](tc TryteCore[T], v int) (a T, rest int) {
-	return intToTriteV1(tc, v)
+	//return intToTriteV1(tc, v)
 	//return intToTriteV2(tc, v)
+	return intToTriteV3(tc, v)
 }
 
 func tryteToIntV1[T Unsigned](tc TryteCore[T], a T) int {
