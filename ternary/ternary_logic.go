@@ -85,6 +85,8 @@ func Dec(a int) int {
 
 //------------------------------------------------------------------------------
 
+// https://en.wikipedia.org/wiki/AND_gate
+
 // "Min" or "And"
 
 // Min table:
@@ -106,6 +108,8 @@ func Min(a, b int) int {
 var _ BinaryFunc = Min
 
 //------------------------------------------------------------------------------
+
+// https://en.wikipedia.org/wiki/OR_gate
 
 // "Max" or "Or"
 
@@ -181,6 +185,8 @@ func NegIs(a int, v int) int {
 }
 
 //------------------------------------------------------------------------------
+
+// https://en.wikipedia.org/wiki/XOR_gate
 
 // Xor - Exclusive Or
 

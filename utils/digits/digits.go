@@ -18,6 +18,20 @@ func QuoRemMinMax(x int, min, max int) (q, r int) {
 	return q, r
 }
 
+// func QuoRemMinMax(x int, min, max int) (q, r int) {
+// 	base := max - min + 1
+// 	q, r = quoRem(x, base)
+// 	if r < min {
+// 		q--
+// 		r += base
+// 	}
+// 	if r > max {
+// 		q++
+// 		r -= base
+// 	}
+// 	return q, r
+// }
+
 func quoRem(a, b int) (quo, rem int) {
 	quo = a / b
 	rem = a % b

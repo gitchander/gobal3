@@ -21,14 +21,14 @@ func testCalcDigits() {
 		// min, max   = -1, 1
 		// digitWidth = 3
 
-		// min, max   = 0, 9
-		// digitWidth = 1
+		min, max   = 0, 9
+		digitWidth = 1
 
 		// min, max   = 5, 7
 		// digitWidth = 1
 
-		min, max   = -1, 5
-		digitWidth = 3
+		// min, max   = -1, 5
+		// digitWidth = 3
 	)
 	ds := make([]int, 10)
 	for x := -20; x <= 20; x++ {

@@ -2,6 +2,7 @@ package bal3
 
 import (
 	"fmt"
+	"math"
 	"testing"
 )
 
@@ -236,4 +237,51 @@ func testQuoRemDouble[T Unsigned](tc TryteCore[T], a, b T) error {
 	}
 
 	return nil
+}
+
+func TestQuoRemBal3Samples(t *testing.T) {
+	samples := []struct {
+		a        int
+		quo, rem int
+	}{
+		{a: math.MinInt + 0, quo: -3074457345618258603, rem: 1},
+		{a: math.MinInt + 1, quo: -3074457345618258602, rem: -1},
+		{a: math.MinInt + 2, quo: -3074457345618258602, rem: 0},
+		{a: math.MinInt + 3, quo: -3074457345618258602, rem: 1},
+		{a: math.MinInt + 4, quo: -3074457345618258601, rem: -1},
+		{a: math.MinInt + 5, quo: -3074457345618258601, rem: 0},
+		{a: math.MinInt + 6, quo: -3074457345618258601, rem: 1},
+
+		{a: -7, quo: -2, rem: -1},
+		{a: -6, quo: -2, rem: 0},
+		{a: -5, quo: -2, rem: 1},
+		{a: -4, quo: -1, rem: -1},
+		{a: -3, quo: -1, rem: 0},
+		{a: -2, quo: -1, rem: 1},
+		{a: -1, quo: 0, rem: -1},
+		{a: 0, quo: 0, rem: 0},
+		{a: 1, quo: 0, rem: 1},
+		{a: 2, quo: 1, rem: -1},
+		{a: 3, quo: 1, rem: 0},
+		{a: 4, quo: 1, rem: 1},
+		{a: 5, quo: 2, rem: -1},
+		{a: 6, quo: 2, rem: 0},
+		{a: 7, quo: 2, rem: 1},
+
+		{a: math.MaxInt - 5, quo: 3074457345618258601, rem: -1},
+		{a: math.MaxInt - 4, quo: 3074457345618258601, rem: 0},
+		{a: math.MaxInt - 3, quo: 3074457345618258601, rem: 1},
+		{a: math.MaxInt - 2, quo: 3074457345618258602, rem: -1},
+		{a: math.MaxInt - 1, quo: 3074457345618258602, rem: 0},
+		{a: math.MaxInt - 0, quo: 3074457345618258602, rem: 1},
+	}
+	for _, sample := range samples {
+		quo, rem := quoRemBal3(sample.a)
+		if quo != sample.quo {
+			t.Fatalf("invalid %q (a=%d): have %d, want %d", "quo", sample.a, quo, sample.quo)
+		}
+		if rem != sample.rem {
+			t.Fatalf("invalid %q (a=%d): have %d, want %d", "rem", sample.a, rem, sample.rem)
+		}
+	}
 }

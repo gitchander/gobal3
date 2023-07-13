@@ -129,12 +129,6 @@ func setAllInts(as []int, v int) {
 	}
 }
 
-func quoRem(a, b int) (quo, rem int) {
-	quo = a / b
-	rem = a % b
-	return
-}
-
 func ceilDiv(a, b int) int {
 	return (a + (b - 1)) / b
 }
@@ -165,6 +159,8 @@ func splitTrits2(v int) (t1, t0 int) {
 	}
 }
 
+//------------------------------------------------------------------------------
+
 func quoRemBal3(a int) (q, r int) {
 
 	const (
@@ -176,16 +172,22 @@ func quoRemBal3(a int) (q, r int) {
 
 	q, r = quoRem(a, base)
 
-	if r > max {
-		q++
-		r -= base
-	}
 	if r < min {
 		q--
 		r += base
 	}
+	if r > max {
+		q++
+		r -= base
+	}
 
 	return q, r
+}
+
+func quoRem(a, b int) (quo, rem int) {
+	quo = a / b
+	rem = a % b
+	return
 }
 
 //------------------------------------------------------------------------------

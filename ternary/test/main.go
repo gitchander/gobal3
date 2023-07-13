@@ -5,12 +5,13 @@ import (
 	"math"
 
 	"github.com/gitchander/gobal3/ternary"
+	"github.com/gitchander/gobal3/utils/digits"
 )
 
 func main() {
-	testFunc()
+	//testFunc()
 	//testModBal3()
-	//testQuoRem()
+	testQuoRem()
 }
 
 func testFunc() {
@@ -38,17 +39,17 @@ func testFunc() {
 
 	// http://homepage.divms.uiowa.edu/%7Ejones/ternary/logic.shtml#minimization
 
-	// ts := [3][3]int{
-	// 	{1, -1, 0},
-	// 	{-1, 0, 1},
-	// 	{0, 1, -1},
-	// }
-
 	ts := [3][3]int{
-		{-1, 0, 0},
-		{0, 0, 0},
-		{0, 0, 1},
+		{1, -1, 0},
+		{-1, 0, 1},
+		{0, 1, -1},
 	}
+
+	// ts := [3][3]int{
+	// 	{-1, 0, 0},
+	// 	{0, 0, 0},
+	// 	{0, 0, 1},
+	// }
 
 	f := func(a, b int) int {
 		return maxInts(
@@ -203,19 +204,26 @@ var (
 
 func testQuoRem() {
 
+	const (
+		min = -1
+		max = +1
+
+		base = max - min + 1
+	)
+
+	quoRemMinMax := digits.QuoRemMinMax
+	_ = quoRemMinMax
+
 	testSample := func(a int) {
-		const base = 3
 		q, r := quoRemBal3(a)
-		b := q*3 + r
+		//q, r := quoRemMinMax(a, min, max)
+
+		b := q*base + r
 		if b != a {
 			err := fmt.Errorf("invalid value: have %d, want %d", b, a)
 			panic(err)
 		}
 		fmt.Printf("%3d %3d %3d\n", a, q, r)
-	}
-
-	for i := -20; i <= 20; i++ {
-		testSample(i)
 	}
 
 	{
@@ -227,8 +235,12 @@ func testQuoRem() {
 		}
 	}
 
+	for i := -7; i <= 7; i++ {
+		testSample(i)
+	}
+
 	{
-		const n = 7
+		const n = 6
 		a := math.MaxInt - n + 1
 		for i := 0; i < n; i++ {
 			testSample(a)
