@@ -4,24 +4,49 @@ import (
 	"github.com/gitchander/gobal3/utils/digits"
 )
 
+var digiter = digits.NewDigiter(tritMin, tritMax+1)
+
+//------------------------------------------------------------------------------
+
 func intToTriteV1[T Unsigned](tc TryteCore[T], v int) (a T, rest int) {
 	var t int
 	for i := 0; i < tc.n; i++ {
-		v, t = digits.QuoRemMinMax(v, tritMin, tritMax)
+		v, t = digiter.QuoRem(v)
 		a = tc.setTrit(a, i, t)
 	}
 	rest = v
 	return
 }
 
+func tryteToIntV1[T Unsigned](tc TryteCore[T], a T, rest int) int {
+	base := digiter.Base()
+	v := rest
+	for i := (tc.n - 1); i >= 0; i-- {
+		v = (v * base) + tc.getTrit(a, i)
+	}
+	return v
+}
+
+//------------------------------------------------------------------------------
+
 func intToTriteV2[T Unsigned](tc TryteCore[T], v int) (a T, rest int) {
 	ds := make([]int, tc.n)
-	rest = digits.CalcDigits(v, tritMin, tritMax, ds)
+	rest = digiter.IntToDigits(v, ds)
 	for i, d := range ds {
 		a = tc.setTrit(a, i, d)
 	}
 	return
 }
+
+func tryteToIntV2[T Unsigned](tc TryteCore[T], a T, rest int) int {
+	ds := make([]int, tc.n)
+	for i := range ds {
+		ds[i] = tc.getTrit(a, i)
+	}
+	return digiter.DigitsToInt(ds, rest)
+}
+
+//------------------------------------------------------------------------------
 
 func intToTriteV3[T Unsigned](tc TryteCore[T], v int) (a T, rest int) {
 	var t int
@@ -33,31 +58,15 @@ func intToTriteV3[T Unsigned](tc TryteCore[T], v int) (a T, rest int) {
 	return
 }
 
-func intToTriteRest[T Unsigned](tc TryteCore[T], v int) (a T, rest int) {
-	//return intToTriteV1(tc, v)
+//------------------------------------------------------------------------------
+
+func intToTrite[T Unsigned](tc TryteCore[T], v int) (a T, rest int) {
+	return intToTriteV1(tc, v)
 	//return intToTriteV2(tc, v)
-	return intToTriteV3(tc, v)
+	//return intToTriteV3(tc, v)
 }
 
-func tryteToIntV1[T Unsigned](tc TryteCore[T], a T) int {
-	var v int
-	p := 1
-	for i := 0; i < tc.n; i++ {
-		v += p * tc.getTrit(a, i)
-		p *= base
-	}
-	return v
-}
-
-func tryteToIntV2[T Unsigned](tc TryteCore[T], a T) int {
-	ds := make([]int, tc.n)
-	for i := range ds {
-		ds[i] = tc.getTrit(a, i)
-	}
-	return digits.CalcNumber(tritMin, tritMax, ds, 0)
-}
-
-func tryteToInt[T Unsigned](tc TryteCore[T], a T) int {
-	return tryteToIntV1(tc, a)
-	//return tryteToIntV2(tc, a)
+func tryteToInt[T Unsigned](tc TryteCore[T], a T, rest int) int {
+	return tryteToIntV1(tc, a, rest)
+	// return tryteToIntV2(tc, a, rest)
 }

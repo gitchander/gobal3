@@ -7,13 +7,11 @@ import (
 
 func testTritsAdd[T Unsigned](tc TryteCore[T], a, b T, carryIn int) error {
 
-	carryFactor := powersOfThree[tc.n]
-
 	res, carryOut := tc.Add(a, b, carryIn)
 
 	var (
-		have = tc.TryteToInt(res) + (carryOut * carryFactor)
-		want = tc.TryteToInt(a) + tc.TryteToInt(b) + carryIn
+		have = tc.TryteToInt(res, carryOut)
+		want = tc.TryteToInt(a, 0) + tc.TryteToInt(b, 0) + carryIn
 	)
 
 	if have != want {
@@ -24,13 +22,11 @@ func testTritsAdd[T Unsigned](tc TryteCore[T], a, b T, carryIn int) error {
 
 func testTritsSub[T Unsigned](tc TryteCore[T], a, b T, carryIn int) error {
 
-	carryFactor := powersOfThree[tc.n]
-
 	res, carryOut := tc.Sub(a, b, carryIn)
 
 	var (
-		have = tc.TryteToInt(res) + (carryOut * carryFactor)
-		want = tc.TryteToInt(a) - tc.TryteToInt(b) + carryIn
+		have = tc.TryteToInt(res, carryOut)
+		want = tc.TryteToInt(a, 0) - tc.TryteToInt(b, 0) + carryIn
 	)
 
 	if have != want {
@@ -67,9 +63,9 @@ func TestAddTryte4(t *testing.T) {
 	tc := TC4
 	min, max := tc.Bounds()
 	for av := min; av <= max; av++ {
-		a := tc.IntToTrite(av)
+		a, _ := tc.IntToTrite(av)
 		for bv := min; bv <= max; bv++ {
-			b := tc.IntToTrite(bv)
+			b, _ := tc.IntToTrite(bv)
 			for _, carryIn := range tritValues {
 				err := testTritsAddSub(tc, a, b, carryIn)
 				if err != nil {
@@ -108,8 +104,8 @@ func TestAddT8Samples(t *testing.T) {
 
 	minInt, maxInt := tc.Bounds()
 	var (
-		min = tc.IntToTrite(minInt)
-		max = tc.IntToTrite(maxInt)
+		min, _ = tc.IntToTrite(minInt)
+		max, _ = tc.IntToTrite(maxInt)
 	)
 
 	type sample[T Unsigned] struct {
@@ -168,8 +164,8 @@ func TestCompareTryte4(t *testing.T) {
 		}
 
 		var (
-			a = tc.IntToTrite(av)
-			b = tc.IntToTrite(bv)
+			a, _ = tc.IntToTrite(av)
+			b, _ = tc.IntToTrite(bv)
 		)
 
 		have := tc.Compare(a, b)

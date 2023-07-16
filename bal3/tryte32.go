@@ -7,7 +7,7 @@ var tc32 = MakeTryteCore[Tryte32](32)
 var TC32 = tc32
 
 func (a Tryte32) Int() int {
-	return tc32.TryteToInt(a)
+	return tc32.TryteToInt(a, 0)
 }
 
 func (a Tryte32) String() string {

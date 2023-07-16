@@ -7,7 +7,7 @@ var tc6 = MakeTryteCore[Tryte6](6)
 var TC6 = tc6
 
 func (a Tryte6) Int() int {
-	return tc6.TryteToInt(a)
+	return tc6.TryteToInt(a, 0)
 }
 
 func (a Tryte6) String() string {

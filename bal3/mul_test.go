@@ -12,8 +12,8 @@ func testMul[T Unsigned](tc TryteCore[T], a, b T) error {
 	hiFactor := powersOfThree[tc.n]
 
 	var (
-		have = tc.TryteToInt(hi)*hiFactor + tc.TryteToInt(lo)
-		want = tc.TryteToInt(a) * tc.TryteToInt(b)
+		have = tc.TryteToInt(hi, 0)*hiFactor + tc.TryteToInt(lo, 0)
+		want = tc.TryteToInt(a, 0) * tc.TryteToInt(b, 0)
 	)
 
 	if have != want {
@@ -27,8 +27,8 @@ func testMulBounds[T Unsigned](tc TryteCore[T]) error {
 	for av := min; av <= max; av++ {
 		for bv := min; bv <= max; bv++ {
 			var (
-				a = tc.IntToTrite(av)
-				b = tc.IntToTrite(bv)
+				a, _ = tc.IntToTrite(av)
+				b, _ = tc.IntToTrite(bv)
 			)
 			err := testMul(tc, a, b)
 			if err != nil {

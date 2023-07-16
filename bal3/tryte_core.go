@@ -122,17 +122,12 @@ func (tc TryteCore[T]) SetAllTrits(t int) T {
 
 //------------------------------------------------------------------------------
 
-func (tc TryteCore[T]) IntToTriteRest(v int) (a T, rest int) {
-	return intToTriteRest(tc, v)
+func (tc TryteCore[T]) IntToTrite(v int) (a T, rest int) {
+	return intToTrite(tc, v)
 }
 
-func (tc TryteCore[T]) IntToTrite(v int) T {
-	a, _ := intToTriteRest(tc, v)
-	return a
-}
-
-func (tc TryteCore[T]) TryteToInt(a T) int {
-	return tryteToInt(tc, a)
+func (tc TryteCore[T]) TryteToInt(a T, rest int) int {
+	return tryteToInt(tc, a, rest)
 }
 
 //------------------------------------------------------------------------------

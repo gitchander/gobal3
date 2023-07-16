@@ -7,13 +7,11 @@ import (
 
 func testDoubleAdd[T Unsigned](dc doubleCore[T], a, b double[T], carryIn int) error {
 
-	hiFactor := powersOfThree[2*dc.tc.n]
-
 	res, carryOut := dc.Add(a, b, carryIn)
 
 	var (
-		have = dc.DTryteToInt(res) + (carryOut * hiFactor)
-		want = (dc.DTryteToInt(a) + dc.DTryteToInt(b)) + carryIn
+		have = dc.DoubleToInt(res, carryOut)
+		want = (dc.DoubleToInt(a, 0) + dc.DoubleToInt(b, 0)) + carryIn
 	)
 
 	if have != want {
@@ -24,13 +22,11 @@ func testDoubleAdd[T Unsigned](dc doubleCore[T], a, b double[T], carryIn int) er
 
 func testDoubleSub[T Unsigned](dc doubleCore[T], a, b double[T], carryIn int) error {
 
-	hiFactor := powersOfThree[2*dc.tc.n]
-
 	res, carryOut := dc.Sub(a, b, carryIn)
 
 	var (
-		have = dc.DTryteToInt(res) + (carryOut * hiFactor)
-		want = (dc.DTryteToInt(a) - dc.DTryteToInt(b)) + carryIn
+		have = dc.DoubleToInt(res, carryOut)
+		want = (dc.DoubleToInt(a, 0) - dc.DoubleToInt(b, 0)) + carryIn
 	)
 
 	if have != want {
@@ -68,7 +64,7 @@ func TestDoubleShl(t *testing.T) {
 		)
 
 		if dc.Compare(have, want) != 0 {
-			t.Fatalf("invalid value: have %d, want %d", dc.DTryteToInt(have), dc.DTryteToInt(want))
+			t.Fatalf("invalid value: have %d, want %d", dc.DoubleToInt(have, 0), dc.DoubleToInt(want, 0))
 		}
 	}
 }
@@ -92,7 +88,7 @@ func TestDoubleShr(t *testing.T) {
 		)
 
 		if dc.Compare(have, want) != 0 {
-			t.Fatalf("invalid value: have %d, want %d", dc.DTryteToInt(have), dc.DTryteToInt(want))
+			t.Fatalf("invalid value: have %d, want %d", dc.DoubleToInt(have, 0), dc.DoubleToInt(want, 0))
 		}
 	}
 }
@@ -152,8 +148,8 @@ func TestDoubleAddSubT8Samples(t *testing.T) {
 
 	minInt, maxInt := dc.Bounds()
 	var (
-		min = dc.IntToDTryte(minInt)
-		max = dc.IntToDTryte(maxInt)
+		min, _ = dc.IntToDouble(minInt)
+		max, _ = dc.IntToDouble(maxInt)
 	)
 
 	type sample[T Unsigned] struct {
@@ -184,8 +180,8 @@ func testDoubleMul[T Unsigned](dc doubleCore[T], a, b double[T]) error {
 	hiFactor := powersOfThree[2*dc.tc.n]
 
 	var (
-		have = dc.DTryteToInt(hi)*hiFactor + dc.DTryteToInt(lo)
-		want = dc.DTryteToInt(a) * dc.DTryteToInt(b)
+		have = dc.DoubleToInt(hi, 0)*hiFactor + dc.DoubleToInt(lo, 0)
+		want = dc.DoubleToInt(a, 0) * dc.DoubleToInt(b, 0)
 	)
 
 	if have != want {

@@ -5,7 +5,6 @@ import (
 	"math"
 
 	"github.com/gitchander/gobal3/ternary"
-	"github.com/gitchander/gobal3/utils/digits"
 )
 
 func main() {
@@ -204,15 +203,7 @@ var (
 
 func testQuoRem() {
 
-	const (
-		min = -1
-		max = +1
-
-		base = max - min + 1
-	)
-
-	quoRemMinMax := digits.QuoRemMinMax
-	_ = quoRemMinMax
+	base := 3
 
 	testSample := func(a int) {
 		q, r := quoRemBal3(a)

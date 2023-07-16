@@ -1,36 +1,49 @@
 package digits
 
-// QuoRemMinMax
-// (a <= b)
-// Z:   ....................... | a ... b | .......................
+type Digiter struct {
+	min, max int
+	base     int
+}
+
+func NewDigiter(min, max int) *Digiter {
+	if min >= max {
+		panic("interval is empty")
+	}
+	return &Digiter{
+		min:  min,
+		max:  max,
+		base: max - min,
+	}
+}
+
+func (d *Digiter) Base() int {
+	return d.base
+}
+
+// QuoRemInterval
+// min < max
+// a = min
+// b = max - 1
+
+// val: ....................... | a ... b | .......................
 // quo: ... |-2 ...-2 |-1 ...-1 | 0 ... 0 | 1 ... 1 | 2 ... 2 | ...
 // rem: ... | a ... b | a ... b | a ... b | a ... b | a ... b | ...
 
-func QuoRemMinMax(x int, min, max int) (q, r int) {
-	base := max - min + 1
-	if x < min {
-		q, r = quoRem(x-max, base)
-		r += max
-	} else {
-		q, r = quoRem(x-min, base)
-		r += min
+func (d *Digiter) QuoRem(x int) (q, r int) {
+
+	q, r = quoRem(x, d.base)
+
+	for r < d.min {
+		q--
+		r += d.base
 	}
+	for r >= d.max {
+		q++
+		r -= d.base
+	}
+
 	return q, r
 }
-
-// func QuoRemMinMax(x int, min, max int) (q, r int) {
-// 	base := max - min + 1
-// 	q, r = quoRem(x, base)
-// 	if r < min {
-// 		q--
-// 		r += base
-// 	}
-// 	if r > max {
-// 		q++
-// 		r -= base
-// 	}
-// 	return q, r
-// }
 
 func quoRem(a, b int) (quo, rem int) {
 	quo = a / b
@@ -38,38 +51,35 @@ func quoRem(a, b int) (quo, rem int) {
 	return
 }
 
-func CalcDigits(v int, min, max int, ds []int) (rest int) {
-	var d int
+// dl - digit interval
+func (d *Digiter) IntToDigits(v int, ds []int) (rest int) {
+	var digit int
 	for i := range ds {
-		v, d = QuoRemMinMax(v, min, max)
-		ds[i] = d
+		v, digit = d.QuoRem(v)
+		ds[i] = digit
 	}
 	rest = v
 	return rest
 }
 
-func CalcDigitsN(v int, min, max int, n int) (ds []int, rest int) {
-	var d int
+func (d *Digiter) DigitsToInt(ds []int, rest int) int {
+	v := rest
+	for i := len(ds) - 1; i >= 0; i-- {
+		v = (v * d.base) + ds[i]
+	}
+	return v
+}
+
+func (d *Digiter) IntToDigitsN(v int, n int) (ds []int, rest int) {
+	var digit int
 	ds = make([]int, 0, n)
 	for i := 0; i < n; i++ {
 		if (v == 0) && (len(ds) > 0) {
 			break
 		}
-		v, d = QuoRemMinMax(v, min, max)
-		ds = append(ds, d)
+		v, digit = d.QuoRem(v)
+		ds = append(ds, digit)
 	}
 	rest = v
 	return ds, rest
-}
-
-func CalcNumber(min, max int, ds []int, rest int) int {
-	base := max - min + 1
-	var v int
-	p := 1
-	for _, d := range ds {
-		v += d * p
-		p *= base
-	}
-	v += rest * p
-	return v
 }

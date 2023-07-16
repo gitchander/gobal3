@@ -28,7 +28,7 @@ func testBase27[T Unsigned](tc TryteCore[T], a T) error {
 func testBase27Bounds[T Unsigned](tc TryteCore[T]) error {
 	var min, max = tc.Bounds()
 	for av := min; av <= max; av++ {
-		a := tc.IntToTrite(av)
+		a, _ := tc.IntToTrite(av)
 		err := testBase27(tc, a)
 		if err != nil {
 			return err
