@@ -4,14 +4,14 @@ import (
 	"github.com/gitchander/gobal3/utils/digits"
 )
 
-var digiter = digits.NewDigiter(tritMin, tritMax+1)
+var digiter = digits.NewDigiter(tritMin, (tritMax + 1))
 
 //------------------------------------------------------------------------------
 
 func intToTriteV1[T Unsigned](tc TryteCore[T], v int) (a T, rest int) {
 	var t int
 	for i := 0; i < tc.n; i++ {
-		v, t = digiter.QuoRem(v)
+		t, v = digiter.Digit(v)
 		a = tc.setTrit(a, i, t)
 	}
 	rest = v

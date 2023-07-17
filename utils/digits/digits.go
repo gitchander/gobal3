@@ -1,5 +1,11 @@
 package digits
 
+import (
+	"fmt"
+
+	"github.com/gitchander/gobal3/utils/overflows"
+)
+
 type Digiter struct {
 	min, max int
 	base     int
@@ -29,9 +35,9 @@ func (d *Digiter) Base() int {
 // quo: ... |-2 ...-2 |-1 ...-1 | 0 ... 0 | 1 ... 1 | 2 ... 2 | ...
 // rem: ... | a ... b | a ... b | a ... b | a ... b | a ... b | ...
 
-func (d *Digiter) QuoRem(x int) (q, r int) {
+func (d *Digiter) Digit(x int) (digit, rest int) {
 
-	q, r = quoRem(x, d.base)
+	q, r := quoRem(x, d.base)
 
 	for r < d.min {
 		q--
@@ -42,7 +48,9 @@ func (d *Digiter) QuoRem(x int) (q, r int) {
 		r -= d.base
 	}
 
-	return q, r
+	digit = r
+	rest = q
+	return
 }
 
 func quoRem(a, b int) (quo, rem int) {
@@ -55,7 +63,7 @@ func quoRem(a, b int) (quo, rem int) {
 func (d *Digiter) IntToDigits(v int, ds []int) (rest int) {
 	var digit int
 	for i := range ds {
-		v, digit = d.QuoRem(v)
+		digit, v = d.Digit(v)
 		ds[i] = digit
 	}
 	rest = v
@@ -70,6 +78,20 @@ func (d *Digiter) DigitsToInt(ds []int, rest int) int {
 	return v
 }
 
+func (d *Digiter) DigitsToIntOK(ds []int, rest int) (int, bool) {
+	v := rest
+	for i := len(ds) - 1; i >= 0; i-- {
+		fmt.Println(v, d.base)
+		// todo
+		vb, ok := overflows.MulInt(v, d.base)
+		if !ok {
+			return vb, false
+		}
+		v = vb + ds[i]
+	}
+	return v, true
+}
+
 func (d *Digiter) IntToDigitsN(v int, n int) (ds []int, rest int) {
 	var digit int
 	ds = make([]int, 0, n)
@@ -77,7 +99,7 @@ func (d *Digiter) IntToDigitsN(v int, n int) (ds []int, rest int) {
 		if (v == 0) && (len(ds) > 0) {
 			break
 		}
-		v, digit = d.QuoRem(v)
+		digit, v = d.Digit(v)
 		ds = append(ds, digit)
 	}
 	rest = v

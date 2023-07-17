@@ -9,9 +9,10 @@ import (
 )
 
 func main() {
-	testCalcDigits()
+	//testCalcDigits()
 	//testCalcDigitsN()
 	//testDigits()
+	testCalcDigits2()
 }
 
 func testCalcDigits() {
@@ -105,4 +106,41 @@ func frameSquare(s string) string {
 func frame(s string) string {
 	return "(" + s + ")"
 	//return "[" + s + "]"
+}
+
+func testCalcDigits2() {
+
+	var (
+		digiter      = digits.NewDigiter(0, 10)
+		digitWidth   = 3
+		digitsNumber = 21
+
+		// digiter      = digits.NewDigiter(-1, 2)
+		// digitWidth   = 3
+		// digitsNumber = 41
+	)
+
+	ds := make([]int, digitsNumber)
+
+	var (
+		a = math.MinInt
+		//a = math.MinInt + 8
+		//a = math.MaxInt
+	)
+
+	rest := digiter.IntToDigits(a, ds)
+	fmt.Printf("%d %d %s\n", a, rest, formatDigits(ds, digitWidth))
+
+	if false {
+		b := digiter.DigitsToInt(ds, rest)
+		if b != a {
+			panic(fmt.Errorf("%d != %d", b, a))
+		}
+	} else {
+		b, ok := digiter.DigitsToIntOK(ds, rest)
+		fmt.Println(ok)
+		if b != a {
+			panic(fmt.Errorf("%d != %d", b, a))
+		}
+	}
 }

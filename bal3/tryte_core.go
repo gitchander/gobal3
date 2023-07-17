@@ -325,9 +325,9 @@ func (tc TryteCore[T]) DoUnary(a T, f ternary.UnaryFunc) T {
 	for i := 0; i < tc.n; i++ {
 		var (
 			ai = tc.getTrit(a, i)
-			t  = f(ai)
+			bi = f(ai)
 		)
-		b = tc.setTrit(b, i, t)
+		b = tc.setTrit(b, i, bi)
 	}
 	return b
 }
@@ -338,9 +338,9 @@ func (tc TryteCore[T]) DoBinary(a, b T, f ternary.BinaryFunc) T {
 		var (
 			ai = tc.getTrit(a, i)
 			bi = tc.getTrit(b, i)
-			t  = f(ai, bi)
+			ci = f(ai, bi)
 		)
-		c = tc.setTrit(c, i, t)
+		c = tc.setTrit(c, i, ci)
 	}
 	return c
 }

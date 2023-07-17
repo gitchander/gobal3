@@ -9,10 +9,8 @@ func testMul[T Unsigned](tc TryteCore[T], a, b T) error {
 
 	hi, lo := tc.Mul(a, b)
 
-	hiFactor := powersOfThree[tc.n]
-
 	var (
-		have = tc.TryteToInt(hi, 0)*hiFactor + tc.TryteToInt(lo, 0)
+		have = tc.TryteToInt(lo, tc.TryteToInt(hi, 0))
 		want = tc.TryteToInt(a, 0) * tc.TryteToInt(b, 0)
 	)
 
