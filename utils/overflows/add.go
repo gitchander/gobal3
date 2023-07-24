@@ -23,3 +23,21 @@ func AddInt64(a, b int64) (int64, bool) {
 	}
 	return a + b, true
 }
+
+func AddInt(a, b int) (int, bool) {
+	const (
+		min = math.MinInt
+		max = math.MaxInt
+	)
+	if a < 0 {
+		if b < (min - a) {
+			return 0, false
+		}
+	}
+	if a > 0 {
+		if b > (max - a) {
+			return 0, false
+		}
+	}
+	return a + b, true
+}

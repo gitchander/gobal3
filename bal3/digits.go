@@ -43,7 +43,11 @@ func tryteToIntV2[T Unsigned](tc TryteCore[T], a T, rest int) int {
 	for i := range ds {
 		ds[i] = tc.getTrit(a, i)
 	}
-	return digiter.DigitsToInt(ds, rest)
+	v, err := digiter.DigitsToInt(ds, rest)
+	if err != nil {
+		panic(err)
+	}
+	return v
 }
 
 //------------------------------------------------------------------------------
@@ -68,5 +72,5 @@ func intToTrite[T Unsigned](tc TryteCore[T], v int) (a T, rest int) {
 
 func tryteToInt[T Unsigned](tc TryteCore[T], a T, rest int) int {
 	return tryteToIntV1(tc, a, rest)
-	// return tryteToIntV2(tc, a, rest)
+	//return tryteToIntV2(tc, a, rest)
 }

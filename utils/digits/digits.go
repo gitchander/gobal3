@@ -22,6 +22,13 @@ func NewDigiter(min, max int) *Digiter {
 	}
 }
 
+func (d *Digiter) checkDigit(digit int) error {
+	if (d.min <= digit) && (digit < d.max) {
+		return nil
+	}
+	return fmt.Errorf("invalid digit %d, want interval [%d...%d)", digit, d.min, d.max)
+}
+
 func (d *Digiter) Base() int {
 	return d.base
 }
@@ -70,28 +77,6 @@ func (d *Digiter) IntToDigits(v int, ds []int) (rest int) {
 	return rest
 }
 
-func (d *Digiter) DigitsToInt(ds []int, rest int) int {
-	v := rest
-	for i := len(ds) - 1; i >= 0; i-- {
-		v = (v * d.base) + ds[i]
-	}
-	return v
-}
-
-func (d *Digiter) DigitsToIntOK(ds []int, rest int) (int, bool) {
-	v := rest
-	for i := len(ds) - 1; i >= 0; i-- {
-		fmt.Println(v, d.base)
-		// todo
-		vb, ok := overflows.MulInt(v, d.base)
-		if !ok {
-			return vb, false
-		}
-		v = vb + ds[i]
-	}
-	return v, true
-}
-
 func (d *Digiter) IntToDigitsN(v int, n int) (ds []int, rest int) {
 	var digit int
 	ds = make([]int, 0, n)
@@ -104,4 +89,53 @@ func (d *Digiter) IntToDigitsN(v int, n int) (ds []int, rest int) {
 	}
 	rest = v
 	return ds, rest
+}
+
+func (d *Digiter) digitsToInt_(ds []int, rest int) int {
+	v := rest
+	for i := len(ds) - 1; i >= 0; i-- {
+		v = (v * d.base) + ds[i]
+	}
+	return v
+}
+
+func (d *Digiter) DigitsToInt(digits []int, rest int) (int, error) {
+	base := d.base
+	v := rest
+	for i := len(digits) - 1; i >= 0; i-- {
+		digit := digits[i]
+		err := d.checkDigit(digit)
+		if err != nil {
+			return 0, err
+		}
+
+		//fmt.Println(v)
+
+		// v = (v * d.base) + digit
+		// v = (v * d.base) + digit + (k*d.base - k*d.base)
+		// v = (v + k)*d.base - k*d.base + digit
+
+		k := 0
+		switch {
+		case v < 0:
+			k = +base
+		case v > 0:
+			k = -base
+		}
+
+		vb, ok := overflows.MulInt((v + k), base)
+		if !ok {
+			return 0, fmt.Errorf("mul overflow")
+		}
+		s1, ok := overflows.AddInt(-(k * base), digit)
+		if !ok {
+			return 0, fmt.Errorf("add overflow: s1")
+		}
+		s2, ok := overflows.AddInt(vb, s1)
+		if !ok {
+			return 0, fmt.Errorf("add overflow: s2")
+		}
+		v = s2
+	}
+	return v, nil
 }

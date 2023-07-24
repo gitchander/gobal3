@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"math"
 	"strings"
 
@@ -9,10 +10,16 @@ import (
 )
 
 func main() {
-	//testCalcDigits()
+	testCalcDigits()
 	//testCalcDigitsN()
 	//testDigits()
-	testCalcDigits2()
+	//testCalcDigits2()
+}
+
+func checkError(err error) {
+	if err != nil {
+		log.Fatal(err)
+	}
 }
 
 func testCalcDigits() {
@@ -22,8 +29,8 @@ func testCalcDigits() {
 		// digitsNumber = 64
 
 		// digiter      = digits.NewDigiter(0, 10)
-		// digitWidth   = 3
-		// digitsNumber = 25
+		// digitWidth   = 1
+		// digitsNumber = 22
 
 		// digiter      = digits.NewDigiter(-1, 2)
 		// digitWidth   = 3
@@ -41,9 +48,21 @@ func testCalcDigits() {
 		// digitWidth   = 4
 		// digitsNumber = 11
 
-		digiter      = digits.NewDigiter(4, 13)
+		// digiter      = digits.NewDigiter(4, 13)
+		// digitWidth   = 3
+		// digitsNumber = 25
+
+		// digiter      = digits.NewDigiter(17, 36)
+		// digitWidth   = 3
+		// digitsNumber = 20
+
+		// digiter      = digits.NewDigiter(-36, -17)
+		// digitWidth   = 4
+		// digitsNumber = 20
+
+		digiter      = digits.NewDigiter(-1, 2)
 		digitWidth   = 3
-		digitsNumber = 25
+		digitsNumber = 43
 	)
 	var as []int
 	as = appendIntsMinMax(as, math.MinInt, math.MinInt+15)
@@ -53,11 +72,13 @@ func testCalcDigits() {
 	ds := make([]int, digitsNumber)
 	for _, a := range as {
 		rest := digiter.IntToDigits(a, ds)
-		b := digiter.DigitsToInt(ds, rest)
+		fmt.Printf("%21d %21d %s\n", a, rest, formatDigits(ds, digitWidth))
+
+		b, err := digiter.DigitsToInt(ds, rest)
+		checkError(err)
 		if b != a {
 			panic(fmt.Errorf("%d != %d", b, a))
 		}
-		fmt.Printf("%21d %21d %s\n", a, rest, formatDigits(ds, digitWidth))
 	}
 }
 
@@ -111,18 +132,31 @@ func frame(s string) string {
 func testCalcDigits2() {
 
 	var (
-		digiter      = digits.NewDigiter(0, 10)
-		digitWidth   = 3
-		digitsNumber = 21
+		// digiter      = digits.NewDigiter(0, 10)
+		// digitWidth   = 3
+		// digitsNumber = 21
 
 		// digiter      = digits.NewDigiter(-1, 2)
 		// digitWidth   = 3
 		// digitsNumber = 41
+
+		// digiter      = digits.NewDigiter(50, 109)
+		// digitWidth   = 3
+		// digitsNumber = 40
+
+		// digiter      = digits.NewDigiter(-13, -8)
+		// digitWidth   = 4
+		// digitsNumber = 30
+
+		digiter      = digits.NewDigiter(2, 3)
+		digitWidth   = 3
+		digitsNumber = 30
 	)
 
 	ds := make([]int, digitsNumber)
 
 	var (
+		//a = -1
 		a = math.MinInt
 		//a = math.MinInt + 8
 		//a = math.MaxInt
@@ -131,16 +165,9 @@ func testCalcDigits2() {
 	rest := digiter.IntToDigits(a, ds)
 	fmt.Printf("%d %d %s\n", a, rest, formatDigits(ds, digitWidth))
 
-	if false {
-		b := digiter.DigitsToInt(ds, rest)
-		if b != a {
-			panic(fmt.Errorf("%d != %d", b, a))
-		}
-	} else {
-		b, ok := digiter.DigitsToIntOK(ds, rest)
-		fmt.Println(ok)
-		if b != a {
-			panic(fmt.Errorf("%d != %d", b, a))
-		}
+	b, err := digiter.DigitsToInt(ds, rest)
+	checkError(err)
+	if b != a {
+		panic(fmt.Errorf("%d != %d", b, a))
 	}
 }
