@@ -232,8 +232,22 @@ func (dc doubleCore[T]) Sub(a, b double[T], carryIn int) (c double[T], carryOut 
 	return makeDouble(hi, lo), carry
 }
 
-func (dc doubleCore[T]) Bounds() (min, max int) {
-	return tryteBounds(dc.TotalTrits())
+// Bounds
+func (dc doubleCore[T]) Limits() (min, max double[T]) {
+
+	n := dc.tc.TotalTrits()
+
+	min = double[T]{
+		Hi: setTritsN[T](n, tv_T),
+		Lo: setTritsN[T](n, tv_T),
+	}
+
+	max = double[T]{
+		Hi: setTritsN[T](n, tv_1),
+		Lo: setTritsN[T](n, tv_1),
+	}
+
+	return min, max
 }
 
 func (dc doubleCore[T]) Mul(a, b double[T]) (hi, lo double[T]) {

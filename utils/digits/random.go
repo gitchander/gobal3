@@ -31,7 +31,7 @@ func randBaseInt(r *rand.Rand) int {
 	return a
 }
 
-func randomBaseMinMax(r *rand.Rand) (min, max int) {
+func randomBaseMinMaxV1(r *rand.Rand) (min, max int) {
 	var a, b int
 	for a == b {
 		a = randBaseInt(r)
@@ -41,4 +41,15 @@ func randomBaseMinMax(r *rand.Rand) (min, max int) {
 		a, b = b, a
 	}
 	return a, b
+}
+
+func randomBaseMinMaxV2(r *rand.Rand) (min, max int) {
+	a := -random.RandIntMinMax(r, 0, 20)
+	b := random.RandIntMinMax(r, 0, 20)
+	return a, b
+}
+
+func randomBaseMinMax(r *rand.Rand) (min, max int) {
+	//return randomBaseMinMaxV1(r)
+	return randomBaseMinMaxV2(r)
 }

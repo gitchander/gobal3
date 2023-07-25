@@ -21,7 +21,7 @@ func testMul[T Unsigned](tc TryteCore[T], a, b T) error {
 }
 
 func testMulBounds[T Unsigned](tc TryteCore[T]) error {
-	var min, max = tc.Bounds()
+	min, max := tc.Limits()
 	for av := min; av <= max; av++ {
 		for bv := min; bv <= max; bv++ {
 			var (

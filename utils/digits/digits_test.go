@@ -32,10 +32,9 @@ func TestDigitsSamples(t *testing.T) {
 	//r := randBySeed(0)
 	for i := 0; i < 100; i++ {
 		min, max := randomBaseMinMax(r)
-		t.Log(min, max)
+		// t.Log(min, max)
 		for _, sample := range samples {
-			//fmt.Println(sample)
-			err := testSample(sample, min, max, 40)
+			err := testSample(sample, min, max, 1)
 			if err != nil {
 				t.Fatal(err)
 			}

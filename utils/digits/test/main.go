@@ -14,6 +14,7 @@ func main() {
 	//testCalcDigitsN()
 	//testDigits()
 	//testCalcDigits2()
+	//testQuoRemMinMax()
 }
 
 func checkError(err error) {
@@ -24,19 +25,19 @@ func checkError(err error) {
 
 func testCalcDigits() {
 	var (
-		// digiter      = digits.NewDigiter(0, 2)
-		// digitWidth   = 1
-		// digitsNumber = 64
+		digiter      = digits.NewDigiter(0, 1)
+		digitWidth   = 1
+		digitsNumber = 64
 
-		// digiter      = digits.NewDigiter(0, 10)
+		// digiter      = digits.NewDigiter(0, 9)
 		// digitWidth   = 1
-		// digitsNumber = 22
+		// digitsNumber = 25
 
-		// digiter      = digits.NewDigiter(-1, 2)
+		// digiter      = digits.NewDigiter(-1, 1)
 		// digitWidth   = 3
 		// digitsNumber = 41
 
-		// digiter      = digits.NewDigiter(5, 9)
+		// digiter      = digits.NewDigiter(5, 8)
 		// digitWidth   = 1
 		// digitsNumber = 40
 
@@ -60,9 +61,9 @@ func testCalcDigits() {
 		// digitWidth   = 4
 		// digitsNumber = 20
 
-		digiter      = digits.NewDigiter(-1, 2)
-		digitWidth   = 3
-		digitsNumber = 43
+		// digiter      = digits.NewDigiter(-1, +1)
+		// digitWidth   = 3
+		// digitsNumber = 43
 	)
 	var as []int
 	as = appendIntsMinMax(as, math.MinInt, math.MinInt+15)
@@ -93,7 +94,7 @@ func testCalcDigitsN() {
 	const (
 		digitWidth = 3
 	)
-	digiter := digits.NewDigiter(0, 10)
+	digiter := digits.NewDigiter(0, 9)
 	x := 123404534
 	ds, rest := digiter.IntToDigitsN(x, 10)
 	fmt.Println(x, rest, formatDigits(ds, digitWidth))
@@ -103,7 +104,7 @@ func testDigits() {
 	const (
 		digitWidth = 3
 	)
-	digiter := digits.NewDigiter(-1, 2)
+	digiter := digits.NewDigiter(-1, +1)
 	ds := make([]int, 10)
 	for x := 0; x < 100; x++ {
 		rest := digiter.IntToDigits(x, ds)
@@ -132,23 +133,23 @@ func frame(s string) string {
 func testCalcDigits2() {
 
 	var (
-		// digiter      = digits.NewDigiter(0, 10)
+		// digiter      = digits.NewDigiter(0, 9)
 		// digitWidth   = 3
 		// digitsNumber = 21
 
-		// digiter      = digits.NewDigiter(-1, 2)
+		// digiter      = digits.NewDigiter(-1, +1)
 		// digitWidth   = 3
 		// digitsNumber = 41
 
-		// digiter      = digits.NewDigiter(50, 109)
+		// digiter      = digits.NewDigiter(50, 108)
 		// digitWidth   = 3
 		// digitsNumber = 40
 
-		// digiter      = digits.NewDigiter(-13, -8)
+		// digiter      = digits.NewDigiter(-13, -9)
 		// digitWidth   = 4
 		// digitsNumber = 30
 
-		digiter      = digits.NewDigiter(2, 3)
+		digiter      = digits.NewDigiter(2, 2)
 		digitWidth   = 3
 		digitsNumber = 30
 	)
@@ -169,5 +170,25 @@ func testCalcDigits2() {
 	checkError(err)
 	if b != a {
 		panic(fmt.Errorf("%d != %d", b, a))
+	}
+}
+
+func testQuoRemMinMax() {
+
+	var (
+		//dmin, dmax = -1, 1
+		//dmin, dmax = 0, 1
+		dmin, dmax = 0, 19
+	)
+
+	var as []int
+	as = appendIntsMinMax(as, math.MinInt, math.MinInt+100)
+	as = appendIntsMinMax(as, -100, 100)
+	as = appendIntsMinMax(as, math.MaxInt-100, math.MaxInt)
+	as = append(as, math.MaxInt)
+
+	for _, a := range as {
+		q, r := digits.QuoRemMinMax2(a, dmin, dmax)
+		fmt.Printf("%20d %20d %3d\n", a, q, r)
 	}
 }

@@ -146,11 +146,7 @@ func TestDoubleAddSubT8Samples(t *testing.T) {
 		dc = makeDoubleCore(tc)
 	)
 
-	minInt, maxInt := dc.Bounds()
-	var (
-		min, _ = dc.IntToDouble(minInt)
-		max, _ = dc.IntToDouble(maxInt)
-	)
+	min, max := dc.Limits()
 
 	type sample[T Unsigned] struct {
 		a double[T]
@@ -177,10 +173,8 @@ func testDoubleMul[T Unsigned](dc doubleCore[T], a, b double[T]) error {
 
 	hi, lo := dc.Mul(a, b)
 
-	hiFactor := powersOfThree[2*dc.tc.n]
-
 	var (
-		have = dc.DoubleToInt(hi, 0)*hiFactor + dc.DoubleToInt(lo, 0)
+		have = dc.DoubleToInt(lo, dc.DoubleToInt(hi, 0))
 		want = dc.DoubleToInt(a, 0) * dc.DoubleToInt(b, 0)
 	)
 

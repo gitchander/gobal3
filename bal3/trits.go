@@ -81,3 +81,11 @@ func getTrit[T Unsigned](x T, i int) int {
 
 	return bitsToTrit(x)
 }
+
+func setTritsN[T Unsigned](n int, t int) T {
+	var y T
+	for i := 0; i < n; i++ {
+		y = (y << bitsPerTrit) | (tritToBits[T](t))
+	}
+	return y
+}

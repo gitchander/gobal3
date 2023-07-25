@@ -14,15 +14,15 @@ func main() {
 
 	//testToString()
 
-	testIncTC4()
+	//testIncTC4()
 	//testIncTC6()
 	//testIncTC9()
 
-	// testFormatBase27()
-	// testParseBase27()
+	//testFormatBase27()
+	//testParseBase27()
 
-	// testBounds()
-	// testQuoRemT32Random()
+	//testBounds()
+	testQuoRemT32Random()
 }
 
 func checkError(err error) {
@@ -108,27 +108,30 @@ func testParseBase27() {
 }
 
 func testBounds() {
-	printBounds := func(typeName string, min, max int) {
+
+	type tryteType = bal3.Tryte4
+
+	printBounds := func(typeName string, min, max tryteType) {
 		fmt.Printf("%q: { min: %d, max: %d }\n", typeName, min, max)
 	}
-	var min, max int
+	var min, max tryteType
 
-	min, max = bal3.TC4.Bounds()
+	min, max = bal3.TC4.Limits()
 	printBounds("tryte4", min, max)
 
-	min, max = bal3.TC8.Bounds()
+	min, max = bal3.TC8.Limits()
 	printBounds("tryte8", min, max)
 
-	min, max = bal3.TC16.Bounds()
+	min, max = bal3.TC16.Limits()
 	printBounds("tryte16", min, max)
 
-	min, max = bal3.TC32.Bounds()
+	min, max = bal3.TC32.Limits()
 	printBounds("tryte32", min, max)
 
-	min, max = bal3.TC6.Bounds()
+	min, max = bal3.TC6.Limits()
 	printBounds("tryte6", min, max)
 
-	min, max = bal3.TC9.Bounds()
+	min, max = bal3.TC9.Limits()
 	printBounds("tryte9", min, max)
 
 	printBounds("int32", math.MinInt32, math.MaxInt32)

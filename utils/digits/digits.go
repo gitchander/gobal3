@@ -12,35 +12,26 @@ type Digiter struct {
 }
 
 func NewDigiter(min, max int) *Digiter {
-	if min >= max {
+	if min > max {
 		panic("interval is empty")
 	}
 	return &Digiter{
 		min:  min,
 		max:  max,
-		base: max - min,
+		base: (max - min + 1),
 	}
 }
 
 func (d *Digiter) checkDigit(digit int) error {
-	if (d.min <= digit) && (digit < d.max) {
+	if (d.min <= digit) && (digit <= d.max) {
 		return nil
 	}
-	return fmt.Errorf("invalid digit %d, want interval [%d...%d)", digit, d.min, d.max)
+	return fmt.Errorf("invalid digit %d, want interval [%d .. %d]", digit, d.min, d.max)
 }
 
 func (d *Digiter) Base() int {
 	return d.base
 }
-
-// QuoRemInterval
-// min < max
-// a = min
-// b = max - 1
-
-// val: ....................... | a ... b | .......................
-// quo: ... |-2 ...-2 |-1 ...-1 | 0 ... 0 | 1 ... 1 | 2 ... 2 | ...
-// rem: ... | a ... b | a ... b | a ... b | a ... b | a ... b | ...
 
 func (d *Digiter) Digit(x int) (digit, rest int) {
 
@@ -50,7 +41,7 @@ func (d *Digiter) Digit(x int) (digit, rest int) {
 		q--
 		r += d.base
 	}
-	for r >= d.max {
+	for r > d.max {
 		q++
 		r -= d.base
 	}
@@ -125,7 +116,8 @@ func (d *Digiter) DigitsToInt(digits []int, rest int) (int, error) {
 
 		vb, ok := overflows.MulInt((v + k), base)
 		if !ok {
-			return 0, fmt.Errorf("mul overflow")
+			fmt.Println("digits:", digits, len(digits))
+			return 0, fmt.Errorf("mul overflow: %d * %d", v, k)
 		}
 		s1, ok := overflows.AddInt(-(k * base), digit)
 		if !ok {

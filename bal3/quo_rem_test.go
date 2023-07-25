@@ -106,12 +106,7 @@ func TestQuoRemT32Samples(t *testing.T) {
 	type tritsType = Tryte32
 	tc := TC32
 
-	minInt, maxInt := tc.Bounds()
-
-	var (
-		min, _ = tc.IntToTrite(minInt)
-		max, _ = tc.IntToTrite(maxInt)
-	)
+	min, max := tc.Limits()
 
 	samples := [][2]tritsType{
 		{0, max},

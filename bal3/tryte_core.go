@@ -314,8 +314,19 @@ func (tc TryteCore[T]) Len(x T) int {
 	return 0
 }
 
-func (tc TryteCore[T]) Bounds() (min, max int) {
-	return tryteBounds(tc.TotalTrits())
+// Bounds
+func (tc TryteCore[T]) Limits() (min, max T) {
+	n := tc.TotalTrits()
+	min = setTritsN[T](n, tv_T)
+	max = setTritsN[T](n, tv_1)
+	return min, max
+}
+
+func (tc TryteCore[T]) LimitsInt64() (min, max int64) {
+	tmin, tmax := tc.Limits()
+	min = tc.TryteToInt(tmin, 0)
+	max = tc.TryteToInt(tmax, 0)
+	return min, max
 }
 
 //------------------------------------------------------------------------------

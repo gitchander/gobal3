@@ -102,11 +102,7 @@ func TestAddT8Samples(t *testing.T) {
 	type tritsType = Tryte8
 	tc := TC8
 
-	minInt, maxInt := tc.Bounds()
-	var (
-		min, _ = tc.IntToTrite(minInt)
-		max, _ = tc.IntToTrite(maxInt)
-	)
+	min, max := tc.Limits()
 
 	type sample[T Unsigned] struct {
 		a       T
