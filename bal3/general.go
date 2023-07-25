@@ -5,7 +5,7 @@ type tryteGeneral[T Unsigned] interface {
 
 	Invert() T
 
-	Int() int
+	ToInt64() (int64, bool)
 	String() string
 
 	Add(T) T

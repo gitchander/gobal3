@@ -10,8 +10,8 @@ func testTritsAdd[T Unsigned](tc TryteCore[T], a, b T, carryIn int) error {
 	res, carryOut := tc.Add(a, b, carryIn)
 
 	var (
-		have = tc.TryteToInt(res, carryOut)
-		want = tc.TryteToInt(a, 0) + tc.TryteToInt(b, 0) + carryIn
+		have = tc.tryteToInt64(res, int64(carryOut))
+		want = tc.tryteToInt64(a, 0) + tc.tryteToInt64(b, 0) + int64(carryIn)
 	)
 
 	if have != want {
@@ -25,8 +25,8 @@ func testTritsSub[T Unsigned](tc TryteCore[T], a, b T, carryIn int) error {
 	res, carryOut := tc.Sub(a, b, carryIn)
 
 	var (
-		have = tc.TryteToInt(res, carryOut)
-		want = tc.TryteToInt(a, 0) - tc.TryteToInt(b, 0) + carryIn
+		have = tc.tryteToInt64(res, int64(carryOut))
+		want = tc.tryteToInt64(a, 0) - tc.tryteToInt64(b, 0) + int64(carryIn)
 	)
 
 	if have != want {
@@ -61,11 +61,11 @@ func testAddSubRand[T Unsigned](tc TryteCore[T]) error {
 
 func TestAddTryte4(t *testing.T) {
 	tc := TC4
-	min, max := tc.Bounds()
+	min, max := tc.LimitsInt64()
 	for av := min; av <= max; av++ {
-		a, _ := tc.IntToTrite(av)
+		a, _ := tc.Int64ToTrite(av)
 		for bv := min; bv <= max; bv++ {
-			b, _ := tc.IntToTrite(bv)
+			b, _ := tc.Int64ToTrite(bv)
 			for _, carryIn := range tritValues {
 				err := testTritsAddSub(tc, a, b, carryIn)
 				if err != nil {
@@ -149,7 +149,7 @@ func TestCompareTryte4(t *testing.T) {
 
 	tc := TC4
 
-	test := func(av, bv int) {
+	test := func(av, bv int64) {
 
 		want := 0
 		switch {
@@ -160,8 +160,8 @@ func TestCompareTryte4(t *testing.T) {
 		}
 
 		var (
-			a, _ = tc.IntToTrite(av)
-			b, _ = tc.IntToTrite(bv)
+			a, _ = tc.Int64ToTrite(av)
+			b, _ = tc.Int64ToTrite(bv)
 		)
 
 		have := tc.Compare(a, b)
@@ -171,7 +171,7 @@ func TestCompareTryte4(t *testing.T) {
 		}
 	}
 
-	min, max := tc.Bounds()
+	min, max := tc.LimitsInt64()
 	for av := min; av <= max; av++ {
 		for bv := min; bv <= max; bv++ {
 			test(av, bv)

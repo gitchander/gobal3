@@ -161,7 +161,7 @@ func splitTrits2(v int) (t1, t0 int) {
 
 //------------------------------------------------------------------------------
 
-func quoRemBal3(a int) (q, r int) {
+func quoRemBal3(a int64) (q, r int64) {
 
 	const (
 		min = -1
@@ -170,7 +170,7 @@ func quoRemBal3(a int) (q, r int) {
 		base = max - min + 1
 	)
 
-	q, r = quoRem(a, base)
+	q, r = quoRemInt64(a, base)
 
 	if r < min {
 		q--
@@ -184,7 +184,13 @@ func quoRemBal3(a int) (q, r int) {
 	return q, r
 }
 
-func quoRem(a, b int) (quo, rem int) {
+func quoRemInt(a, b int) (quo, rem int) {
+	quo = a / b
+	rem = a % b
+	return
+}
+
+func quoRemInt64(a, b int64) (quo, rem int64) {
 	quo = a / b
 	rem = a % b
 	return

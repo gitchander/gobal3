@@ -21,10 +21,10 @@ func TestQuoRemT16Samples(t *testing.T) {
 			return sampleType{a, b}
 		}
 
-		fromInt = func(av, bv int) sampleType {
+		fromInt64 = func(av, bv int64) sampleType {
 			var (
-				a, _ = tc.IntToTrite(av)
-				b, _ = tc.IntToTrite(bv)
+				a, _ = tc.Int64ToTrite(av)
+				b, _ = tc.Int64ToTrite(bv)
 			)
 			return sampleType{a, b}
 		}
@@ -38,11 +38,11 @@ func TestQuoRemT16Samples(t *testing.T) {
 		// custom samples
 		fromStr("1", "1T"),
 		fromStr("1T", "10"),
-		fromInt(2, 4),
-		fromInt(5, 3),
-		fromInt(-8, -5),
-		fromInt(1316, -191),
-		fromInt(2, 3),
+		fromInt64(2, 4),
+		fromInt64(5, 3),
+		fromInt64(-8, -5),
+		fromInt64(1316, -191),
+		fromInt64(2, 3),
 	}
 
 	for _, p := range ps {
@@ -56,14 +56,14 @@ func TestQuoRemT16Samples(t *testing.T) {
 
 func TestQuoRemT4All(t *testing.T) {
 	tc := TC4
-	min, max := tc.Bounds()
+	min, max := tc.LimitsInt64()
 	for ai := min; ai <= max; ai++ {
-		a, _ := tc.IntToTrite(ai)
+		a, _ := tc.Int64ToTrite(ai)
 		for bi := min; bi <= max; bi++ {
 			if bi == 0 {
 				continue
 			}
-			b, _ := tc.IntToTrite(bi)
+			b, _ := tc.Int64ToTrite(bi)
 			err := testQuoRemDouble(tc, a, b)
 			if err != nil {
 				t.Fatal(err)
@@ -148,8 +148,8 @@ func testQuoRemRange[T Unsigned](tc TryteCore[T]) error {
 func testQuoRemT16(a, b Tryte16) error {
 
 	var (
-		av = a.Int()
-		bv = b.Int()
+		av, _ = a.ToInt64()
+		bv, _ = b.ToInt64()
 	)
 
 	var (
@@ -159,11 +159,11 @@ func testQuoRemT16(a, b Tryte16) error {
 
 	quo, rem := quoRemT16(a, b)
 	var (
-		haveQuo = quo.Int()
-		haveRem = rem.Int()
+		haveQuo, _ = quo.ToInt64()
+		haveRem, _ = rem.ToInt64()
 	)
 
-	wantQuo, wantRem := quoRem(av, bv)
+	wantQuo, wantRem := quoRemInt64(av, bv)
 
 	printAll := func() {
 		fmt.Printf("have: quoRem(%d, %d) => { quo: %d, rem: %d }\n", av, bv, haveQuo, haveRem)
@@ -195,17 +195,17 @@ func testQuoRemT16(a, b Tryte16) error {
 func testQuoRemDouble[T Unsigned](tc TryteCore[T], a, b T) error {
 
 	var (
-		av = tc.TryteToInt(a, 0)
-		bv = tc.TryteToInt(b, 0)
+		av = tc.tryteToInt64(a, 0)
+		bv = tc.tryteToInt64(b, 0)
 	)
 
 	quo, rem := tc.QuoRem(a, b)
 	var (
-		haveQuo = tc.TryteToInt(quo, 0)
-		haveRem = tc.TryteToInt(rem, 0)
+		haveQuo = tc.tryteToInt64(quo, 0)
+		haveRem = tc.tryteToInt64(rem, 0)
 	)
 
-	wantQuo, wantRem := quoRem(av, bv)
+	wantQuo, wantRem := quoRemInt64(av, bv)
 
 	printAll := func() {
 		fmt.Printf("have: quoRem(%d, %d) => { quo: %d, rem: %d }\n", av, bv, haveQuo, haveRem)
@@ -236,16 +236,16 @@ func testQuoRemDouble[T Unsigned](tc TryteCore[T], a, b T) error {
 
 func TestQuoRemBal3Samples(t *testing.T) {
 	samples := []struct {
-		a        int
-		quo, rem int
+		a        int64
+		quo, rem int64
 	}{
-		{a: math.MinInt + 0, quo: -3074457345618258603, rem: 1},
-		{a: math.MinInt + 1, quo: -3074457345618258602, rem: -1},
-		{a: math.MinInt + 2, quo: -3074457345618258602, rem: 0},
-		{a: math.MinInt + 3, quo: -3074457345618258602, rem: 1},
-		{a: math.MinInt + 4, quo: -3074457345618258601, rem: -1},
-		{a: math.MinInt + 5, quo: -3074457345618258601, rem: 0},
-		{a: math.MinInt + 6, quo: -3074457345618258601, rem: 1},
+		{a: math.MinInt64 + 0, quo: -3074457345618258603, rem: 1},
+		{a: math.MinInt64 + 1, quo: -3074457345618258602, rem: -1},
+		{a: math.MinInt64 + 2, quo: -3074457345618258602, rem: 0},
+		{a: math.MinInt64 + 3, quo: -3074457345618258602, rem: 1},
+		{a: math.MinInt64 + 4, quo: -3074457345618258601, rem: -1},
+		{a: math.MinInt64 + 5, quo: -3074457345618258601, rem: 0},
+		{a: math.MinInt64 + 6, quo: -3074457345618258601, rem: 1},
 
 		{a: -7, quo: -2, rem: -1},
 		{a: -6, quo: -2, rem: 0},
@@ -263,12 +263,12 @@ func TestQuoRemBal3Samples(t *testing.T) {
 		{a: 6, quo: 2, rem: 0},
 		{a: 7, quo: 2, rem: 1},
 
-		{a: math.MaxInt - 5, quo: 3074457345618258601, rem: -1},
-		{a: math.MaxInt - 4, quo: 3074457345618258601, rem: 0},
-		{a: math.MaxInt - 3, quo: 3074457345618258601, rem: 1},
-		{a: math.MaxInt - 2, quo: 3074457345618258602, rem: -1},
-		{a: math.MaxInt - 1, quo: 3074457345618258602, rem: 0},
-		{a: math.MaxInt - 0, quo: 3074457345618258602, rem: 1},
+		{a: math.MaxInt64 - 5, quo: 3074457345618258601, rem: -1},
+		{a: math.MaxInt64 - 4, quo: 3074457345618258601, rem: 0},
+		{a: math.MaxInt64 - 3, quo: 3074457345618258601, rem: 1},
+		{a: math.MaxInt64 - 2, quo: 3074457345618258602, rem: -1},
+		{a: math.MaxInt64 - 1, quo: 3074457345618258602, rem: 0},
+		{a: math.MaxInt64 - 0, quo: 3074457345618258602, rem: 1},
 	}
 	for _, sample := range samples {
 		quo, rem := quoRemBal3(sample.a)

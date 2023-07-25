@@ -6,8 +6,8 @@ type Tryte9 uint32
 var tc9 = MakeTryteCore[Tryte9](9)
 var TC9 = tc9
 
-func (a Tryte9) Int() int {
-	return tc9.TryteToInt(a, 0)
+func (a Tryte9) ToInt64() (int64, bool) {
+	return tc9.TryteToInt64(a, 0)
 }
 
 func (a Tryte9) String() string {

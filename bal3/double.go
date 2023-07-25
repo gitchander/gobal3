@@ -125,22 +125,34 @@ func (dc doubleCore[T]) GetTrit(a double[T], i int) int {
 	return t
 }
 
-func (dc doubleCore[T]) IntToDouble(v int) (d double[T], rest int) {
+func (dc doubleCore[T]) Int64ToDouble(v int64) (d double[T], rest int64) {
 	tc := dc.tc
 	var lo, hi T
-	lo, v = tc.IntToTrite(v)
-	hi, v = tc.IntToTrite(v)
+	lo, v = tc.Int64ToTrite(v)
+	hi, v = tc.Int64ToTrite(v)
 	d = makeDouble(hi, lo)
 	rest = v
 	return d, rest
 }
 
-func (dc doubleCore[T]) DoubleToInt(a double[T], rest int) int {
+func (dc doubleCore[T]) DoubleToInt64(a double[T], rest int64) (int64, bool) {
 	tc := dc.tc
 	v := rest
-	v = tc.TryteToInt(a.Hi, v)
-	v = tc.TryteToInt(a.Lo, v)
-	return v
+	var ok bool
+	v, ok = tc.TryteToInt64(a.Hi, v)
+	if !ok {
+		return 0, false
+	}
+	v, ok = tc.TryteToInt64(a.Lo, v)
+	if !ok {
+		return 0, false
+	}
+	return v, true
+}
+
+func (dc doubleCore[T]) doubleToInt64(a double[T], rest int64) int64 {
+	x, _ := dc.DoubleToInt64(a, rest)
+	return x
 }
 
 func (dc doubleCore[T]) ToStringAll(a double[T]) string {

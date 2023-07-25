@@ -10,8 +10,8 @@ func testMul[T Unsigned](tc TryteCore[T], a, b T) error {
 	hi, lo := tc.Mul(a, b)
 
 	var (
-		have = tc.TryteToInt(lo, tc.TryteToInt(hi, 0))
-		want = tc.TryteToInt(a, 0) * tc.TryteToInt(b, 0)
+		have = tc.tryteToInt64(lo, tc.tryteToInt64(hi, 0))
+		want = tc.tryteToInt64(a, 0) * tc.tryteToInt64(b, 0)
 	)
 
 	if have != want {
@@ -21,12 +21,12 @@ func testMul[T Unsigned](tc TryteCore[T], a, b T) error {
 }
 
 func testMulBounds[T Unsigned](tc TryteCore[T]) error {
-	min, max := tc.Limits()
+	min, max := tc.LimitsInt64()
 	for av := min; av <= max; av++ {
 		for bv := min; bv <= max; bv++ {
 			var (
-				a, _ = tc.IntToTrite(av)
-				b, _ = tc.IntToTrite(bv)
+				a, _ = tc.Int64ToTrite(av)
+				b, _ = tc.Int64ToTrite(bv)
 			)
 			err := testMul(tc, a, b)
 			if err != nil {

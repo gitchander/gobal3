@@ -18,13 +18,13 @@ func intToTriteV1[T Unsigned](tc TryteCore[T], v int) (a T, rest int) {
 	return
 }
 
-func tryteToIntV1[T Unsigned](tc TryteCore[T], a T, rest int) int {
-	base := digiter.Base()
+func tryteToInt64V1[T Unsigned](tc TryteCore[T], a T, rest int64) (int64, bool) {
+	base := int64(digiter.Base())
 	v := rest
 	for i := (tc.n - 1); i >= 0; i-- {
-		v = (v * base) + tc.getTrit(a, i)
+		v = (v * base) + int64(tc.getTrit(a, i))
 	}
-	return v
+	return v, true
 }
 
 //------------------------------------------------------------------------------
@@ -52,11 +52,11 @@ func tryteToIntV2[T Unsigned](tc TryteCore[T], a T, rest int) int {
 
 //------------------------------------------------------------------------------
 
-func intToTriteV3[T Unsigned](tc TryteCore[T], v int) (a T, rest int) {
-	var t int
+func int64ToTriteV3[T Unsigned](tc TryteCore[T], v int64) (a T, rest int64) {
+	var t int64
 	for i := 0; i < tc.n; i++ {
 		v, t = quoRemBal3(v)
-		a = tc.setTrit(a, i, t)
+		a = tc.setTrit(a, i, int(t))
 	}
 	rest = v
 	return
@@ -64,13 +64,13 @@ func intToTriteV3[T Unsigned](tc TryteCore[T], v int) (a T, rest int) {
 
 //------------------------------------------------------------------------------
 
-func intToTrite[T Unsigned](tc TryteCore[T], v int) (a T, rest int) {
+func int64ToTrite[T Unsigned](tc TryteCore[T], v int64) (a T, rest int64) {
 	//return intToTriteV1(tc, v)
 	//return intToTriteV2(tc, v)
-	return intToTriteV3(tc, v)
+	return int64ToTriteV3(tc, v)
 }
 
-func tryteToInt[T Unsigned](tc TryteCore[T], a T, rest int) int {
-	return tryteToIntV1(tc, a, rest)
+func tryteToInt64[T Unsigned](tc TryteCore[T], a T, rest int64) (int64, bool) {
+	return tryteToInt64V1(tc, a, rest)
 	//return tryteToIntV2(tc, a, rest)
 }

@@ -127,8 +127,12 @@ func FormatBase27[T Unsigned](tc TryteCore[T], a T) string {
 		count++
 
 		if count == tritsPerDigit {
-			digit := tc.TryteToInt(b, 0)
-			writeDigit(digit)
+			digit, ok := tc.TryteToInt64(b, 0)
+			if !ok {
+				err := fmt.Errorf("invalid convert tryte %s to int64", tc.Format(b))
+				panic(err)
+			}
+			writeDigit(int(digit))
 
 			// reset all
 			b = 0
@@ -137,8 +141,12 @@ func FormatBase27[T Unsigned](tc TryteCore[T], a T) string {
 	}
 
 	if count > 0 {
-		digit := tc.TryteToInt(b, 0)
-		writeDigit(digit)
+		digit, ok := tc.TryteToInt64(b, 0)
+		if !ok {
+			err := fmt.Errorf("invalid convert tryte %s to int64", tc.Format(b))
+			panic(err)
+		}
+		writeDigit(int(digit))
 	}
 
 	return string(cs[k:])
@@ -160,7 +168,7 @@ func ParseBase27[T Unsigned](tc TryteCore[T], s string) (T, error) {
 		if !ok {
 			return 0, fmt.Errorf("invalid char %c", char)
 		}
-		b, _ := tc.IntToTrite(digit)
+		b, _ := tc.Int64ToTrite(int64(digit))
 		for j := tritsPerDigit; j > 0; j-- {
 			if count >= tc.n {
 				return 0, fmt.Errorf("number of trits more than %d", tc.n)

@@ -10,8 +10,8 @@ func testDoubleAdd[T Unsigned](dc doubleCore[T], a, b double[T], carryIn int) er
 	res, carryOut := dc.Add(a, b, carryIn)
 
 	var (
-		have = dc.DoubleToInt(res, carryOut)
-		want = (dc.DoubleToInt(a, 0) + dc.DoubleToInt(b, 0)) + carryIn
+		have = dc.doubleToInt64(res, int64(carryOut))
+		want = (dc.doubleToInt64(a, 0) + dc.doubleToInt64(b, 0)) + int64(carryIn)
 	)
 
 	if have != want {
@@ -25,8 +25,8 @@ func testDoubleSub[T Unsigned](dc doubleCore[T], a, b double[T], carryIn int) er
 	res, carryOut := dc.Sub(a, b, carryIn)
 
 	var (
-		have = dc.DoubleToInt(res, carryOut)
-		want = (dc.DoubleToInt(a, 0) - dc.DoubleToInt(b, 0)) + carryIn
+		have = dc.doubleToInt64(res, int64(carryOut))
+		want = (dc.doubleToInt64(a, 0) - dc.doubleToInt64(b, 0)) + int64(carryIn)
 	)
 
 	if have != want {
@@ -64,7 +64,8 @@ func TestDoubleShl(t *testing.T) {
 		)
 
 		if dc.Compare(have, want) != 0 {
-			t.Fatalf("invalid value: have %d, want %d", dc.DoubleToInt(have, 0), dc.DoubleToInt(want, 0))
+			t.Fatalf("invalid value: have %d, want %d",
+				dc.doubleToInt64(have, 0), dc.doubleToInt64(want, 0))
 		}
 	}
 }
@@ -88,7 +89,8 @@ func TestDoubleShr(t *testing.T) {
 		)
 
 		if dc.Compare(have, want) != 0 {
-			t.Fatalf("invalid value: have %d, want %d", dc.DoubleToInt(have, 0), dc.DoubleToInt(want, 0))
+			t.Fatalf("invalid value: have %d, want %d",
+				dc.doubleToInt64(have, 0), dc.doubleToInt64(want, 0))
 		}
 	}
 }
@@ -174,8 +176,8 @@ func testDoubleMul[T Unsigned](dc doubleCore[T], a, b double[T]) error {
 	hi, lo := dc.Mul(a, b)
 
 	var (
-		have = dc.DoubleToInt(lo, dc.DoubleToInt(hi, 0))
-		want = dc.DoubleToInt(a, 0) * dc.DoubleToInt(b, 0)
+		have = dc.doubleToInt64(lo, dc.doubleToInt64(hi, 0))
+		want = dc.doubleToInt64(a, 0) * dc.doubleToInt64(b, 0)
 	)
 
 	if have != want {

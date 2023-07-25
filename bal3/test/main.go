@@ -33,41 +33,42 @@ func checkError(err error) {
 
 func testToString() {
 	tc := bal3.TC6
-	fmt.Println(tc.IntToTrite(5))
+	fmt.Println(tc.Int64ToTrite(5))
 }
 
 func testIncTC4() {
 	tc := bal3.TC4
-	min, max := tc.Bounds()
+	min, max := tc.LimitsInt64()
 	var a bal3.Tryte4
-	a, _ = tc.IntToTrite(min)
+	a, _ = tc.Int64ToTrite(min)
 	for i := min; i <= max; i++ {
 		s := bal3.FormatBase27(tc, a)
-		fmt.Printf("%3d %4s %2s\n", a.Int(), a, s)
+		ai64, _ := a.ToInt64()
+		fmt.Printf("%3d %4s %2s\n", ai64, a, s)
 		a, _ = tc.Add(a, 0, 1) // inc 1 trit
 	}
 }
 
 func testIncTC6() {
 	tc := bal3.TC6
-	min, max := tc.Bounds()
+	min, max := tc.LimitsInt64()
 	var a bal3.Tryte6
-	a, _ = tc.IntToTrite(min)
+	a, _ = tc.Int64ToTrite(min)
 	for i := min; i <= max; i++ {
 		s := bal3.FormatBase27(tc, a)
-		fmt.Printf("%4d %6s %2s\n", a.Int(), a, s)
+		fmt.Printf("%4d %6s %2s\n", tc.Int64(a), a, s)
 		a, _ = tc.Add(a, 0, 1) // inc 1 trit
 	}
 }
 
 func testIncTC9() {
 	tc := bal3.TC9
-	min, max := tc.Bounds()
+	min, max := tc.LimitsInt64()
 	var a bal3.Tryte9
-	a, _ = tc.IntToTrite(min)
+	a, _ = tc.Int64ToTrite(min)
 	for i := min; i <= max; i++ {
 		s := bal3.FormatBase27(tc, a)
-		fmt.Printf("%5d %9s %3s\n", a.Int(), a, s)
+		fmt.Printf("%5d %9s %3s\n", tc.Int64(a), a, s)
 		a, _ = tc.Add(a, 0, 1) // inc 1 trit
 	}
 }
@@ -76,12 +77,12 @@ func testFormatBase27() {
 	tc := bal3.TC32
 
 	const (
-		min = 10000000
-		max = 10000100
+		min int64 = 10000000
+		max int64 = 10000100
 	)
 
 	for i := min; i <= max; i++ {
-		a, _ := tc.IntToTrite(i)
+		a, _ := tc.Int64ToTrite(i)
 		s := bal3.FormatBase27(tc, a)
 		fmt.Println(i, a, s)
 	}
@@ -104,34 +105,32 @@ func testParseBase27() {
 	a, err := bal3.ParseBase27(tc, "4DD")
 	checkError(err)
 	s := bal3.FormatBase27(tc, a)
-	fmt.Println(a.Int(), a, s)
+	fmt.Println(tc.Int64(a), a, s)
 }
 
 func testBounds() {
 
-	type tryteType = bal3.Tryte4
-
-	printBounds := func(typeName string, min, max tryteType) {
+	printBounds := func(typeName string, min, max int64) {
 		fmt.Printf("%q: { min: %d, max: %d }\n", typeName, min, max)
 	}
-	var min, max tryteType
+	var min, max int64
 
-	min, max = bal3.TC4.Limits()
+	min, max = bal3.TC4.LimitsInt64()
 	printBounds("tryte4", min, max)
 
-	min, max = bal3.TC8.Limits()
+	min, max = bal3.TC8.LimitsInt64()
 	printBounds("tryte8", min, max)
 
-	min, max = bal3.TC16.Limits()
+	min, max = bal3.TC16.LimitsInt64()
 	printBounds("tryte16", min, max)
 
-	min, max = bal3.TC32.Limits()
+	min, max = bal3.TC32.LimitsInt64()
 	printBounds("tryte32", min, max)
 
-	min, max = bal3.TC6.Limits()
+	min, max = bal3.TC6.LimitsInt64()
 	printBounds("tryte6", min, max)
 
-	min, max = bal3.TC9.Limits()
+	min, max = bal3.TC9.LimitsInt64()
 	printBounds("tryte9", min, max)
 
 	printBounds("int32", math.MinInt32, math.MaxInt32)
@@ -142,8 +141,8 @@ func testQuoRemT16Samples() {
 
 	tc := bal3.TC16
 
-	intToTrite := func(v int) bal3.Tryte16 {
-		t, _ := tc.IntToTrite(v)
+	intToTrite := func(v int64) bal3.Tryte16 {
+		t, _ := tc.Int64ToTrite(v)
 		return t
 	}
 
@@ -162,15 +161,15 @@ func testQuoRemT16Samples() {
 			a = sample[0]
 			b = sample[1]
 
-			av = tc.TryteToInt(a, 0)
-			bv = tc.TryteToInt(b, 0)
+			av, _ = tc.TryteToInt64(a, 0)
+			bv, _ = tc.TryteToInt64(b, 0)
 		)
 
 		quo, rem := tc.QuoRem(a, b)
 
 		var (
-			haveQuo = quo.Int()
-			haveRem = rem.Int()
+			haveQuo, _ = quo.ToInt64()
+			haveRem, _ = rem.ToInt64()
 
 			wantQuo = av / bv
 			wantRem = av % bv
@@ -197,15 +196,15 @@ func testQuoRemT32Random() {
 		}
 
 		var (
-			av = tc.TryteToInt(a, 0)
-			bv = tc.TryteToInt(b, 0)
+			av, _ = tc.TryteToInt64(a, 0)
+			bv, _ = tc.TryteToInt64(b, 0)
 		)
 
 		quo, rem := tc.QuoRem(a, b)
 
 		var (
-			haveQuo = quo.Int()
-			haveRem = rem.Int()
+			haveQuo = tc.Int64(quo)
+			haveRem = tc.Int64(rem)
 
 			wantQuo = av / bv
 			wantRem = av % bv
@@ -219,35 +218,35 @@ func testQuoRemT32Random() {
 
 func testTryte4() {
 	var (
-		av = 40
-		bv = 40
+		av int64 = 40
+		bv int64 = 40
 	)
 
 	tc := bal3.TC4
 
-	a, _ := tc.IntToTrite(av)
-	b, _ := tc.IntToTrite(bv)
+	a, _ := tc.Int64ToTrite(av)
+	b, _ := tc.Int64ToTrite(bv)
 
 	hi, lo := tc.Mul(a, b)
 	fmt.Println(hi, lo)
-	fmt.Println("1>", hi.Int()*81+lo.Int())
+	fmt.Println("1>", tc.Int64(hi)*81+tc.Int64(lo))
 	fmt.Println("2>", av*bv)
 
 	cLo := a.Mul(b)
-	fmt.Println(cLo, cLo.Int())
+	fmt.Println(cLo, tc.Int64(cLo))
 }
 
 func testTryte8() {
 	tc := bal3.TC8
 
-	x, _ := tc.IntToTrite(7)
-	y, _ := tc.IntToTrite(7)
+	x, _ := tc.Int64ToTrite(7)
+	y, _ := tc.Int64ToTrite(7)
 
 	xyLo := x.Mul(y)
-	fmt.Println(xyLo, xyLo.Int())
+	fmt.Println(xyLo, tc.Int64(xyLo))
 
-	for i := -3280; i <= 3280; i++ {
-		a, _ := tc.IntToTrite(i)
+	for i := int64(-3280); i <= 3280; i++ {
+		a, _ := tc.Int64ToTrite(i)
 		fmt.Printf("%3d: %5s\n", i, a)
 	}
 }
@@ -257,13 +256,13 @@ func testQuoRemT16() {
 	tc := bal3.TC8
 
 	var (
-		a, _ = tc.IntToTrite(-21523360)
-		b, _ = tc.IntToTrite(7)
+		a, _ = tc.Int64ToTrite(-21523360)
+		b, _ = tc.Int64ToTrite(7)
 	)
 
 	quo, rem := tc.QuoRem(a, b)
 	fmt.Println(quo, rem)
-	fmt.Println(quo.Int(), rem.Int())
+	fmt.Println(tc.Int64(quo), tc.Int64(rem))
 }
 
 func printPowersOfThree() {
