@@ -6,8 +6,8 @@ type Tryte4 uint8
 var tc4 = MakeTryteCore[Tryte4](4)
 var TC4 = tc4
 
-func (a Tryte4) ToInt64() (int64, bool) {
-	return tc4.TryteToInt64(a, 0)
+func (a Tryte4) ToInt64() int64 {
+	return tc4.ToInt64(a)
 }
 
 func (a Tryte4) String() string {

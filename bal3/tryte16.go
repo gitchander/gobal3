@@ -6,8 +6,8 @@ type Tryte16 uint32
 var tc16 = MakeTryteCore[Tryte16](16)
 var TC16 = tc16
 
-func (a Tryte16) ToInt64() (int64, bool) {
-	return tc16.TryteToInt64(a, 0)
+func (a Tryte16) ToInt64() int64 {
+	return tc16.ToInt64(a)
 }
 
 func (a Tryte16) String() string {

@@ -21,8 +21,8 @@ func main() {
 	//testFormatBase27()
 	//testParseBase27()
 
-	//testBounds()
-	testQuoRemT32Random()
+	testLimits()
+	//testQuoRemT32Random()
 }
 
 func checkError(err error) {
@@ -43,7 +43,7 @@ func testIncTC4() {
 	a, _ = tc.Int64ToTrite(min)
 	for i := min; i <= max; i++ {
 		s := bal3.FormatBase27(tc, a)
-		ai64, _ := a.ToInt64()
+		ai64 := a.ToInt64()
 		fmt.Printf("%3d %4s %2s\n", ai64, a, s)
 		a, _ = tc.Add(a, 0, 1) // inc 1 trit
 	}
@@ -56,7 +56,7 @@ func testIncTC6() {
 	a, _ = tc.Int64ToTrite(min)
 	for i := min; i <= max; i++ {
 		s := bal3.FormatBase27(tc, a)
-		fmt.Printf("%4d %6s %2s\n", tc.Int64(a), a, s)
+		fmt.Printf("%4d %6s %2s\n", tc.ToInt64(a), a, s)
 		a, _ = tc.Add(a, 0, 1) // inc 1 trit
 	}
 }
@@ -68,7 +68,7 @@ func testIncTC9() {
 	a, _ = tc.Int64ToTrite(min)
 	for i := min; i <= max; i++ {
 		s := bal3.FormatBase27(tc, a)
-		fmt.Printf("%5d %9s %3s\n", tc.Int64(a), a, s)
+		fmt.Printf("%5d %9s %3s\n", tc.ToInt64(a), a, s)
 		a, _ = tc.Add(a, 0, 1) // inc 1 trit
 	}
 }
@@ -105,36 +105,39 @@ func testParseBase27() {
 	a, err := bal3.ParseBase27(tc, "4DD")
 	checkError(err)
 	s := bal3.FormatBase27(tc, a)
-	fmt.Println(tc.Int64(a), a, s)
+	fmt.Println(tc.ToInt64(a), a, s)
 }
 
-func testBounds() {
+func testLimits() {
 
-	printBounds := func(typeName string, min, max int64) {
-		fmt.Printf("%q: { min: %d, max: %d }\n", typeName, min, max)
+	printLimits := func(typeName string, min, max int64) {
+		w := max - min + 1
+		fmt.Printf("%q: { min: %d, max: %d } %d\n", typeName, min, max, w)
 	}
+
 	var min, max int64
 
 	min, max = bal3.TC4.LimitsInt64()
-	printBounds("tryte4", min, max)
-
-	min, max = bal3.TC8.LimitsInt64()
-	printBounds("tryte8", min, max)
-
-	min, max = bal3.TC16.LimitsInt64()
-	printBounds("tryte16", min, max)
-
-	min, max = bal3.TC32.LimitsInt64()
-	printBounds("tryte32", min, max)
+	printLimits("tryte4", min, max)
 
 	min, max = bal3.TC6.LimitsInt64()
-	printBounds("tryte6", min, max)
+	printLimits("tryte6", min, max)
+
+	min, max = bal3.TC8.LimitsInt64()
+	printLimits("tryte8", min, max)
 
 	min, max = bal3.TC9.LimitsInt64()
-	printBounds("tryte9", min, max)
+	printLimits("tryte9", min, max)
 
-	printBounds("int32", math.MinInt32, math.MaxInt32)
-	printBounds("int64", math.MinInt64, math.MaxInt64)
+	min, max = bal3.TC16.LimitsInt64()
+	printLimits("tryte16", min, max)
+
+	min, max = bal3.TC32.LimitsInt64()
+	printLimits("tryte32", min, max)
+
+	fmt.Println()
+	printLimits("int32", math.MinInt32, math.MaxInt32)
+	printLimits("int64", math.MinInt64, math.MaxInt64)
 }
 
 func testQuoRemT16Samples() {
@@ -168,8 +171,8 @@ func testQuoRemT16Samples() {
 		quo, rem := tc.QuoRem(a, b)
 
 		var (
-			haveQuo, _ = quo.ToInt64()
-			haveRem, _ = rem.ToInt64()
+			haveQuo = quo.ToInt64()
+			haveRem = rem.ToInt64()
 
 			wantQuo = av / bv
 			wantRem = av % bv
@@ -203,8 +206,8 @@ func testQuoRemT32Random() {
 		quo, rem := tc.QuoRem(a, b)
 
 		var (
-			haveQuo = tc.Int64(quo)
-			haveRem = tc.Int64(rem)
+			haveQuo = tc.ToInt64(quo)
+			haveRem = tc.ToInt64(rem)
 
 			wantQuo = av / bv
 			wantRem = av % bv
@@ -229,11 +232,11 @@ func testTryte4() {
 
 	hi, lo := tc.Mul(a, b)
 	fmt.Println(hi, lo)
-	fmt.Println("1>", tc.Int64(hi)*81+tc.Int64(lo))
+	fmt.Println("1>", tc.ToInt64(hi)*81+tc.ToInt64(lo))
 	fmt.Println("2>", av*bv)
 
 	cLo := a.Mul(b)
-	fmt.Println(cLo, tc.Int64(cLo))
+	fmt.Println(cLo, tc.ToInt64(cLo))
 }
 
 func testTryte8() {
@@ -243,7 +246,7 @@ func testTryte8() {
 	y, _ := tc.Int64ToTrite(7)
 
 	xyLo := x.Mul(y)
-	fmt.Println(xyLo, tc.Int64(xyLo))
+	fmt.Println(xyLo, tc.ToInt64(xyLo))
 
 	for i := int64(-3280); i <= 3280; i++ {
 		a, _ := tc.Int64ToTrite(i)
@@ -262,7 +265,7 @@ func testQuoRemT16() {
 
 	quo, rem := tc.QuoRem(a, b)
 	fmt.Println(quo, rem)
-	fmt.Println(tc.Int64(quo), tc.Int64(rem))
+	fmt.Println(tc.ToInt64(quo), tc.ToInt64(rem))
 }
 
 func printPowersOfThree() {

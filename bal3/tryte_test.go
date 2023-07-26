@@ -10,8 +10,8 @@ func testTritsAdd[T Unsigned](tc TryteCore[T], a, b T, carryIn int) error {
 	res, carryOut := tc.Add(a, b, carryIn)
 
 	var (
-		have = tc.tryteToInt64(res, int64(carryOut))
-		want = tc.tryteToInt64(a, 0) + tc.tryteToInt64(b, 0) + int64(carryIn)
+		have, _ = tc.TryteToInt64(res, int64(carryOut))
+		want    = tc.ToInt64(a) + tc.ToInt64(b) + int64(carryIn)
 	)
 
 	if have != want {
@@ -25,8 +25,8 @@ func testTritsSub[T Unsigned](tc TryteCore[T], a, b T, carryIn int) error {
 	res, carryOut := tc.Sub(a, b, carryIn)
 
 	var (
-		have = tc.tryteToInt64(res, int64(carryOut))
-		want = tc.tryteToInt64(a, 0) - tc.tryteToInt64(b, 0) + int64(carryIn)
+		have, _ = tc.TryteToInt64(res, int64(carryOut))
+		want    = tc.ToInt64(a) - tc.ToInt64(b) + int64(carryIn)
 	)
 
 	if have != want {

@@ -148,8 +148,8 @@ func testQuoRemRange[T Unsigned](tc TryteCore[T]) error {
 func testQuoRemT16(a, b Tryte16) error {
 
 	var (
-		av, _ = a.ToInt64()
-		bv, _ = b.ToInt64()
+		av = a.ToInt64()
+		bv = b.ToInt64()
 	)
 
 	var (
@@ -159,8 +159,8 @@ func testQuoRemT16(a, b Tryte16) error {
 
 	quo, rem := quoRemT16(a, b)
 	var (
-		haveQuo, _ = quo.ToInt64()
-		haveRem, _ = rem.ToInt64()
+		haveQuo = quo.ToInt64()
+		haveRem = rem.ToInt64()
 	)
 
 	wantQuo, wantRem := quoRemInt64(av, bv)
@@ -195,14 +195,14 @@ func testQuoRemT16(a, b Tryte16) error {
 func testQuoRemDouble[T Unsigned](tc TryteCore[T], a, b T) error {
 
 	var (
-		av = tc.tryteToInt64(a, 0)
-		bv = tc.tryteToInt64(b, 0)
+		av = tc.ToInt64(a)
+		bv = tc.ToInt64(b)
 	)
 
 	quo, rem := tc.QuoRem(a, b)
 	var (
-		haveQuo = tc.tryteToInt64(quo, 0)
-		haveRem = tc.tryteToInt64(rem, 0)
+		haveQuo = tc.ToInt64(quo)
+		haveRem = tc.ToInt64(rem)
 	)
 
 	wantQuo, wantRem := quoRemInt64(av, bv)
@@ -236,47 +236,53 @@ func testQuoRemDouble[T Unsigned](tc TryteCore[T], a, b T) error {
 
 func TestQuoRemBal3Samples(t *testing.T) {
 	samples := []struct {
-		a        int64
+		val      int64
 		quo, rem int64
 	}{
-		{a: math.MinInt64 + 0, quo: -3074457345618258603, rem: 1},
-		{a: math.MinInt64 + 1, quo: -3074457345618258602, rem: -1},
-		{a: math.MinInt64 + 2, quo: -3074457345618258602, rem: 0},
-		{a: math.MinInt64 + 3, quo: -3074457345618258602, rem: 1},
-		{a: math.MinInt64 + 4, quo: -3074457345618258601, rem: -1},
-		{a: math.MinInt64 + 5, quo: -3074457345618258601, rem: 0},
-		{a: math.MinInt64 + 6, quo: -3074457345618258601, rem: 1},
+		{val: math.MinInt64 + 0, quo: -3074457345618258603, rem: 1},
+		{val: math.MinInt64 + 1, quo: -3074457345618258602, rem: -1},
+		{val: math.MinInt64 + 2, quo: -3074457345618258602, rem: 0},
+		{val: math.MinInt64 + 3, quo: -3074457345618258602, rem: 1},
+		{val: math.MinInt64 + 4, quo: -3074457345618258601, rem: -1},
+		{val: math.MinInt64 + 5, quo: -3074457345618258601, rem: 0},
+		{val: math.MinInt64 + 6, quo: -3074457345618258601, rem: 1},
+		{val: math.MinInt64 + 7, quo: -3074457345618258600, rem: -1},
+		{val: math.MinInt64 + 8, quo: -3074457345618258600, rem: 0},
+		{val: math.MinInt64 + 9, quo: -3074457345618258600, rem: 1},
 
-		{a: -7, quo: -2, rem: -1},
-		{a: -6, quo: -2, rem: 0},
-		{a: -5, quo: -2, rem: 1},
-		{a: -4, quo: -1, rem: -1},
-		{a: -3, quo: -1, rem: 0},
-		{a: -2, quo: -1, rem: 1},
-		{a: -1, quo: 0, rem: -1},
-		{a: 0, quo: 0, rem: 0},
-		{a: 1, quo: 0, rem: 1},
-		{a: 2, quo: 1, rem: -1},
-		{a: 3, quo: 1, rem: 0},
-		{a: 4, quo: 1, rem: 1},
-		{a: 5, quo: 2, rem: -1},
-		{a: 6, quo: 2, rem: 0},
-		{a: 7, quo: 2, rem: 1},
+		{val: -7, quo: -2, rem: -1},
+		{val: -6, quo: -2, rem: 0},
+		{val: -5, quo: -2, rem: 1},
+		{val: -4, quo: -1, rem: -1},
+		{val: -3, quo: -1, rem: 0},
+		{val: -2, quo: -1, rem: 1},
+		{val: -1, quo: 0, rem: -1},
+		{val: 0, quo: 0, rem: 0},
+		{val: 1, quo: 0, rem: 1},
+		{val: 2, quo: 1, rem: -1},
+		{val: 3, quo: 1, rem: 0},
+		{val: 4, quo: 1, rem: 1},
+		{val: 5, quo: 2, rem: -1},
+		{val: 6, quo: 2, rem: 0},
+		{val: 7, quo: 2, rem: 1},
 
-		{a: math.MaxInt64 - 5, quo: 3074457345618258601, rem: -1},
-		{a: math.MaxInt64 - 4, quo: 3074457345618258601, rem: 0},
-		{a: math.MaxInt64 - 3, quo: 3074457345618258601, rem: 1},
-		{a: math.MaxInt64 - 2, quo: 3074457345618258602, rem: -1},
-		{a: math.MaxInt64 - 1, quo: 3074457345618258602, rem: 0},
-		{a: math.MaxInt64 - 0, quo: 3074457345618258602, rem: 1},
+		{val: math.MaxInt64 - 8, quo: 3074457345618258600, rem: -1},
+		{val: math.MaxInt64 - 7, quo: 3074457345618258600, rem: 0},
+		{val: math.MaxInt64 - 6, quo: 3074457345618258600, rem: 1},
+		{val: math.MaxInt64 - 5, quo: 3074457345618258601, rem: -1},
+		{val: math.MaxInt64 - 4, quo: 3074457345618258601, rem: 0},
+		{val: math.MaxInt64 - 3, quo: 3074457345618258601, rem: 1},
+		{val: math.MaxInt64 - 2, quo: 3074457345618258602, rem: -1},
+		{val: math.MaxInt64 - 1, quo: 3074457345618258602, rem: 0},
+		{val: math.MaxInt64 - 0, quo: 3074457345618258602, rem: 1},
 	}
 	for _, sample := range samples {
-		quo, rem := quoRemBal3(sample.a)
+		quo, rem := quoRemBal3(sample.val)
 		if quo != sample.quo {
-			t.Fatalf("invalid %q (a=%d): have %d, want %d", "quo", sample.a, quo, sample.quo)
+			t.Fatalf("invalid %q (val=%d): have %d, want %d", "quo", sample.val, quo, sample.quo)
 		}
 		if rem != sample.rem {
-			t.Fatalf("invalid %q (a=%d): have %d, want %d", "rem", sample.a, rem, sample.rem)
+			t.Fatalf("invalid %q (val=%d): have %d, want %d", "rem", sample.val, rem, sample.rem)
 		}
 	}
 }

@@ -10,8 +10,8 @@ func testMul[T Unsigned](tc TryteCore[T], a, b T) error {
 	hi, lo := tc.Mul(a, b)
 
 	var (
-		have = tc.tryteToInt64(lo, tc.tryteToInt64(hi, 0))
-		want = tc.tryteToInt64(a, 0) * tc.tryteToInt64(b, 0)
+		have, _ = tc.TryteToInt64(lo, tc.ToInt64(hi))
+		want    = tc.ToInt64(a) * tc.ToInt64(b)
 	)
 
 	if have != want {

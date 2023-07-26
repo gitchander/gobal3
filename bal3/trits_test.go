@@ -19,10 +19,8 @@ type sampleBinaryFunc struct {
 
 // wantFunc - reference function
 func testUnaryFunc(vs []sampleUnaryFunc, wantFunc UnaryFunc) error {
-	n := len(tritValues)
 	for _, v := range vs {
-		for i := 0; i < n; i++ {
-			a := tritValues[i]
+		for _, a := range tritValues {
 			var (
 				have = v.testFunc(a)
 				want = wantFunc(a)

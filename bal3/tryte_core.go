@@ -126,16 +126,13 @@ func (tc TryteCore[T]) Int64ToTrite(v int64) (a T, rest int64) {
 	return int64ToTrite(tc, v)
 }
 
+//------------------------------------------------------------------------------
+
 func (tc TryteCore[T]) TryteToInt64(a T, rest int64) (int64, bool) {
 	return tryteToInt64(tc, a, rest)
 }
 
-func (tc TryteCore[T]) tryteToInt64(a T, rest int64) int64 {
-	x, _ := tc.TryteToInt64(a, rest)
-	return x
-}
-
-func (tc TryteCore[T]) Int64(a T) int64 {
+func (tc TryteCore[T]) ToInt64(a T) int64 {
 	x, _ := tc.TryteToInt64(a, 0)
 	return x
 }
@@ -334,8 +331,8 @@ func (tc TryteCore[T]) Limits() (min, max T) {
 
 func (tc TryteCore[T]) LimitsInt64() (min, max int64) {
 	tmin, tmax := tc.Limits()
-	min, _ = tc.TryteToInt64(tmin, 0)
-	max, _ = tc.TryteToInt64(tmax, 0)
+	min = tc.ToInt64(tmin)
+	max = tc.ToInt64(tmax)
 	return min, max
 }
 

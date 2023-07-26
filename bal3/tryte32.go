@@ -6,8 +6,8 @@ type Tryte32 uint64
 var tc32 = MakeTryteCore[Tryte32](32)
 var TC32 = tc32
 
-func (a Tryte32) ToInt64() (int64, bool) {
-	return tc32.TryteToInt64(a, 0)
+func (a Tryte32) ToInt64() int64 {
+	return tc32.ToInt64(a)
 }
 
 func (a Tryte32) String() string {
