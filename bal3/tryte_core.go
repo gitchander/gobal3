@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/gitchander/gobal3/ternary"
+	ivl "github.com/gitchander/gobal3/utils/interval"
 )
 
 type TryteCore[T Unsigned] struct {
@@ -185,8 +186,8 @@ func (tc TryteCore[T]) Parse(s string) (T, error) {
 		v = tc.setTrit(v, 0, t) // v[0] = t
 		count++
 	}
-	if not(inInterval(count, 1, tc.n+1)) {
-		return v, fmt.Errorf("invalid number of trits: have %d, want [%d..%d]", count, 1, tc.n)
+	if l := ivl.Ivl(1, tc.n+1); not(l.Contains(count)) {
+		return v, fmt.Errorf("invalid number of trits: have %d, want %v", count, l)
 	}
 	return v, nil
 }
@@ -201,7 +202,8 @@ func (tc TryteCore[T]) MustParse(s string) T {
 
 //------------------------------------------------------------------------------
 
-func (tc TryteCore[T]) Invert(a T) (b T) {
+// Negative, Invert
+func (tc TryteCore[T]) Neg(a T) (b T) {
 	for i := 0; i < tc.n; i++ {
 		t := tc.getTrit(a, i)
 		t = ternary.Neg(t)

@@ -164,11 +164,11 @@ func (dc doubleCore[T]) ToStringAll(a double[T]) string {
 	return hi + "_" + lo
 }
 
-func (dc doubleCore[T]) Invert(a double[T]) double[T] {
+func (dc doubleCore[T]) Neg(a double[T]) double[T] {
 	tc := dc.tc
 	return double[T]{
-		Hi: tc.Invert(a.Hi),
-		Lo: tc.Invert(a.Lo),
+		Hi: tc.Neg(a.Hi),
+		Lo: tc.Neg(a.Lo),
 	}
 }
 

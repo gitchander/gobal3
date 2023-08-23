@@ -14,8 +14,8 @@ func (a Tryte16) String() string {
 	return tc16.Format(a)
 }
 
-func (a Tryte16) Invert() (b Tryte16) {
-	return tc16.Invert(a)
+func (a Tryte16) Neg() (b Tryte16) {
+	return tc16.Neg(a)
 }
 
 func (a Tryte16) Add(b Tryte16) (c Tryte16) {

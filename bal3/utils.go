@@ -73,15 +73,6 @@ func powN(a int, n int) int {
 	return p
 }
 
-// inInterval returns true if (min <= a < max).
-func inInterval(a int, min, max int) bool {
-	// Check empty interval
-	if min >= max {
-		return false
-	}
-	return (min <= a) && (a < max)
-}
-
 func not(b bool) bool {
 	return !b
 }

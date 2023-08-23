@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	//testFunc()
+	testFunc()
 	//testModBal3()
 	testQuoRem()
 }

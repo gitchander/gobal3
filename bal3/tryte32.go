@@ -14,8 +14,8 @@ func (a Tryte32) String() string {
 	return tc32.Format(a)
 }
 
-func (a Tryte32) Invert() (b Tryte32) {
-	return tc32.Invert(a)
+func (a Tryte32) Neg() (b Tryte32) {
+	return tc32.Neg(a)
 }
 
 func (a Tryte32) Add(b Tryte32) (c Tryte32) {

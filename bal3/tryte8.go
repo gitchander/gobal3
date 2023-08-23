@@ -14,8 +14,8 @@ func (a Tryte8) String() string {
 	return tc8.Format(a)
 }
 
-func (a Tryte8) Invert() (b Tryte8) {
-	return tc8.Invert(a)
+func (a Tryte8) Neg() (b Tryte8) {
+	return tc8.Neg(a)
 }
 
 func (a Tryte8) Add(b Tryte8) (c Tryte8) {

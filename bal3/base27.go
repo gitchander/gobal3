@@ -3,6 +3,8 @@ package bal3
 import (
 	"errors"
 	"fmt"
+
+	ivl "github.com/gitchander/gobal3/utils/interval"
 )
 
 //------------------------------------------------------------------------------
@@ -30,6 +32,8 @@ const (
 )
 
 var coderB27 = mustMakeBase27Coder(negativeChars + "0" + positiveChars)
+
+var intervalBase27 = ivl.Ivl(-13, (13 + 1))
 
 //------------------------------------------------------------------------------
 
@@ -72,7 +76,7 @@ func mustMakeBase27Coder(s string) *base27Coder {
 }
 
 func (p *base27Coder) digitToChar(digit int) (char byte, ok bool) {
-	if inInterval(digit, -13, (13 + 1)) {
+	if intervalBase27.Contains(digit) {
 		char = p.enc[digit+13]
 		return char, true
 	}

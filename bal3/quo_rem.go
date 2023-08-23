@@ -72,8 +72,8 @@ func tryteQuoRemLo[T Unsigned](tc TryteCore[T], a, b T) (q, r T) {
 	case 0: // b == 0
 		panic(errDivisionByZero)
 	case -1: // b < 0
-		a = tc.Invert(a)
-		b = tc.Invert(b)
+		a = tc.Neg(a)
+		b = tc.Neg(b)
 	}
 
 	//---------------------------------------------------------------
@@ -104,7 +104,7 @@ func tryteQuoRemLo[T Unsigned](tc TryteCore[T], a, b T) (q, r T) {
 	}
 
 	dd = tc.Shl(dd, k)
-	halfDivNeg := tc.Invert(halfDivPos) // negative
+	halfDivNeg := tc.Neg(halfDivPos) // negative
 
 	//---------------------------------------------------------------
 
@@ -164,7 +164,7 @@ func tryteQuoRemLo[T Unsigned](tc TryteCore[T], a, b T) (q, r T) {
 
 	// b < 0
 	if signB == -1 {
-		r = tc.Invert(r)
+		r = tc.Neg(r)
 	}
 
 	// correction
@@ -223,7 +223,7 @@ type divParams[T Unsigned] struct {
 
 	d   double[T] // d - divisor: { hi: 0, lo: b }
 	hd  double[T] // hd - half divisor (d/2)
-	hdi double[T] // hdi - half divisor invert (-d/2)
+	hdn double[T] // hdn - half divisor negative (-d/2)
 
 	signD int
 
@@ -242,7 +242,7 @@ func makeDivParams[T Unsigned](tc TryteCore[T], a, b T) *divParams[T] {
 	var (
 		//		d   Double[T] // d - divisor: { hi: 0, lo: b }
 		hd  double[T] // hd - half divisor (d/2)
-		hdi double[T] // hdi - half divisor invert (-d/2)
+		hdn double[T] // hdn - half divisor negative (-d/2)
 	)
 
 	// 0.5_base10 = (0.1111111...)_bal3
@@ -262,14 +262,14 @@ func makeDivParams[T Unsigned](tc TryteCore[T], a, b T) *divParams[T] {
 
 	d = dc.Shl(d, tc.n) // d = d << n
 	hd, _ = dc.Add(d1, d2, 0)
-	hdi = dc.Invert(hd)
+	hdn = dc.Neg(hd)
 
 	return &divParams[T]{
 		dc: dc,
 
 		d:   d,
 		hd:  hd,
-		hdi: hdi,
+		hdn: hdn,
 
 		signD: dc.Sign(d),
 
@@ -283,7 +283,7 @@ func (p *divParams[T]) divIterV1() int {
 
 	if p.signD == 1 { // d > 0
 
-		// hdi < 0 < hd < d
+		// hdn < 0 < hd < d
 
 		c1 := dc.Compare(p.r, p.hd)
 		if c1 == 1 { // rr > hd
@@ -291,8 +291,8 @@ func (p *divParams[T]) divIterV1() int {
 			return 1
 		}
 
-		c2 := dc.Compare(p.r, p.hdi)
-		if c2 == -1 { // rr < hdi
+		c2 := dc.Compare(p.r, p.hdn)
+		if c2 == -1 { // rr < hdn
 			p.r, _ = dc.Add(p.r, p.d, 0)
 			return -1
 		}
@@ -302,7 +302,7 @@ func (p *divParams[T]) divIterV1() int {
 
 	if p.signD == -1 { // d < 0
 
-		// d < hd < 0 < hdi
+		// d < hd < 0 < hdn
 
 		c1 := dc.Compare(p.r, p.hd)
 		if c1 == -1 { // rr < hd
@@ -310,8 +310,8 @@ func (p *divParams[T]) divIterV1() int {
 			return 1
 		}
 
-		c2 := dc.Compare(p.r, p.hdi)
-		if c2 == 1 { // rr > hdi
+		c2 := dc.Compare(p.r, p.hdn)
+		if c2 == 1 { // rr > hdn
 			p.r, _ = dc.Add(p.r, p.d, 0)
 			return -1
 		}
@@ -332,7 +332,7 @@ func (p *divParams[T]) divIterV2() int {
 		return 1
 	}
 
-	c2 := dc.Compare(p.r, p.hdi)
+	c2 := dc.Compare(p.r, p.hdn)
 	if c2 == -p.signD {
 		p.r, _ = dc.Add(p.r, p.d, 0)
 		return -1
@@ -348,7 +348,7 @@ func (p *divParams[T]) divIterV3() int {
 		p.r, _ = dc.Sub(p.r, p.d, 0)
 		return 1
 	}
-	if dc.Compare(p.hdi, p.r) == p.signD {
+	if dc.Compare(p.hdn, p.r) == p.signD {
 		p.r, _ = dc.Add(p.r, p.d, 0)
 		return -1
 	}
