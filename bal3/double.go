@@ -96,7 +96,7 @@ func (dc doubleCore[T]) Shr(a double[T], i int) double[T] {
 
 //------------------------------------------------------------------------------
 
-func (dc doubleCore[T]) SetTrit(a double[T], i int, t int) double[T] {
+func (dc doubleCore[T]) SetTrit(a double[T], i int, t Trit) double[T] {
 	var (
 		tc = dc.tc
 		n  = tc.n
@@ -110,12 +110,12 @@ func (dc doubleCore[T]) SetTrit(a double[T], i int, t int) double[T] {
 	return a
 }
 
-func (dc doubleCore[T]) GetTrit(a double[T], i int) int {
+func (dc doubleCore[T]) GetTrit(a double[T], i int) Trit {
 	var (
 		tc = dc.tc
 		n  = tc.n
 	)
-	var t int
+	var t Trit
 	switch {
 	case i < n:
 		t = tc.getTrit(a.Lo, i)
@@ -226,7 +226,7 @@ func (dc doubleCore[T]) RandSh(r *Rand) double[T] {
 
 //------------------------------------------------------------------------------
 
-func (dc doubleCore[T]) Add(a, b double[T], carryIn int) (c double[T], carryOut int) {
+func (dc doubleCore[T]) Add(a, b double[T], carryIn Trit) (c double[T], carryOut Trit) {
 	tc := dc.tc
 	var lo, hi T
 	carry := carryIn
@@ -235,7 +235,7 @@ func (dc doubleCore[T]) Add(a, b double[T], carryIn int) (c double[T], carryOut 
 	return makeDouble(hi, lo), carry
 }
 
-func (dc doubleCore[T]) Sub(a, b double[T], carryIn int) (c double[T], carryOut int) {
+func (dc doubleCore[T]) Sub(a, b double[T], carryIn Trit) (c double[T], carryOut Trit) {
 	tc := dc.tc
 	var lo, hi T
 	carry := carryIn
@@ -280,7 +280,9 @@ func (dc doubleCore[T]) Mul(a, b double[T]) (hi, lo double[T]) {
 		a3 = hi_11
 	)
 
-	carry := 0
+	var carry Trit
+
+	carry = 0
 	a1, carry = tc.Add(a1, lo_01, carry)
 	a2, carry = tc.Add(a2, hi_10, carry)
 	a3, carry = tc.Add(a3, 0, carry)

@@ -12,7 +12,7 @@ func intToTriteV1[T Unsigned](tc TryteCore[T], v int) (a T, rest int) {
 	var t int
 	for i := 0; i < tc.n; i++ {
 		t, v = digiter.Digit(v)
-		a = tc.setTrit(a, i, t)
+		a = tc.setTrit(a, i, Trit(t))
 	}
 	rest = v
 	return
@@ -33,7 +33,8 @@ func intToTriteV2[T Unsigned](tc TryteCore[T], v int) (a T, rest int) {
 	ds := make([]int, tc.n)
 	rest = digiter.IntToDigits(v, ds)
 	for i, d := range ds {
-		a = tc.setTrit(a, i, d)
+		t := Trit(d)
+		a = tc.setTrit(a, i, t)
 	}
 	return
 }
@@ -41,7 +42,8 @@ func intToTriteV2[T Unsigned](tc TryteCore[T], v int) (a T, rest int) {
 func tryteToIntV2[T Unsigned](tc TryteCore[T], a T, rest int) int {
 	ds := make([]int, tc.n)
 	for i := range ds {
-		ds[i] = tc.getTrit(a, i)
+		t := tc.getTrit(a, i)
+		ds[i] = int(t)
 	}
 	v, err := digiter.DigitsToInt(ds, rest)
 	if err != nil {
@@ -56,7 +58,7 @@ func int64ToTriteV3[T Unsigned](tc TryteCore[T], v int64) (a T, rest int64) {
 	var t int64
 	for i := 0; i < tc.n; i++ {
 		v, t = quoRemBal3(v)
-		a = tc.setTrit(a, i, int(t))
+		a = tc.setTrit(a, i, Trit(t))
 	}
 	rest = v
 	return

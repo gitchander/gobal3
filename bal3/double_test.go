@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func testDoubleAdd[T Unsigned](dc doubleCore[T], a, b double[T], carryIn int) error {
+func testDoubleAdd[T Unsigned](dc doubleCore[T], a, b double[T], carryIn Trit) error {
 
 	res, carryOut := dc.Add(a, b, carryIn)
 
@@ -20,7 +20,7 @@ func testDoubleAdd[T Unsigned](dc doubleCore[T], a, b double[T], carryIn int) er
 	return nil
 }
 
-func testDoubleSub[T Unsigned](dc doubleCore[T], a, b double[T], carryIn int) error {
+func testDoubleSub[T Unsigned](dc doubleCore[T], a, b double[T], carryIn Trit) error {
 
 	res, carryOut := dc.Sub(a, b, carryIn)
 
@@ -35,7 +35,7 @@ func testDoubleSub[T Unsigned](dc doubleCore[T], a, b double[T], carryIn int) er
 	return nil
 }
 
-func testDoubleAddSub[T Unsigned](dc doubleCore[T], a, b double[T], carryIn int) error {
+func testDoubleAddSub[T Unsigned](dc doubleCore[T], a, b double[T], carryIn Trit) error {
 	err := testDoubleAdd(dc, a, b, carryIn)
 	if err != nil {
 		return err

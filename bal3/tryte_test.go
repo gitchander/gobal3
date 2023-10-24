@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func testTritsAdd[T Unsigned](tc TryteCore[T], a, b T, carryIn int) error {
+func testTritsAdd[T Unsigned](tc TryteCore[T], a, b T, carryIn Trit) error {
 
 	res, carryOut := tc.Add(a, b, carryIn)
 
@@ -20,7 +20,7 @@ func testTritsAdd[T Unsigned](tc TryteCore[T], a, b T, carryIn int) error {
 	return nil
 }
 
-func testTritsSub[T Unsigned](tc TryteCore[T], a, b T, carryIn int) error {
+func testTritsSub[T Unsigned](tc TryteCore[T], a, b T, carryIn Trit) error {
 
 	res, carryOut := tc.Sub(a, b, carryIn)
 
@@ -35,7 +35,7 @@ func testTritsSub[T Unsigned](tc TryteCore[T], a, b T, carryIn int) error {
 	return nil
 }
 
-func testTritsAddSub[T Unsigned](tc TryteCore[T], a, b T, carryIn int) error {
+func testTritsAddSub[T Unsigned](tc TryteCore[T], a, b T, carryIn Trit) error {
 	err := testTritsAdd(tc, a, b, carryIn)
 	if err != nil {
 		return err
@@ -107,7 +107,7 @@ func TestAddT8Samples(t *testing.T) {
 	type sample[T Unsigned] struct {
 		a       T
 		b       T
-		carryIn int
+		carryIn Trit
 	}
 	samples := []sample[tritsType]{
 		{a: min, b: min, carryIn: -1},

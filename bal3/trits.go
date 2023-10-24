@@ -31,11 +31,11 @@ const (
 // | trits |   3   |   2   |   1   |   0   |
 // +-------+-------+-------+-------+-------+
 
-func errInvalidTrit(t int) error {
+func errInvalidTrit(t Trit) error {
 	return fmt.Errorf("invalid trit value %d", t)
 }
 
-func bitsToTrit[T Unsigned](x T) int {
+func bitsToTrit[T Unsigned](x T) Trit {
 	x &= tbs_Mask
 	switch x {
 	case tbs_T:
@@ -47,7 +47,7 @@ func bitsToTrit[T Unsigned](x T) int {
 	}
 }
 
-func tritToBits[T Unsigned](t int) T {
+func tritToBits[T Unsigned](t Trit) T {
 	switch t {
 	case tv_T:
 		return tbs_T
@@ -60,7 +60,7 @@ func tritToBits[T Unsigned](t int) T {
 	}
 }
 
-func setTrit[T Unsigned](x T, i int, t int) T {
+func setTrit[T Unsigned](x T, i int, t Trit) T {
 
 	offset := i * bitsPerTrit
 
@@ -73,7 +73,7 @@ func setTrit[T Unsigned](x T, i int, t int) T {
 	return x
 }
 
-func getTrit[T Unsigned](x T, i int) int {
+func getTrit[T Unsigned](x T, i int) Trit {
 
 	offset := i * bitsPerTrit
 
@@ -82,7 +82,7 @@ func getTrit[T Unsigned](x T, i int) int {
 	return bitsToTrit(x)
 }
 
-func setTritsN[T Unsigned](n int, t int) T {
+func setTritsN[T Unsigned](n int, t Trit) T {
 	var y T
 	for i := 0; i < n; i++ {
 		y = (y << bitsPerTrit) | (tritToBits[T](t))

@@ -125,7 +125,7 @@ func ceilDiv(a, b int) int {
 }
 
 // sum 4 trits: [-4..4]
-func splitTrits2(v int) (t1, t0 int) {
+func splitTrits2(v int) (t1, t0 Trit) {
 	switch v {
 	case -4:
 		return tv_T, tv_T
@@ -189,16 +189,16 @@ func quoRemInt64(a, b int64) (quo, rem int64) {
 
 //------------------------------------------------------------------------------
 
-func parseTable(sss ...string) ([][]int, error) {
+func parseTable(sss ...string) ([][]Trit, error) {
 	cols := 0
 	for _, ss := range sss {
 		cols = maxInt(cols, len(ss))
 	}
-	ttt := make([][]int, len(sss))
+	ttt := make([][]Trit, len(sss))
 	for i, ss := range sss {
 		var (
 			chars = []byte(ss)
-			tt    = make([]int, cols)
+			tt    = make([]Trit, cols)
 		)
 		for j, char := range chars {
 			t, ok := charToTrit(char)
@@ -212,7 +212,7 @@ func parseTable(sss ...string) ([][]int, error) {
 	return ttt, nil
 }
 
-func mustParseTable(sss ...string) [][]int {
+func mustParseTable(sss ...string) [][]Trit {
 	table, err := parseTable(sss...)
 	if err != nil {
 		panic(err)
@@ -220,6 +220,6 @@ func mustParseTable(sss ...string) [][]int {
 	return table
 }
 
-func tritByTable(table [][]int, a, b int) int {
+func tritByTable(table [][]Trit, a, b Trit) Trit {
 	return table[a+1][b+1]
 }

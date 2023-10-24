@@ -3,8 +3,6 @@ package bal3
 import (
 	"fmt"
 	"testing"
-
-	. "github.com/gitchander/gobal3/ternary"
 )
 
 type sampleUnaryFunc struct {
@@ -79,8 +77,8 @@ func TestAddSum(t *testing.T) {
 		},
 	}
 
-	wantFunc := func(a, b int) int {
-		_, t0 := splitTrits2(a + b)
+	wantFunc := func(a, b Trit) Trit {
+		_, t0 := splitTrits2(int(a + b))
 		return t0
 	}
 
@@ -119,8 +117,8 @@ func TestAddCons(t *testing.T) {
 		},
 	}
 
-	wantFunc := func(a, b int) int {
-		t1, _ := splitTrits2(a + b)
+	wantFunc := func(a, b Trit) Trit {
+		t1, _ := splitTrits2(int(a + b))
 		return t1
 	}
 
@@ -151,7 +149,7 @@ func TestTritsMul(t *testing.T) {
 		},
 	}
 
-	wantFunc := func(a, b int) int {
+	wantFunc := func(a, b Trit) Trit {
 		return a * b
 	}
 

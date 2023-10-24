@@ -3,7 +3,6 @@ package bal3
 import (
 	"fmt"
 
-	"github.com/gitchander/gobal3/ternary"
 	ivl "github.com/gitchander/gobal3/utils/interval"
 )
 
@@ -28,11 +27,11 @@ func (tc TryteCore[T]) TotalTrits() int {
 
 //------------------------------------------------------------------------------
 
-func (tc TryteCore[T]) setTrit(x T, i int, t int) T {
+func (tc TryteCore[T]) setTrit(x T, i int, t Trit) T {
 	return setTrit(x, i, t)
 }
 
-func (tc TryteCore[T]) getTrit(x T, i int) int {
+func (tc TryteCore[T]) getTrit(x T, i int) Trit {
 	return getTrit(x, i)
 }
 
@@ -85,12 +84,23 @@ func (tc TryteCore[T]) GreaterOrEqual(a, b T) bool {
 
 //------------------------------------------------------------------------------
 
+//  +-
+//  | -1: x < 0
+// -+  0: x = 0
+//  | +1: x > 0
+//  +-
+
 func (tc TryteCore[T]) Sign(x T) int {
 	for i := tc.n; i > 0; {
 		i--
 		t := tc.getTrit(x, i)
 		if t != 0 {
-			return t
+			switch {
+			case t < 0:
+				return -1
+			case t > 0:
+				return 1
+			}
 		}
 	}
 	return 0
@@ -113,7 +123,7 @@ func (tc TryteCore[T]) IsPositive(x T) bool {
 
 //------------------------------------------------------------------------------
 
-func (tc TryteCore[T]) SetAllTrits(t int) T {
+func (tc TryteCore[T]) SetAllTrits(t Trit) T {
 	var a T
 	for i := 0; i < tc.n; i++ {
 		a = tc.setTrit(a, i, t)
@@ -206,7 +216,7 @@ func (tc TryteCore[T]) MustParse(s string) T {
 func (tc TryteCore[T]) Neg(a T) (b T) {
 	for i := 0; i < tc.n; i++ {
 		t := tc.getTrit(a, i)
-		t = ternary.Neg(t)
+		t = terNeg(t)
 		b = tc.setTrit(b, i, t)
 	}
 	return b
@@ -231,8 +241,8 @@ func (tc TryteCore[T]) Shr(a T, i int) T {
 // carryIn  - input carry trit
 // carryOut - output carry trit
 
-func (tc TryteCore[T]) Add(x, y T, carryIn int) (res T, carryOut int) {
-	var s int
+func (tc TryteCore[T]) Add(x, y T, carryIn Trit) (res T, carryOut Trit) {
+	var s Trit
 	carry := carryIn
 	for i := 0; i < tc.n; i++ {
 		s, carry = tritsAdd(tc.getTrit(x, i), tc.getTrit(y, i), carry)
@@ -241,8 +251,8 @@ func (tc TryteCore[T]) Add(x, y T, carryIn int) (res T, carryOut int) {
 	return res, carry
 }
 
-func (tc TryteCore[T]) Sub(x, y T, carryIn int) (res T, carryOut int) {
-	var s int
+func (tc TryteCore[T]) Sub(x, y T, carryIn Trit) (res T, carryOut Trit) {
+	var s Trit
 	carry := carryIn
 	for i := 0; i < tc.n; i++ {
 		s, carry = tritsSub(tc.getTrit(x, i), tc.getTrit(y, i), carry)
@@ -260,9 +270,10 @@ func (tc TryteCore[T]) Mul(a, b T) (hi, lo T) {
 			w = tc.setTrit(w, j, tritsMul(ai, bj))
 		}
 		var (
-			wLo   = tc.Shl(w, i)          // w << i
-			wHi   = tc.Shr(w, (tc.n - i)) // w >> (n-i)
-			carry = 0
+			wLo = tc.Shl(w, i)          // w << i
+			wHi = tc.Shr(w, (tc.n - i)) // w >> (n-i)
+
+			carry = Trit(0)
 		)
 		lo, carry = tc.Add(lo, wLo, carry)
 		hi, carry = tc.Add(hi, wHi, carry)
@@ -280,7 +291,7 @@ func (tc TryteCore[T]) MulLo(a, b T) (lo T) {
 		}
 		var (
 			wLo   = tc.Shl(w, i) // w << i
-			carry = 0
+			carry = Trit(0)
 		)
 		lo, carry = tc.Add(lo, wLo, carry)
 	}
@@ -340,7 +351,7 @@ func (tc TryteCore[T]) LimitsInt64() (min, max int64) {
 
 //------------------------------------------------------------------------------
 
-func (tc TryteCore[T]) DoUnary(a T, f ternary.UnaryFunc) T {
+func (tc TryteCore[T]) DoUnary(a T, f UnaryFunc) T {
 	var b T
 	for i := 0; i < tc.n; i++ {
 		var (
@@ -352,7 +363,7 @@ func (tc TryteCore[T]) DoUnary(a T, f ternary.UnaryFunc) T {
 	return b
 }
 
-func (tc TryteCore[T]) DoBinary(a, b T, f ternary.BinaryFunc) T {
+func (tc TryteCore[T]) DoBinary(a, b T, f BinaryFunc) T {
 	var c T
 	for i := 0; i < tc.n; i++ {
 		var (

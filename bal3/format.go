@@ -1,6 +1,6 @@
 package bal3
 
-func tritToChar(t int) (c byte, ok bool) {
+func tritToChar(t Trit) (c byte, ok bool) {
 	switch t {
 	case tv_T:
 		c = tc_T
@@ -14,7 +14,7 @@ func tritToChar(t int) (c byte, ok bool) {
 	return c, true
 }
 
-func charToTrit(c byte) (t int, ok bool) {
+func charToTrit(c byte) (t Trit, ok bool) {
 	switch c {
 	case tc_T:
 		t = tv_T
@@ -28,7 +28,7 @@ func charToTrit(c byte) (t int, ok bool) {
 	return t, true
 }
 
-func mustTritToChar(t int) byte {
+func mustTritToChar(t Trit) byte {
 	c, ok := tritToChar(t)
 	if !ok {
 		panic(errInvalidTrit(t))

@@ -1,9 +1,5 @@
 package bal3
 
-import (
-	. "github.com/gitchander/gobal3/ternary"
-)
-
 // http://homepage.divms.uiowa.edu/%7Ejones/ternary/arith.shtml
 
 //------------------------------------------------------------------------------
@@ -70,16 +66,16 @@ var tableAddSum = mustParseTable(
 	"01T",
 )
 
-func addSumV1(a, b int) int {
+func addSumV1(a, b Trit) Trit {
 	return tritByTable(tableAddSum, a, b)
 }
 
-func addSumV2(a, b int) int {
-	_, t0 := splitTrits2(a + b)
+func addSumV2(a, b Trit) Trit {
+	_, t0 := splitTrits2(int(a + b))
 	return t0
 }
 
-func addSumV3(a, b int) int {
+func addSumV3(a, b Trit) Trit {
 	c := a + b
 	if c < -1 {
 		c += 3
@@ -90,7 +86,7 @@ func addSumV3(a, b int) int {
 	return c
 }
 
-func addSumV4(a, b int) int {
+func addSumV4(a, b Trit) Trit {
 
 	// (a + b) = ((a = -1) ∧ (b - 1)) ∨ ((a = 0) ∧ (b)) ∨ ((a = +1) ∧ (b + 1))
 	// where:
@@ -100,12 +96,12 @@ func addSumV4(a, b int) int {
 	// (b + 1) - inc(b)
 
 	var (
-		v1 = Min(Is(a, -1), Dec(b))
-		v2 = Min(Is(a, 0), b)
-		v3 = Min(Is(a, +1), Inc(b))
+		v1 = terMin(terIs(a, -1), terDec(b))
+		v2 = terMin(terIs(a, 0), b)
+		v3 = terMin(terIs(a, +1), terInc(b))
 	)
 
-	return Max(v1, Max(v2, v3))
+	return terMax(v1, terMax(v2, v3))
 }
 
 var (
@@ -135,36 +131,36 @@ var tableAddCons = mustParseTable(
 	"001",
 )
 
-func addConsV1(a, b int) int {
+func addConsV1(a, b Trit) Trit {
 	return tritByTable(tableAddCons, a, b)
 }
 
-func addConsV2(a, b int) int {
-	t1, _ := splitTrits2(a + b)
+func addConsV2(a, b Trit) Trit {
+	t1, _ := splitTrits2(int(a + b))
 	return t1
 }
 
-func addConsV3(a, b int) int {
-	if v := -1; (a == v) && (b == v) {
+func addConsV3(a, b Trit) Trit {
+	if v := Trit(tv_T); (a == v) && (b == v) {
 		return v
 	}
-	if v := 1; (a == v) && (b == v) {
+	if v := Trit(tv_1); (a == v) && (b == v) {
 		return v
 	}
 	return 0
 }
 
-func addConsV4(a, b int) int {
+func addConsV4(a, b Trit) Trit {
 	var (
-		v1 = Min(a, b)
-		v2 = Min(Neg(Is(a, -1)), 0)
-		v3 = Min(Neg(Is(b, -1)), 0)
+		v1 = terMin(a, b)
+		v2 = terMin(terNeg(terIs(a, -1)), 0)
+		v3 = terMin(terNeg(terIs(b, -1)), 0)
 	)
-	return Max(v1, Max(v2, v3))
+	return terMax(v1, terMax(v2, v3))
 }
 
-func addConsV5(a, b int) int {
-	return Max(Min(a, b), Min(0, Max(a, b)))
+func addConsV5(a, b Trit) Trit {
+	return terMax(terMin(a, b), terMin(0, terMax(a, b)))
 }
 
 var (
@@ -181,14 +177,14 @@ var (
 
 // c - carryOut
 
-func halfAdderV1(a, b int) (s, c int) {
-	t1, t0 := splitTrits2(a + b)
+func halfAdderV1(a, b Trit) (s, c Trit) {
+	t1, t0 := splitTrits2(int(a + b))
 	s = t0
 	c = t1
 	return
 }
 
-func halfAdderV2(a, b int) (s, c int) {
+func halfAdderV2(a, b Trit) (s, c Trit) {
 	s = addSum(a, b)
 	c = addCons(a, b)
 	return
@@ -206,7 +202,7 @@ var (
 // c0 - carryIn
 // c1 - carryOut
 
-func fullAdder(a, b int, c0 int) (s, c1 int) {
+func fullAdder(a, b Trit, c0 Trit) (s, c1 Trit) {
 	var (
 		s1, x1 = halfAdder(a, b)
 		s2, x2 = halfAdder(s1, c0)
@@ -219,12 +215,12 @@ func fullAdder(a, b int, c0 int) (s, c1 int) {
 
 //------------------------------------------------------------------------------
 
-func tritsAddV1(a, b int, c0 int) (s, c1 int) {
+func tritsAddV1(a, b Trit, c0 Trit) (s, c1 Trit) {
 	return fullAdder(a, b, c0)
 }
 
-func tritsAddV2(a, b int, c0 int) (s, c1 int) {
-	t1, t0 := splitTrits2(a + b + c0)
+func tritsAddV2(a, b Trit, c0 Trit) (s, c1 Trit) {
+	t1, t0 := splitTrits2(int(a + b + c0))
 	s = t0
 	c1 = t1
 	return
@@ -237,13 +233,13 @@ var (
 
 //------------------------------------------------------------------------------
 
-func tritsSubV1(a, b int, c0 int) (s, c1 int) {
-	b = Neg(b)
+func tritsSubV1(a, b Trit, c0 Trit) (s, c1 Trit) {
+	b = terNeg(b)
 	return tritsAdd(a, b, c0)
 }
 
-func tritsSubV2(a, b int, c0 int) (s, c1 int) {
-	t1, t0 := splitTrits2(a - b + c0)
+func tritsSubV2(a, b Trit, c0 Trit) (s, c1 Trit) {
+	t1, t0 := splitTrits2(int(a - b + c0))
 	s = t0
 	c1 = t1
 	return

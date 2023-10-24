@@ -1,9 +1,5 @@
 package bal3
 
-import (
-	"github.com/gitchander/gobal3/ternary"
-)
-
 // Mul table
 
 // +---+---+---+---+
@@ -22,16 +18,16 @@ var tableMul = mustParseTable(
 	"T01",
 )
 
-func tritsMulV1(a, b int) int {
+func tritsMulV1(a, b Trit) Trit {
 	return tritByTable(tableMul, a, b)
 }
 
-func tritsMulV2(a, b int) int {
+func tritsMulV2(a, b Trit) Trit {
 	return a * b
 }
 
-func tritsMulV3(a, b int) int {
-	return ternary.NegXor(a, b)
+func tritsMulV3(a, b Trit) Trit {
+	return terNegXor(a, b)
 }
 
 var (
