@@ -94,13 +94,11 @@ func (tc TryteCore[T]) Sign(x T) int {
 	for i := tc.n; i > 0; {
 		i--
 		t := tc.getTrit(x, i)
-		if t != 0 {
-			switch {
-			case t < 0:
-				return -1
-			case t > 0:
-				return 1
-			}
+		switch {
+		case t < 0:
+			return -1
+		case t > 0:
+			return +1
 		}
 	}
 	return 0
@@ -242,8 +240,10 @@ func (tc TryteCore[T]) Shr(a T, i int) T {
 // carryOut - output carry trit
 
 func (tc TryteCore[T]) Add(x, y T, carryIn Trit) (res T, carryOut Trit) {
-	var s Trit
-	carry := carryIn
+	var (
+		s     Trit
+		carry Trit = carryIn
+	)
 	for i := 0; i < tc.n; i++ {
 		s, carry = tritsAdd(tc.getTrit(x, i), tc.getTrit(y, i), carry)
 		res = tc.setTrit(res, i, s)
@@ -252,8 +252,10 @@ func (tc TryteCore[T]) Add(x, y T, carryIn Trit) (res T, carryOut Trit) {
 }
 
 func (tc TryteCore[T]) Sub(x, y T, carryIn Trit) (res T, carryOut Trit) {
-	var s Trit
-	carry := carryIn
+	var (
+		s     Trit
+		carry Trit = carryIn
+	)
 	for i := 0; i < tc.n; i++ {
 		s, carry = tritsSub(tc.getTrit(x, i), tc.getTrit(y, i), carry)
 		res = tc.setTrit(res, i, s)
@@ -273,7 +275,7 @@ func (tc TryteCore[T]) Mul(a, b T) (hi, lo T) {
 			wLo = tc.Shl(w, i)          // w << i
 			wHi = tc.Shr(w, (tc.n - i)) // w >> (n-i)
 
-			carry = Trit(0)
+			carry Trit = 0
 		)
 		lo, carry = tc.Add(lo, wLo, carry)
 		hi, carry = tc.Add(hi, wHi, carry)
@@ -290,8 +292,9 @@ func (tc TryteCore[T]) MulLo(a, b T) (lo T) {
 			w = tc.setTrit(w, j, tritsMul(ai, bj))
 		}
 		var (
-			wLo   = tc.Shl(w, i) // w << i
-			carry = Trit(0)
+			wLo = tc.Shl(w, i) // w << i
+
+			carry Trit = 0
 		)
 		lo, carry = tc.Add(lo, wLo, carry)
 	}
