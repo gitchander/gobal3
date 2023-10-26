@@ -3,6 +3,8 @@ Balanced Ternary
 https://en.wikipedia.org/wiki/Balanced_ternary
 https://en.wikipedia.org/wiki/Ternary_numeral_system
 
+https://rosettacode.org/wiki/Balanced_ternary
+
 https://web.archive.org/web/20090312094241/http://abhijit.info/tristate/tristate.html
 
 The Ternary Manifesto

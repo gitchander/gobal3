@@ -186,9 +186,9 @@ func (tc TryteCore[T]) Parse(s string) (T, error) {
 		if b == '_' {
 			continue
 		}
-		t, ok := charToTrit(b)
-		if !ok {
-			return v, fmt.Errorf("invalid trit char %q", b)
+		t, err := charToTrit(b)
+		if err != nil {
+			return v, err
 		}
 		v = tc.Shl(v, 1)        // v = v << 1
 		v = tc.setTrit(v, 0, t) // v[0] = t

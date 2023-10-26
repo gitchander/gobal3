@@ -11,18 +11,16 @@ import (
 )
 
 func main() {
-
 	//testToString()
-
 	//testIncTC4()
 	//testIncTC6()
 	//testIncTC9()
-
 	//testFormatBase27()
 	//testParseBase27()
-
-	testLimits()
+	//testLimits()
 	//testQuoRemT32Random()
+
+	testBig()
 }
 
 func checkError(err error) {
@@ -329,4 +327,14 @@ func bitsOpAdd3(a, b, c int) (hi, lo int) {
 	_ = hi3
 
 	return lo3, lo2
+}
+
+func testBig() {
+	//s:= "01T01TTT10T10001T01010101010101010101010TTTTTTT00000TTTT"
+	s := "0"
+	b, err := bal3.ParseBt(s)
+	checkError(err)
+	fmt.Println(b)
+	b.Neg()
+	fmt.Println(b)
 }

@@ -5,49 +5,6 @@ import (
 	"fmt"
 )
 
-// var powersOfThree = [...]int64{
-// 	0:  1,
-// 	1:  3,
-// 	2:  9,
-// 	3:  27,
-// 	4:  81,
-// 	5:  243,
-// 	6:  729,
-// 	7:  2187,
-// 	8:  6561,
-// 	9:  19683,
-// 	10: 59049,
-// 	11: 177147,
-// 	12: 531441,
-// 	13: 1594323,
-// 	14: 4782969,
-// 	15: 14348907,
-// 	16: 43046721,
-// 	17: 129140163,
-// 	18: 387420489,
-// 	19: 1162261467,
-// 	20: 3486784401,
-// 	21: 10460353203,
-// 	22: 31381059609,
-// 	23: 94143178827,
-// 	24: 282429536481,
-// 	25: 847288609443,
-// 	26: 2541865828329,
-// 	27: 7625597484987,
-// 	28: 22876792454961,
-// 	29: 68630377364883,
-// 	30: 205891132094649,
-// 	31: 617673396283947,
-// 	32: 1853020188851841,
-// 	33: 5559060566555523,
-// 	34: 16677181699666569,
-// 	35: 50031545098999707,
-// 	36: 150094635296999121,
-// 	37: 450283905890997363,
-// 	38: 1350851717672992089,
-// 	39: 4052555153018976267,
-// }
-
 var errNegativeShift = errors.New("negative shift amount")
 
 func checkShiftAmount(i int) {
@@ -201,9 +158,9 @@ func parseTable(sss ...string) ([][]Trit, error) {
 			tt    = make([]Trit, cols)
 		)
 		for j, char := range chars {
-			t, ok := charToTrit(char)
-			if !ok {
-				return nil, fmt.Errorf("invalid trit char %q", char)
+			t, err := charToTrit(char)
+			if err != nil {
+				return nil, err
 			}
 			tt[j] = t
 		}
@@ -222,4 +179,35 @@ func mustParseTable(sss ...string) [][]Trit {
 
 func tritByTable(table [][]Trit, a, b Trit) Trit {
 	return table[a+1][b+1]
+}
+
+//------------------------------------------------------------------------------
+
+// forward iterate
+func forward(n int, f func(i int) bool) {
+	for i := 0; i < n; i++ {
+		if !f(i) {
+			return
+		}
+	}
+}
+
+// backward iterate
+func backward(n int, f func(i int) bool) {
+	for i := n; i > 0; {
+		i--
+		if !f(i) {
+			return
+		}
+	}
+}
+
+//------------------------------------------------------------------------------
+
+func reverseSlice[T any](as []T) {
+	i, j := 0, (len(as) - 1)
+	for i < j {
+		as[i], as[j] = as[j], as[i]
+		i, j = i+1, j-1
+	}
 }

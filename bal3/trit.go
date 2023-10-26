@@ -47,8 +47,9 @@ func tritToChar(t Trit) (c byte, ok bool) {
 	return c, true
 }
 
-func charToTrit(c byte) (t Trit, ok bool) {
-	switch c {
+func charToTrit(char byte) (Trit, error) {
+	var t Trit
+	switch char {
 	case tc_T:
 		t = tv_T
 	case tc_0:
@@ -56,9 +57,9 @@ func charToTrit(c byte) (t Trit, ok bool) {
 	case tc_1:
 		t = tv_1
 	default:
-		return 0, false
+		return 0, fmt.Errorf("invalid trit char %q", char)
 	}
-	return t, true
+	return t, nil
 }
 
 func mustTritToChar(t Trit) byte {
