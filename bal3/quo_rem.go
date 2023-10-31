@@ -87,7 +87,7 @@ func tryteQuoRemLo[T Unsigned](tc TryteCore[T], a, b T) (q, r T) {
 		// |000...000,111...111|
 		var factor T // set lo n trits.
 		for i := 0; i < k; i++ {
-			factor = tc.setTrit(factor, i, 1)
+			factor = setTrit(factor, i, 1)
 		}
 
 		//      |<---n--->|
@@ -131,7 +131,7 @@ func tryteQuoRemLo[T Unsigned](tc TryteCore[T], a, b T) (q, r T) {
 		for i := k - 1; i >= 0; i-- {
 			rr = tc.Shl(rr, 1) // r = r << 1
 			t := Trit(iter())
-			q = tc.setTrit(q, i, t)
+			q = setTrit(q, i, t)
 		}
 	} else {
 
@@ -153,7 +153,7 @@ func tryteQuoRemLo[T Unsigned](tc TryteCore[T], a, b T) (q, r T) {
 			fmt.Println(t)
 			fmt.Println()
 
-			q = tc.setTrit(q, i, t)
+			q = setTrit(q, i, t)
 		}
 	}
 
@@ -205,7 +205,7 @@ func tryteQuoRem[T Unsigned](tc TryteCore[T], a, b T) (q, r T) {
 
 	for i := tc.n - 1; i >= 0; i-- {
 		t := dp.divIter()
-		q = tc.setTrit(q, i, Trit(t)) // q[i] = t
+		q = setTrit(q, i, Trit(t)) // q[i] = t
 	}
 
 	r = dp.outRem()

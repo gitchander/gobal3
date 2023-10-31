@@ -37,7 +37,7 @@ func shiftLeftV2[T Unsigned](tc TryteCore[T], a T, i int) T {
 	checkShiftAmount(i)
 	var b T
 	for j := i; j < tc.n; j++ {
-		b = tc.setTrit(b, j, tc.getTrit(a, j-i))
+		b = setTrit(b, j, getTrit(a, j-i))
 	}
 	return b
 }
@@ -46,7 +46,7 @@ func shiftRightV2[T Unsigned](tc TryteCore[T], a T, i int) T {
 	checkShiftAmount(i)
 	var b T
 	for j := tc.n - 1 - i; j >= 0; j-- {
-		b = tc.setTrit(b, j, tc.getTrit(a, j+i))
+		b = setTrit(b, j, getTrit(a, j+i))
 	}
 	return b
 }

@@ -27,23 +27,13 @@ func (tc TryteCore[T]) TotalTrits() int {
 
 //------------------------------------------------------------------------------
 
-func (tc TryteCore[T]) setTrit(x T, i int, t Trit) T {
-	return setTrit(x, i, t)
-}
-
-func (tc TryteCore[T]) getTrit(x T, i int) Trit {
-	return getTrit(x, i)
-}
-
-//------------------------------------------------------------------------------
-
 // The result will be 0 if a == b, -1 if a < b, and +1 if a > b.
 func (tc TryteCore[T]) Compare(a, b T) int {
 	for i := tc.n; i > 0; {
 		i--
 		var (
-			ta = tc.getTrit(a, i)
-			tb = tc.getTrit(b, i)
+			ta = getTrit(a, i)
+			tb = getTrit(b, i)
 		)
 		c := tritsCompare(ta, tb)
 		if c != 0 {
@@ -93,7 +83,7 @@ func (tc TryteCore[T]) GreaterOrEqual(a, b T) bool {
 func (tc TryteCore[T]) Sign(x T) int {
 	for i := tc.n; i > 0; {
 		i--
-		t := tc.getTrit(x, i)
+		t := getTrit(x, i)
 		switch {
 		case t < 0:
 			return -1
@@ -124,7 +114,7 @@ func (tc TryteCore[T]) IsPositive(x T) bool {
 func (tc TryteCore[T]) SetAllTrits(t Trit) T {
 	var a T
 	for i := 0; i < tc.n; i++ {
-		a = tc.setTrit(a, i, t)
+		a = setTrit(a, i, t)
 	}
 	return a
 }
@@ -155,7 +145,7 @@ func (tc TryteCore[T]) Format(a T) string {
 		k  = j
 	)
 	for i := 0; i < tc.n; i++ {
-		t := tc.getTrit(a, i)
+		t := getTrit(a, i)
 		if t != 0 {
 			k = j
 		}
@@ -171,7 +161,7 @@ func (tc TryteCore[T]) FormatAllTrits(a T) string {
 		j  = tc.n - 1
 	)
 	for i := 0; i < tc.n; i++ {
-		t := tc.getTrit(a, i)
+		t := getTrit(a, i)
 		bs[j] = mustTritToChar(t)
 		j--
 	}
@@ -190,8 +180,8 @@ func (tc TryteCore[T]) Parse(s string) (T, error) {
 		if err != nil {
 			return v, err
 		}
-		v = tc.Shl(v, 1)        // v = v << 1
-		v = tc.setTrit(v, 0, t) // v[0] = t
+		v = tc.Shl(v, 1)     // v = v << 1
+		v = setTrit(v, 0, t) // v[0] = t
 		count++
 	}
 	if l := ivl.Ivl(1, tc.n+1); not(l.Contains(count)) {
@@ -213,9 +203,9 @@ func (tc TryteCore[T]) MustParse(s string) T {
 // Negative, Invert
 func (tc TryteCore[T]) Neg(a T) (b T) {
 	for i := 0; i < tc.n; i++ {
-		t := tc.getTrit(a, i)
+		t := getTrit(a, i)
 		t = terNeg(t)
-		b = tc.setTrit(b, i, t)
+		b = setTrit(b, i, t)
 	}
 	return b
 }
@@ -245,8 +235,8 @@ func (tc TryteCore[T]) Add(x, y T, carryIn Trit) (res T, carryOut Trit) {
 		carry Trit = carryIn
 	)
 	for i := 0; i < tc.n; i++ {
-		s, carry = tritsAdd(tc.getTrit(x, i), tc.getTrit(y, i), carry)
-		res = tc.setTrit(res, i, s)
+		s, carry = tritsAdd(getTrit(x, i), getTrit(y, i), carry)
+		res = setTrit(res, i, s)
 	}
 	return res, carry
 }
@@ -257,19 +247,19 @@ func (tc TryteCore[T]) Sub(x, y T, carryIn Trit) (res T, carryOut Trit) {
 		carry Trit = carryIn
 	)
 	for i := 0; i < tc.n; i++ {
-		s, carry = tritsSub(tc.getTrit(x, i), tc.getTrit(y, i), carry)
-		res = tc.setTrit(res, i, s)
+		s, carry = tritsSub(getTrit(x, i), getTrit(y, i), carry)
+		res = setTrit(res, i, s)
 	}
 	return res, carry
 }
 
 func (tc TryteCore[T]) Mul(a, b T) (hi, lo T) {
 	for i := 0; i < tc.n; i++ {
-		ai := tc.getTrit(a, i)
+		ai := getTrit(a, i)
 		var w T
 		for j := 0; j < tc.n; j++ {
-			bj := tc.getTrit(b, j)
-			w = tc.setTrit(w, j, tritsMul(ai, bj))
+			bj := getTrit(b, j)
+			w = setTrit(w, j, tritsMul(ai, bj))
 		}
 		var (
 			wLo = tc.Shl(w, i)          // w << i
@@ -285,11 +275,11 @@ func (tc TryteCore[T]) Mul(a, b T) (hi, lo T) {
 
 func (tc TryteCore[T]) MulLo(a, b T) (lo T) {
 	for i := 0; i < tc.n; i++ {
-		ai := tc.getTrit(a, i)
+		ai := getTrit(a, i)
 		var w T
 		for j := 0; j < tc.n; j++ {
-			bj := tc.getTrit(b, j)
-			w = tc.setTrit(w, j, tritsMul(ai, bj))
+			bj := getTrit(b, j)
+			w = setTrit(w, j, tritsMul(ai, bj))
 		}
 		var (
 			wLo = tc.Shl(w, i) // w << i
@@ -312,7 +302,7 @@ func (tc TryteCore[T]) QuoRem(x, y T) (quo, rem T) {
 func (tc TryteCore[T]) Rand(r *Rand) T {
 	var a T
 	for i := 0; i < tc.n; i++ {
-		a = tc.setTrit(a, i, randTrit(r))
+		a = setTrit(a, i, randTrit(r))
 	}
 	return a
 }
@@ -329,7 +319,7 @@ func (tc TryteCore[T]) RandSh(r *Rand) T {
 // Len returns the minimum number of trits required to represent x; the result is 0 for x == 0.
 func (tc TryteCore[T]) Len(x T) int {
 	for i := tc.n; i > 0; i-- {
-		t := tc.getTrit(x, i-1)
+		t := getTrit(x, i-1)
 		if t != 0 {
 			return i
 		}
@@ -358,10 +348,10 @@ func (tc TryteCore[T]) DoUnary(a T, f UnaryFunc) T {
 	var b T
 	for i := 0; i < tc.n; i++ {
 		var (
-			ai = tc.getTrit(a, i)
+			ai = getTrit(a, i)
 			bi = f(ai)
 		)
-		b = tc.setTrit(b, i, bi)
+		b = setTrit(b, i, bi)
 	}
 	return b
 }
@@ -370,11 +360,11 @@ func (tc TryteCore[T]) DoBinary(a, b T, f BinaryFunc) T {
 	var c T
 	for i := 0; i < tc.n; i++ {
 		var (
-			ai = tc.getTrit(a, i)
-			bi = tc.getTrit(b, i)
+			ai = getTrit(a, i)
+			bi = getTrit(b, i)
 			ci = f(ai, bi)
 		)
-		c = tc.setTrit(c, i, ci)
+		c = setTrit(c, i, ci)
 	}
 	return c
 }

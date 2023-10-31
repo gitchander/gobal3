@@ -115,6 +115,15 @@ func tritToBits[T Unsigned](t Trit) T {
 	}
 }
 
+func getTrit[T Unsigned](x T, i int) Trit {
+
+	offset := i * bitsPerTrit
+
+	x = (x >> offset) & tbs_Mask
+
+	return bitsToTrit(x)
+}
+
 func setTrit[T Unsigned](x T, i int, t Trit) T {
 
 	offset := i * bitsPerTrit
@@ -126,15 +135,6 @@ func setTrit[T Unsigned](x T, i int, t Trit) T {
 	x |= y << offset
 
 	return x
-}
-
-func getTrit[T Unsigned](x T, i int) Trit {
-
-	offset := i * bitsPerTrit
-
-	x = (x >> offset) & tbs_Mask
-
-	return bitsToTrit(x)
 }
 
 func setTritsN[T Unsigned](n int, t Trit) T {

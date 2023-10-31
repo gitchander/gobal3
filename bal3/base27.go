@@ -126,8 +126,8 @@ func FormatBase27[T Unsigned](tc TryteCore[T], a T) string {
 
 	for i := 0; i < tc.n; i++ {
 
-		t := tc.getTrit(a, i)       // t = a[i]
-		b = tc.setTrit(b, count, t) // b[count] = t
+		t := getTrit(a, i)       // t = a[i]
+		b = setTrit(b, count, t) // b[count] = t
 		count++
 
 		if count == tritsPerDigit {
@@ -177,12 +177,12 @@ func ParseBase27[T Unsigned](tc TryteCore[T], s string) (T, error) {
 			if count >= tc.n {
 				return 0, fmt.Errorf("number of trits more than %d", tc.n)
 			}
-			t := tc.getTrit(b, j-1)
+			t := getTrit(b, j-1)
 			if (count > 0) || (t != 0) {
 				count++
 			}
 			a = tc.Shl(a, 1) // a = a << 1
-			a = tc.setTrit(a, 0, t)
+			a = setTrit(a, 0, t)
 		}
 	}
 	return a, nil

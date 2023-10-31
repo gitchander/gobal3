@@ -2,13 +2,6 @@ package bal3
 
 // https://rosettacode.org/wiki/Balanced_ternary
 
-const (
-	bitsPerWord  = 64
-	tritsPerWord = bitsPerWord / bitsPerTrit
-)
-
-type word uint64
-
 // Balanced ternary
 type Bt struct {
 	words []word
@@ -40,7 +33,7 @@ func (b *Bt) backward(f func(i int, t Trit) bool) {
 
 			var (
 				i = wi*tritsPerWord + ti
-				t = bitsToTrit(w >> (ti * bitsPerTrit))
+				t = getTrit(w, ti)
 			)
 			if f(i, t) {
 				break
@@ -61,8 +54,7 @@ func (b *Bt) TritLen() int {
 		for ti := tritsPerWord; ti > 0; {
 			ti--
 
-			k := ti * bitsPerTrit
-			t := bitsToTrit(w >> k)
+			t := getTrit(w, ti)
 			if t != 0 {
 				return wi*tritsPerWord + ti + 1
 			}

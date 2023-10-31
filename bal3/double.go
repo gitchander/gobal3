@@ -103,9 +103,9 @@ func (dc doubleCore[T]) SetTrit(a double[T], i int, t Trit) double[T] {
 	)
 	switch {
 	case i < n:
-		a.Lo = tc.setTrit(a.Lo, i, t)
+		a.Lo = setTrit(a.Lo, i, t)
 	case i < (2 * n):
-		a.Hi = tc.setTrit(a.Hi, i-n, t)
+		a.Hi = setTrit(a.Hi, i-n, t)
 	}
 	return a
 }
@@ -118,9 +118,9 @@ func (dc doubleCore[T]) GetTrit(a double[T], i int) Trit {
 	var t Trit
 	switch {
 	case i < n:
-		t = tc.getTrit(a.Lo, i)
+		t = getTrit(a.Lo, i)
 	case i < (2 * n):
-		t = tc.getTrit(a.Hi, i-n)
+		t = getTrit(a.Hi, i-n)
 	}
 	return t
 }
