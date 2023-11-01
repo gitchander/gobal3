@@ -1,9 +1,9 @@
 package draw3
 
 import (
-	"github.com/fogleman/gg"
+	"image"
 
-	"github.com/gitchander/gobal3/bal3"
+	"github.com/fogleman/gg"
 )
 
 type TritsDrawer interface {
@@ -13,7 +13,7 @@ type TritsDrawer interface {
 	// n - number of trits
 	Bounds(n int) Size
 
-	Draw(*gg.Context, Point2f, []bal3.Trit)
+	Draw(c *gg.Context, p Point2f, digits []int)
 }
 
 type TritsDrawer1 struct {
@@ -37,61 +37,109 @@ func (p *TritsDrawer1) Bounds(n int) Size {
 	}
 }
 
-func (p *TritsDrawer1) drawDigit(c *gg.Context, pos Point2f, t bal3.Trit) {
+func (p *TritsDrawer1) drawDigit(c *gg.Context, pos Point2f, digit int) {
 
 	c.Push()
+	defer c.Pop()
 
-	w := minFloat64(p.digitSize.X, p.digitSize.Y/2) / 2
+	var (
+		size = image.Pt(2, 4)
+		//size = image.Pt(4, 8)
+	)
+
+	w := minFloat64(p.digitSize.X/float64(size.X), p.digitSize.Y/float64(size.Y))
 	w *= 0.8
 
 	lineWidth := w * 0.3
 
 	var (
-		dX2 = p.digitSize.X / 2
-		dY2 = p.digitSize.Y / 2
+		dX2 = (p.digitSize.X - w*float64(size.X)) / 2
+		dY2 = (p.digitSize.Y - w*float64(size.Y)) / 2
 	)
 
-	c.Translate(pos.X+dX2-w, pos.Y+dY2-w*2)
+	c.Translate(pos.X+dX2, pos.Y+dY2)
 
 	c.Scale(w, w)
 
-	if false {
-		c.SetHexColor("f00")
-		c.DrawRectangle(0, 0, 2, 4)
-		c.Fill()
-		c.SetHexColor("000")
+	DrawGreedGG(c, size.X, size.Y, 1)
+
+	nodes := []sdNode{
+		{
+			positive: []Point2f{Pt2f(1, 0), Pt2f(0, 1)},
+			negative: []Point2f{Pt2f(1, 4), Pt2f(2, 3)},
+		},
+		{
+			positive: []Point2f{Pt2f(1, 2), Pt2f(0, 1)},
+			negative: []Point2f{Pt2f(1, 2), Pt2f(2, 3)},
+		},
+		{
+			positive: []Point2f{Pt2f(1, 2), Pt2f(0, 3)},
+			negative: []Point2f{Pt2f(1, 2), Pt2f(2, 1)},
+		},
+		{
+			positive: []Point2f{Pt2f(1, 4), Pt2f(0, 3)},
+			negative: []Point2f{Pt2f(1, 0), Pt2f(2, 1)},
+		},
 	}
 
-	switch t {
-	case -1:
-		c.MoveTo(1, 0)
-		c.LineTo(1, 4)
-		c.LineTo(2, 3)
-	case 0:
-		if true {
-			c.MoveTo(1, 0)
-			c.LineTo(1, 4)
-		} else {
-			c.MoveTo(0, 1)
-			c.LineTo(1, 0)
-			c.LineTo(1, 4)
-			c.LineTo(2, 3)
+	// nodes := []sdNode{
+	// 	{
+	// 		positive: []Point2f{Pt2f(1, 0), Pt2f(2, 1)},
+	// 		negative: []Point2f{Pt2f(1, 0), Pt2f(0, 1)},
+	// 	},
+	// 	{
+	// 		positive: []Point2f{Pt2f(1, 2), Pt2f(2, 1)},
+	// 		negative: []Point2f{Pt2f(1, 2), Pt2f(0, 1)},
+	// 	},
+	// 	{
+	// 		positive: []Point2f{Pt2f(1, 2), Pt2f(2, 3)},
+	// 		negative: []Point2f{Pt2f(1, 2), Pt2f(0, 3)},
+	// 	},
+	// 	{
+	// 		positive: []Point2f{Pt2f(1, 4), Pt2f(2, 3)},
+	// 		negative: []Point2f{Pt2f(1, 4), Pt2f(0, 3)},
+	// 	},
+	// }
+
+	subDigits := calcSubDigits(digit)
+
+	n := minInt(len(nodes), len(subDigits))
+
+	c.MoveTo(1, 0)
+	c.LineTo(1, 4)
+
+	for i := 0; i < n; i++ {
+		var (
+			node     = nodes[i]
+			subDigit = subDigits[i]
+		)
+		switch subDigit {
+		case -1:
+			drawPolyline(c, node.negative)
+		case +1:
+			drawPolyline(c, node.positive)
 		}
-	case +1:
-		c.MoveTo(0, 1)
-		c.LineTo(1, 0)
-		c.LineTo(1, 4)
 	}
 
 	c.SetLineWidth(lineWidth)
 	c.Stroke()
-
-	c.Pop()
 }
 
-func (p *TritsDrawer1) Draw(c *gg.Context, pos Point2f, ts []bal3.Trit) {
-	for _, t := range ts {
-		p.drawDigit(c, pos, t)
+func (p *TritsDrawer1) Draw(c *gg.Context, pos Point2f, digits []int) {
+	for _, digit := range digits {
+		p.drawDigit(c, pos, digit)
 		pos.X += p.digitSize.X
+	}
+}
+
+func drawPolyline(c *gg.Context, ps []Point2f) {
+	n := len(ps)
+	if n > 0 {
+		p := ps[0]
+		c.MoveTo(p.X, p.Y)
+	}
+	for i := 1; i < n; i++ {
+		p := ps[i]
+		c.LineTo(p.X, p.Y)
 	}
 }

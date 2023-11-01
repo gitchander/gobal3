@@ -20,15 +20,14 @@ func main() {
 	)
 	td.SetDigitSize(draw3.MakeSize(dh/2, dh))
 
-	r := random.NewRandNow()
+	// r := random.NewRandNow()
+	// digits := make([]int, 10)
+	// for i := range digits {
+	// 	digits[i] = randDigit(r)
+	// }
+	digits := makeIntsMinMax(-40, 41)
 
-	//ts := []bal3.Trit{0, 1, -1, 0, 1, -1}
-	ts := make([]bal3.Trit, 20)
-	for i := range ts {
-		ts[i] = randTrit(r)
-	}
-
-	b := td.Bounds(len(ts))
+	b := td.Bounds(len(digits))
 
 	var (
 		w = int(math.Ceil(b.X))
@@ -40,13 +39,30 @@ func main() {
 	c.Clear()
 
 	c.SetColor(color.Black)
-	td.Draw(c, draw3.ZP, ts)
+	td.Draw(c, draw3.ZP, digits)
 
 	c.SavePNG("result.png")
 }
 
 var allTrits = []bal3.Trit{-1, 0, 1}
 
+func randDigit(r *random.Rand) int {
+	const (
+		min = -40
+		max = +40
+	)
+	return random.RandIntMinMax(r, min, max+1)
+}
+
 func randTrit(r *random.Rand) bal3.Trit {
 	return random.RandByCorpus(r, allTrits)
+}
+
+func makeIntsMinMax(min, max int) []int {
+	n := max - min
+	as := make([]int, n)
+	for i := range as {
+		as[i] = min + i
+	}
+	return as
 }

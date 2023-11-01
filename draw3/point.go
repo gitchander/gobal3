@@ -13,6 +13,13 @@ func MakePoint2f(x, y float64) Point2f {
 	}
 }
 
+func Pt2f(x, y float64) Point2f {
+	return Point2f{
+		X: x,
+		Y: y,
+	}
+}
+
 type Size = Point2f
 
 func MakeSize(x, y float64) Size {
