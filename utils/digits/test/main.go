@@ -10,11 +10,11 @@ import (
 )
 
 func main() {
-	testCalcDigits()
+	//testCalcDigits()
 	//testCalcDigitsN()
 	//testDigits()
 	//testCalcDigits2()
-	//testQuoRemMinMax()
+	testDigit()
 }
 
 func checkError(err error) {
@@ -25,17 +25,17 @@ func checkError(err error) {
 
 func testCalcDigits() {
 	var (
-		digiter      = digits.NewDigiter(0, 1)
-		digitWidth   = 1
-		digitsNumber = 64
+		// digiter      = digits.NewDigiter(0, 1)
+		// digitWidth   = 1
+		// digitsNumber = 64
 
 		// digiter      = digits.NewDigiter(0, 9)
 		// digitWidth   = 1
 		// digitsNumber = 25
 
-		// digiter      = digits.NewDigiter(-1, 1)
-		// digitWidth   = 3
-		// digitsNumber = 41
+		digiter      = digits.NewDigiter(-1, 1)
+		digitWidth   = 3
+		digitsNumber = 41
 
 		// digiter      = digits.NewDigiter(5, 8)
 		// digitWidth   = 1
@@ -173,12 +173,13 @@ func testCalcDigits2() {
 	}
 }
 
-func testQuoRemMinMax() {
+func testDigit() {
 
 	var (
-		//dmin, dmax = -1, 1
+		dmin, dmax = -1, 1
 		//dmin, dmax = 0, 1
-		dmin, dmax = 0, 19
+		//dmin, dmax = 0, 19
+		//dmin, dmax = -10, -5
 	)
 
 	var as []int
@@ -188,7 +189,7 @@ func testQuoRemMinMax() {
 	as = append(as, math.MaxInt)
 
 	for _, a := range as {
-		q, r := digits.QuoRemMinMax2(a, dmin, dmax)
-		fmt.Printf("%20d %20d %3d\n", a, q, r)
+		digit, rest := digits.Digit(a, dmin, dmax)
+		fmt.Printf("%20d %20d %3d\n", a, rest, digit)
 	}
 }

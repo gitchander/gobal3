@@ -51,12 +51,6 @@ func (d *Digiter) Digit(x int) (digit, rest int) {
 	return
 }
 
-func quoRem(a, b int) (quo, rem int) {
-	quo = a / b
-	rem = a % b
-	return
-}
-
 // dl - digit interval
 func (d *Digiter) IntToDigits(v int, ds []int) (rest int) {
 	var digit int
@@ -82,7 +76,13 @@ func (d *Digiter) IntToDigitsN(v int, n int) (ds []int, rest int) {
 	return ds, rest
 }
 
-func (d *Digiter) digitsToInt_(ds []int, rest int) int {
+func (d *Digiter) DigitsToInt(digits []int, rest int) (int, error) {
+	v := d.digitsToIntV1(digits, rest)
+	return v, nil
+	//return d.digitsToIntV2(digits, rest)
+}
+
+func (d *Digiter) digitsToIntV1(ds []int, rest int) int {
 	v := rest
 	for i := len(ds) - 1; i >= 0; i-- {
 		v = (v * d.base) + ds[i]
@@ -90,7 +90,7 @@ func (d *Digiter) digitsToInt_(ds []int, rest int) int {
 	return v
 }
 
-func (d *Digiter) DigitsToInt(digits []int, rest int) (int, error) {
+func (d *Digiter) digitsToIntV2(digits []int, rest int) (int, error) {
 	base := d.base
 	v := rest
 	for i := len(digits) - 1; i >= 0; i-- {
