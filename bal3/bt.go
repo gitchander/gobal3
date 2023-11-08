@@ -103,10 +103,9 @@ func (p *Bt) Neg() *Bt {
 	for i, w := range ws {
 		var v word
 		for j := 0; j < tritsPerWord; j++ {
-			k := j * bitsPerTrit
-			t := bitsToTrit(w >> k)
-			t = terNeg(t)
-			v |= tritToBits[word](t) << k
+			t := getTrit(w, j)
+			t = trico.Neg(t)
+			v = setTrit(v, j, t)
 		}
 		ws[i] = v
 	}

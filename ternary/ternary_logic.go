@@ -2,22 +2,6 @@ package ternary
 
 //------------------------------------------------------------------------------
 
-func checkTrit(t int) {
-	switch t {
-	case -1, 0, 1:
-	default:
-		panic(errInvalidTrit(t))
-	}
-}
-
-func checkTrits(ts ...int) {
-	for _, t := range ts {
-		checkTrit(t)
-	}
-}
-
-//------------------------------------------------------------------------------
-
 // Invert table:
 
 // +---+---+
@@ -33,7 +17,7 @@ func checkTrits(ts ...int) {
 // NEG - NEGATIVE
 // Anti
 
-func Neg(a int) int {
+func Neg(a Tri) Tri {
 	return -a
 }
 
@@ -53,7 +37,7 @@ var _ UnaryFunc = Neg
 // | 1 | T |
 // +---+---+
 
-func Inc(a int) int {
+func Inc(a Tri) Tri {
 	a++
 	if a > 1 {
 		a -= 3
@@ -75,7 +59,7 @@ func Inc(a int) int {
 // | 1 | 0 |
 // +---+---+
 
-func Dec(a int) int {
+func Dec(a Tri) Tri {
 	a--
 	if a < -1 {
 		a += 3
@@ -101,8 +85,8 @@ func Dec(a int) int {
 // | 1 | T | 0 | 1 |
 // +---+---+---+---+
 
-func Min(a, b int) int {
-	return minInt(a, b)
+func Min(a, b Tri) Tri {
+	return Min2(a, b)
 }
 
 var _ BinaryFunc = Min
@@ -125,8 +109,8 @@ var _ BinaryFunc = Min
 // | 1 | 1 | 1 | 1 |
 // +---+---+---+---+
 
-func Max(a, b int) int {
-	return maxInt(a, b)
+func Max(a, b Tri) Tri {
+	return Max2(a, b)
 }
 
 var _ BinaryFunc = Max
@@ -147,37 +131,18 @@ var _ BinaryFunc = Max
 // | 1 | T | T | 1 |
 // +---+---+---+---+
 
-func Is(a int, v int) int {
+// Equal, Eq
+
+func Is(a Tri, v Tri) Tri {
 	if a == v {
 		return 1 // true
 	}
 	return -1 // false
 }
 
-// (a == -1)
-func IsNegative(a int) int {
-	return Is(a, -1)
-}
-
-// (a == 0)
-func IsZero(a int) int {
-	return Is(a, 0)
-}
-
-// (a == +1)
-func IsPositive(a int) int {
-	return Is(a, +1)
-}
-
-var (
-	_ UnaryFunc = IsNegative
-	_ UnaryFunc = IsZero
-	_ UnaryFunc = IsPositive
-)
-
 //------------------------------------------------------------------------------
 
-func NegIs(a int, v int) int {
+func NegIs(a Tri, v Tri) Tri {
 	if a != v {
 		return 1
 	}
@@ -188,7 +153,7 @@ func NegIs(a int, v int) int {
 
 // https://en.wikipedia.org/wiki/XOR_gate
 
-// Xor - Exclusive Or
+// Xmax - Exclusive max (bool: xor)
 
 // +---+---+---+---+
 // |   | T | 0 | 1 |
@@ -202,13 +167,13 @@ func NegIs(a int, v int) int {
 
 // For binary logic: XOR = Nand(Nand(Nand(a, a), b), Nand(a, Nand(b, b)))
 
-func Xor(a, b int) int {
+func Xmax(a, b Tri) Tri {
 	return Max(Min(a, Neg(b)), Min(Neg(a), b))
 }
 
 //------------------------------------------------------------------------------
 
-// Neg Xor - Not Exclusive Or
+// Xamax - Anti Exclusive max (bool: xnor)
 
 // +---+---+---+---+
 // |   | T | 0 | 1 |
@@ -220,7 +185,7 @@ func Xor(a, b int) int {
 // | 1 | T | 0 | 1 |
 // +---+---+---+---+
 
-func NegXor(a, b int) int {
+func Xamax(a, b Tri) Tri {
 	return Min(Max(a, Neg(b)), Max(Neg(a), b))
 }
 

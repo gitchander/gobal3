@@ -15,6 +15,12 @@ const (
 	tbs_1 = 0b_10 // +1
 )
 
+var tritValues = [...]Trit{
+	tv_T,
+	tv_0,
+	tv_1,
+}
+
 type Trit int
 
 func tritsCompare(a, b Trit) int {
@@ -25,12 +31,6 @@ func tritsCompare(a, b Trit) int {
 		return -1
 	}
 	return +1
-}
-
-var tritValues = [...]Trit{
-	tv_T,
-	tv_0,
-	tv_1,
 }
 
 func tritToChar(t Trit) (c byte, ok bool) {
@@ -90,29 +90,11 @@ func errInvalidTrit(t Trit) error {
 	return fmt.Errorf("invalid trit value %d", t)
 }
 
-func bitsToTrit[T Unsigned](x T) Trit {
-	x &= tbs_Mask
-	switch x {
-	case tbs_T:
-		return tv_T
-	case tbs_1:
-		return tv_1
-	default:
-		return tv_0
-	}
-}
-
-func tritToBits[T Unsigned](t Trit) T {
-	switch t {
-	case tv_T:
-		return tbs_T
-	case tv_0:
-		return tbs_0
-	case tv_1:
-		return tbs_1
-	default:
-		panic(errInvalidTrit(t))
-	}
+var tableBitsToTrit = [...]Trit{
+	0: 0,  // 0 (00) ->  0
+	1: -1, // 1 (01) -> -1
+	2: +1, // 2 (10) -> +1
+	3: 0,  // 3 (11) ->  0
 }
 
 func getTrit[T Unsigned](x T, i int) Trit {
@@ -121,7 +103,13 @@ func getTrit[T Unsigned](x T, i int) Trit {
 
 	x = (x >> offset) & tbs_Mask
 
-	return bitsToTrit(x)
+	return tableBitsToTrit[x]
+}
+
+var tableTritToBits = [...]byte{
+	0: 0b_01, // 0 (-1) -> 01
+	1: 0b_00, // 1 ( 0) -> 00
+	2: 0b_10, // 2 (+1) -> 10
 }
 
 func setTrit[T Unsigned](x T, i int, t Trit) T {
@@ -130,7 +118,7 @@ func setTrit[T Unsigned](x T, i int, t Trit) T {
 
 	x &^= T(tbs_Mask) << offset // reset trit bits
 
-	y := tritToBits[T](t)
+	y := T(tableTritToBits[t+1])
 
 	x |= y << offset
 
@@ -140,7 +128,7 @@ func setTrit[T Unsigned](x T, i int, t Trit) T {
 func setTritsN[T Unsigned](n int, t Trit) T {
 	var y T
 	for i := 0; i < n; i++ {
-		y = (y << bitsPerTrit) | (tritToBits[T](t))
+		y = setTrit(y, i, t)
 	}
 	return y
 }
@@ -174,7 +162,7 @@ func tritsMulV2(a, b Trit) Trit {
 }
 
 func tritsMulV3(a, b Trit) Trit {
-	return terNegXor(a, b)
+	return trico.Xamax(a, b)
 }
 
 var (

@@ -27,6 +27,12 @@ func (tc TryteCore[T]) TotalTrits() int {
 
 //------------------------------------------------------------------------------
 
+//            /
+//            | -1: a < b
+// cmp(a,b) = |  0: a = b
+//            | +1: a > b
+//            \
+
 // The result will be 0 if a == b, -1 if a < b, and +1 if a > b.
 func (tc TryteCore[T]) Compare(a, b T) int {
 	for i := tc.n; i > 0; {
@@ -74,15 +80,18 @@ func (tc TryteCore[T]) GreaterOrEqual(a, b T) bool {
 
 //------------------------------------------------------------------------------
 
-//  +-
-//  | -1: x < 0
-// -+  0: x = 0
-//  | +1: x > 0
-//  +-
+//           /
+//           | -1: x < 0
+// sign(x) = |  0: x = 0
+//           | +1: x > 0
+//           \
 
 func (tc TryteCore[T]) Sign(x T) int {
+
+	// Iterate backward indexes:
 	for i := tc.n; i > 0; {
 		i--
+
 		t := getTrit(x, i)
 		switch {
 		case t < 0:
@@ -204,7 +213,7 @@ func (tc TryteCore[T]) MustParse(s string) T {
 func (tc TryteCore[T]) Neg(a T) (b T) {
 	for i := 0; i < tc.n; i++ {
 		t := getTrit(a, i)
-		t = terNeg(t)
+		t = trico.Neg(t)
 		b = setTrit(b, i, t)
 	}
 	return b

@@ -96,12 +96,12 @@ func addSumV4(a, b Trit) Trit {
 	// (b + 1) - inc(b)
 
 	var (
-		v1 = terMin(terIs(a, -1), terDec(b))
-		v2 = terMin(terIs(a, 0), b)
-		v3 = terMin(terIs(a, +1), terInc(b))
+		v1 = trico.Min(trico.Is(a, -1), trico.Dec(b))
+		v2 = trico.Min(trico.Is(a, 0), b)
+		v3 = trico.Min(trico.Is(a, +1), trico.Inc(b))
 	)
 
-	return terMax(v1, terMax(v2, v3))
+	return trico.Max(v1, trico.Max(v2, v3))
 }
 
 var (
@@ -152,15 +152,15 @@ func addConsV3(a, b Trit) Trit {
 
 func addConsV4(a, b Trit) Trit {
 	var (
-		v1 = terMin(a, b)
-		v2 = terMin(terNeg(terIs(a, -1)), 0)
-		v3 = terMin(terNeg(terIs(b, -1)), 0)
+		v1 = trico.Min(a, b)
+		v2 = trico.Min(trico.Neg(trico.Is(a, -1)), 0)
+		v3 = trico.Min(trico.Neg(trico.Is(b, -1)), 0)
 	)
-	return terMax(v1, terMax(v2, v3))
+	return trico.Max(v1, trico.Max(v2, v3))
 }
 
 func addConsV5(a, b Trit) Trit {
-	return terMax(terMin(a, b), terMin(0, terMax(a, b)))
+	return trico.Max(trico.Min(a, b), trico.Min(0, trico.Max(a, b)))
 }
 
 var (
@@ -227,14 +227,14 @@ func tritsAddV2(a, b Trit, c0 Trit) (s, c1 Trit) {
 }
 
 var (
-	//tritsAdd = tritsAddV1
-	tritsAdd = tritsAddV2
+	tritsAdd = tritsAddV1
+	//tritsAdd = tritsAddV2
 )
 
 //------------------------------------------------------------------------------
 
 func tritsSubV1(a, b Trit, c0 Trit) (s, c1 Trit) {
-	b = terNeg(b)
+	b = trico.Neg(b)
 	return tritsAdd(a, b, c0)
 }
 

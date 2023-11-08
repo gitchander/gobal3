@@ -1,6 +1,10 @@
 http://homepage.divms.uiowa.edu/%7Ejones/ternary/logic.shtml
 https://en.wikipedia.org/wiki/Three-valued_logic#Kleene_logic
 
+https://en.wikipedia.org/wiki/Three-valued_logic
+
+https://en.wikipedia.org/wiki/XNOR_gate
+
 --------------------------------------------------------------------------------
 
 Ternary logic axioms:
@@ -29,12 +33,11 @@ max(a, -1) = a
 max(a, 0) >= 0
 max(a, 1) = 1
 
-
 min(a, -a) <= 0
 max(a, -a) >= 0
 
 min(a, b) = -max(-a, -b)
 max(a, b) = -min(-a, -b)
 
-xor(a, b) = min(max(a, b), max(-a, -b))
-xor(a, b) = max(min(a, -b), min(-a, b))
+xmax(a, b) = min(max(a, b), max(-a, -b))
+xmax(a, b) = max(min(a, -b), min(-a, b))

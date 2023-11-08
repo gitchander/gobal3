@@ -4,40 +4,51 @@ import (
 	"github.com/gitchander/gobal3/ternary"
 )
 
-type UnaryFunc func(Trit) Trit
-type BinaryFunc func(Trit, Trit) Trit
+type (
+	UnaryFunc  func(Trit) Trit
+	BinaryFunc func(Trit, Trit) Trit
+)
 
-func terNeg(a Trit) Trit {
-	c := ternary.Neg(int(a))
+type triCore struct{}
+
+func (triCore) Neg(a Trit) Trit {
+	c := ternary.Neg(ternary.Tri(a))
 	return Trit(c)
 }
 
-func terMin(a, b Trit) Trit {
-	c := ternary.Min(int(a), int(b))
+func (triCore) Min(a, b Trit) Trit {
+	c := ternary.Min(ternary.Tri(a), ternary.Tri(b))
 	return Trit(c)
 }
 
-func terMax(a, b Trit) Trit {
-	c := ternary.Max(int(a), int(b))
+func (triCore) Max(a, b Trit) Trit {
+	c := ternary.Max(ternary.Tri(a), ternary.Tri(b))
 	return Trit(c)
 }
 
-func terIs(a Trit, v Trit) Trit {
-	c := ternary.Is(int(a), int(v))
+func (triCore) Is(a Trit, v Trit) Trit {
+	c := ternary.Is(ternary.Tri(a), ternary.Tri(v))
 	return Trit(c)
 }
 
-func terInc(a Trit) Trit {
-	c := ternary.Inc(int(a))
+func (triCore) Inc(a Trit) Trit {
+	c := ternary.Inc(ternary.Tri(a))
 	return Trit(c)
 }
 
-func terDec(a Trit) Trit {
-	c := ternary.Dec(int(a))
+func (triCore) Dec(a Trit) Trit {
+	c := ternary.Dec(ternary.Tri(a))
 	return Trit(c)
 }
 
-func terNegXor(a, b Trit) Trit {
-	c := ternary.NegXor(int(a), int(b))
+func (triCore) Xmax(a, b Trit) Trit {
+	c := ternary.Xmax(ternary.Tri(a), ternary.Tri(b))
 	return Trit(c)
 }
+
+func (triCore) Xamax(a, b Trit) Trit {
+	c := ternary.Xamax(ternary.Tri(a), ternary.Tri(b))
+	return Trit(c)
+}
+
+var trico triCore

@@ -12,6 +12,6 @@ package ternary
 // | 1 | T | 0 | 1 |
 // +---+---+---+---+
 
-func Imp(a, b int) int {
+func Imp(a, b Tri) Tri {
 	return Max(Neg(a), b)
 }

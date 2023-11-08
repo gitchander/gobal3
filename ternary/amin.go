@@ -14,31 +14,33 @@ package ternary
 // | 1 | 1 | 0 | T |
 // +---+---+---+---+
 
-func Amin(a, b int) int {
+func amin(a, b Tri) Tri {
 	return Neg(Min(a, b))
 }
 
-var _ BinaryFunc = Amin
+var _ BinaryFunc = amin
 
-// aminCore uses only the Amin func for all operations.
-type aminCore struct{}
+// AminCore uses only the amin func for all operations.
+type AminCore struct{}
 
-func (aminCore) Neg(a int) int {
-	return Amin(a, a)
+var _ Core = AminCore{}
+
+func (AminCore) Neg(a Tri) Tri {
+	return amin(a, a)
 }
 
-func (aminCore) Min(a, b int) int {
-	return Amin(Amin(a, b), Amin(a, b))
+func (AminCore) Min(a, b Tri) Tri {
+	return amin(amin(a, b), amin(a, b))
 }
 
-func (aminCore) Max(a, b int) int {
-	return Amin(Amin(a, a), Amin(b, b))
+func (AminCore) Max(a, b Tri) Tri {
+	return amin(amin(a, a), amin(b, b))
 }
 
-func (aminCore) Xor(a, b int) int {
-	return Amin(Amin(Amin(a, a), b), Amin(a, Amin(b, b)))
+func (AminCore) Xmax(a, b Tri) Tri {
+	return amin(amin(amin(a, a), b), amin(a, amin(b, b)))
 }
 
-func (aminCore) NegXor(a, b int) int {
-	return Amin(Amin(a, b), Amin(Amin(a, a), Amin(b, b)))
+func (AminCore) Xamax(a, b Tri) Tri {
+	return amin(amin(a, b), amin(amin(a, a), amin(b, b)))
 }

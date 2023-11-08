@@ -14,31 +14,33 @@ package ternary
 // | 1 | T | T | T |
 // +---+---+---+---+
 
-func Amax(a, b int) int {
+func amax(a, b Tri) Tri {
 	return Neg(Max(a, b))
 }
 
-var _ BinaryFunc = Amax
+var _ BinaryFunc = amax
 
-// amaxCore uses only the Amax func for all operations.
-type amaxCore struct{}
+// AmaxCore uses only the amax func for all operations.
+type AmaxCore struct{}
 
-func (amaxCore) Neg(a int) int {
-	return Amax(a, a)
+var _ Core = AmaxCore{}
+
+func (AmaxCore) Neg(a Tri) Tri {
+	return amax(a, a)
 }
 
-func (amaxCore) Min(a, b int) int {
-	return Amax(Amax(a, a), Amax(b, b))
+func (AmaxCore) Min(a, b Tri) Tri {
+	return amax(amax(a, a), amax(b, b))
 }
 
-func (amaxCore) Max(a, b int) int {
-	return Amax(Amax(a, b), Amax(a, b))
+func (AmaxCore) Max(a, b Tri) Tri {
+	return amax(amax(a, b), amax(a, b))
 }
 
-func (amaxCore) Xor(a, b int) int {
-	return Amax(Amax(a, b), Amax(Amax(a, a), Amax(b, b)))
+func (AmaxCore) Xmax(a, b Tri) Tri {
+	return amax(amax(a, b), amax(amax(a, a), amax(b, b)))
 }
 
-func (amaxCore) NegXor(a, b int) int {
-	return Amax(Amax(Amax(a, a), b), Amax(a, Amax(b, b)))
+func (AmaxCore) Xamax(a, b Tri) Tri {
+	return amax(amax(amax(a, a), b), amax(a, amax(b, b)))
 }

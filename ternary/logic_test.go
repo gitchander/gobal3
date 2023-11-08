@@ -58,20 +58,20 @@ func TestNeg(t *testing.T) {
 
 	vs := []sampleUnaryFunc{
 		{
-			name:     "Neg",
-			testFunc: Neg,
+			name:     "base-neg",
+			testFunc: BaseCore{}.Neg,
 		},
 		{
-			name:     "amin_neg",
-			testFunc: aminCore{}.Neg,
+			name:     "amin-neg",
+			testFunc: AminCore{}.Neg,
 		},
 		{
-			name:     "amax_neg",
-			testFunc: amaxCore{}.Neg,
+			name:     "amax-neg",
+			testFunc: AmaxCore{}.Neg,
 		},
 	}
 
-	wantFunc := func(a int) int {
+	wantFunc := func(a Tri) Tri {
 		return -a
 	}
 
@@ -85,21 +85,21 @@ func TestMin(t *testing.T) {
 
 	vs := []sampleBinaryFunc{
 		{
-			name:     "Min",
-			testFunc: Min,
+			name:     "base-min",
+			testFunc: BaseCore{}.Min,
 		},
 		{
-			name:     "amin_min",
-			testFunc: aminCore{}.Min,
+			name:     "amin-min",
+			testFunc: AminCore{}.Min,
 		},
 		{
-			name:     "amax_min",
-			testFunc: amaxCore{}.Min,
+			name:     "amax-min",
+			testFunc: AmaxCore{}.Min,
 		},
 	}
 
-	wantFunc := func(a, b int) int {
-		return minInt(a, b)
+	wantFunc := func(a, b Tri) Tri {
+		return Min2(a, b)
 	}
 
 	err := testBinaryFunc(vs, wantFunc)
@@ -112,21 +112,21 @@ func TestMax(t *testing.T) {
 
 	vs := []sampleBinaryFunc{
 		{
-			name:     "Max",
-			testFunc: Max,
+			name:     "base-max",
+			testFunc: BaseCore{}.Max,
 		},
 		{
-			name:     "amin_max",
-			testFunc: aminCore{}.Max,
+			name:     "amin-max",
+			testFunc: AminCore{}.Max,
 		},
 		{
-			name:     "amax_max",
-			testFunc: amaxCore{}.Max,
+			name:     "amax-max",
+			testFunc: AmaxCore{}.Max,
 		},
 	}
 
-	wantFunc := func(a, b int) int {
-		return maxInt(a, b)
+	wantFunc := func(a, b Tri) Tri {
+		return Max2(a, b)
 	}
 
 	err := testBinaryFunc(vs, wantFunc)
@@ -135,24 +135,24 @@ func TestMax(t *testing.T) {
 	}
 }
 
-func TestXor(t *testing.T) {
+func TestXmax(t *testing.T) {
 
 	vs := []sampleBinaryFunc{
 		{
-			name:     "Xor",
-			testFunc: Xor,
+			name:     "base-xmax",
+			testFunc: BaseCore{}.Xmax,
 		},
 		{
-			name:     "amin_xor",
-			testFunc: aminCore{}.Xor,
+			name:     "amin-xmax",
+			testFunc: AminCore{}.Xmax,
 		},
 		{
-			name:     "amax_xor",
-			testFunc: amaxCore{}.Xor,
+			name:     "amax-xmax",
+			testFunc: AmaxCore{}.Xmax,
 		},
 	}
 
-	wantFunc := func(a, b int) int {
+	wantFunc := func(a, b Tri) Tri {
 		return -(a * b)
 	}
 
@@ -162,24 +162,24 @@ func TestXor(t *testing.T) {
 	}
 }
 
-func TestNegXor(t *testing.T) {
+func TestXamax(t *testing.T) {
 
 	vs := []sampleBinaryFunc{
 		{
-			name:     "NegXor",
-			testFunc: NegXor,
+			name:     "base_xamax",
+			testFunc: BaseCore{}.Xamax,
 		},
 		{
-			name:     "amin_neg_xor",
-			testFunc: aminCore{}.NegXor,
+			name:     "amin_xamax",
+			testFunc: AminCore{}.Xamax,
 		},
 		{
-			name:     "amax_nex_xor",
-			testFunc: amaxCore{}.NegXor,
+			name:     "amax_xamax",
+			testFunc: AmaxCore{}.Xamax,
 		},
 	}
 
-	wantFunc := func(a, b int) int {
+	wantFunc := func(a, b Tri) Tri {
 		return a * b
 	}
 

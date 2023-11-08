@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"math"
 
-	"github.com/gitchander/gobal3/ternary"
+	. "github.com/gitchander/gobal3/ternary"
 )
 
 func main() {
@@ -14,17 +14,6 @@ func main() {
 }
 
 func testFunc() {
-
-	var (
-		neg = ternary.Neg
-		min = ternary.Min
-		max = ternary.Max
-		xor = ternary.Xor
-		inc = ternary.Inc
-		dec = ternary.Dec
-	)
-
-	_, _, _, _, _, _ = neg, min, max, xor, inc, dec
 
 	// +---+---+---+---+
 	// |   | T | 0 | 1 |
@@ -38,106 +27,36 @@ func testFunc() {
 
 	// http://homepage.divms.uiowa.edu/%7Ejones/ternary/logic.shtml#minimization
 
-	ts := [3][3]int{
+	ts := [3][3]Tri{
 		{1, -1, 0},
 		{-1, 0, 1},
 		{0, 1, -1},
 	}
 
-	// ts := [3][3]int{
+	// ts := [3][3]Tri{
 	// 	{-1, 0, 0},
 	// 	{0, 0, 0},
 	// 	{0, 0, 1},
 	// }
 
-	f := func(a, b int) int {
-		return maxInts(
-			minInt3(ternary.Is(a, -1), ternary.Is(b, -1), ts[0][0]),
-			minInt3(ternary.Is(a, -1), ternary.Is(b, 0), ts[0][1]),
-			minInt3(ternary.Is(a, -1), ternary.Is(b, 1), ts[0][2]),
+	f := func(a, b Tri) Tri {
+		return MaxN(
+			Min3(Is(a, -1), Is(b, -1), ts[0][0]),
+			Min3(Is(a, -1), Is(b, 0), ts[0][1]),
+			Min3(Is(a, -1), Is(b, 1), ts[0][2]),
 
-			minInt3(ternary.Is(a, 0), ternary.Is(b, -1), ts[1][0]),
-			minInt3(ternary.Is(a, 0), ternary.Is(b, 0), ts[1][1]),
-			minInt3(ternary.Is(a, 0), ternary.Is(b, 1), ts[1][2]),
+			Min3(Is(a, 0), Is(b, -1), ts[1][0]),
+			Min3(Is(a, 0), Is(b, 0), ts[1][1]),
+			Min3(Is(a, 0), Is(b, 1), ts[1][2]),
 
-			minInt3(ternary.Is(a, 1), ternary.Is(b, -1), ts[2][0]),
-			minInt3(ternary.Is(a, 1), ternary.Is(b, 0), ts[2][1]),
-			minInt3(ternary.Is(a, 1), ternary.Is(b, 1), ts[2][2]),
+			Min3(Is(a, 1), Is(b, -1), ts[2][0]),
+			Min3(Is(a, 1), Is(b, 0), ts[2][1]),
+			Min3(Is(a, 1), Is(b, 1), ts[2][2]),
 		)
 	}
 
-	s := ternary.PrintableBinaryTable("\t", f)
+	s := PrintableBinaryTable("\t", f)
 	fmt.Print(s)
-}
-
-//------------------------------------------------------------------------------
-
-func minInt2(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-
-func maxInt2(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-
-func minInt3(a, b, c int) int {
-	if a < b {
-		if a < c {
-			return a
-		}
-	} else {
-		if b < c {
-			return b
-		}
-	}
-	return c
-}
-
-func maxInt3(a, b, c int) int {
-	if a > b {
-		if a > c {
-			return a
-		}
-	} else {
-		if b > c {
-			return b
-		}
-	}
-	return c
-}
-
-func minInts(as ...int) int {
-	n := len(as)
-	if n == 0 {
-		return 0 // default value
-	}
-	j := 0
-	for i := 1; i < n; i++ {
-		if as[j] > as[i] {
-			j = i
-		}
-	}
-	return as[j]
-}
-
-func maxInts(as ...int) int {
-	n := len(as)
-	if n == 0 {
-		return 0 // default value
-	}
-	j := 0
-	for i := 1; i < n; i++ {
-		if as[j] < as[i] {
-			j = i
-		}
-	}
-	return as[j]
 }
 
 //------------------------------------------------------------------------------
