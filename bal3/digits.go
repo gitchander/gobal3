@@ -11,7 +11,7 @@ var digiter = digits.NewDigiter(tritMin, tritMax)
 func intToTriteV1[T Unsigned](tc TryteCore[T], v int) (a T, rest int) {
 	var t int
 	for i := 0; i < tc.n; i++ {
-		t, v = digiter.Digit(v)
+		v, t = digiter.RestDigit(v)
 		a = setTrit(a, i, Trit(t))
 	}
 	rest = v

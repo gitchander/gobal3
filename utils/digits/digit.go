@@ -26,7 +26,7 @@ import (
 
 //------------------------------------------------------------------------------
 
-func calcDigit1(x int, min, max int) (digit, rest int) {
+func calcRestDigit1(x int, min, max int) (rest, digit int) {
 
 	checkBaseRange(min, max)
 
@@ -47,7 +47,7 @@ func calcDigit1(x int, min, max int) (digit, rest int) {
 	return
 }
 
-func calcDigit2(x int, min, max int) (digit, rest int) {
+func calcRestDigit2(x int, min, max int) (rest, digit int) {
 
 	checkBaseRange(min, max)
 
@@ -73,9 +73,9 @@ func calcDigit2(x int, min, max int) (digit, rest int) {
 	return
 }
 
-func Digit(x int, min, max int) (digit, rest int) {
-	//return calcDigit1(x, min, max)
-	return calcDigit2(x, min, max)
+func RestDigit(x int, min, max int) (rest, digit int) {
+	//return calcRestDigit1(x, min, max)
+	return calcRestDigit2(x, min, max)
 }
 
 func checkBaseRange(min, max int) {

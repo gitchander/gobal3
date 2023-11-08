@@ -6,6 +6,46 @@ import (
 	"github.com/fogleman/gg"
 )
 
+var (
+	nodesV1 = []sdNode{
+		{
+			positive: []Point2f{Pt2f(1, 0), Pt2f(0, 1)},
+			negative: []Point2f{Pt2f(1, 4), Pt2f(2, 3)},
+		},
+		{
+			positive: []Point2f{Pt2f(1, 2), Pt2f(0, 1)},
+			negative: []Point2f{Pt2f(1, 2), Pt2f(2, 3)},
+		},
+		{
+			positive: []Point2f{Pt2f(1, 2), Pt2f(0, 3)},
+			negative: []Point2f{Pt2f(1, 2), Pt2f(2, 1)},
+		},
+		{
+			positive: []Point2f{Pt2f(1, 4), Pt2f(0, 3)},
+			negative: []Point2f{Pt2f(1, 0), Pt2f(2, 1)},
+		},
+	}
+
+	nodesV2 = []sdNode{
+		{
+			positive: []Point2f{Pt2f(1, 0), Pt2f(2, 1)},
+			negative: []Point2f{Pt2f(1, 0), Pt2f(0, 1)},
+		},
+		{
+			positive: []Point2f{Pt2f(1, 2), Pt2f(2, 1)},
+			negative: []Point2f{Pt2f(1, 2), Pt2f(0, 1)},
+		},
+		{
+			positive: []Point2f{Pt2f(1, 2), Pt2f(2, 3)},
+			negative: []Point2f{Pt2f(1, 2), Pt2f(0, 3)},
+		},
+		{
+			positive: []Point2f{Pt2f(1, 4), Pt2f(2, 3)},
+			negative: []Point2f{Pt2f(1, 4), Pt2f(0, 3)},
+		},
+	}
+)
+
 type TritsDrawer interface {
 	SetDigitSize(digitSize Size)
 	GetDigitSize() Size
@@ -48,7 +88,7 @@ func (p *TritsDrawer1) drawDigit(c *gg.Context, pos Point2f, digit int) {
 	)
 
 	w := minFloat64(p.digitSize.X/float64(size.X), p.digitSize.Y/float64(size.Y))
-	w *= 0.8
+	w *= 0.7
 
 	lineWidth := w * 0.3
 
@@ -63,46 +103,12 @@ func (p *TritsDrawer1) drawDigit(c *gg.Context, pos Point2f, digit int) {
 
 	DrawGreedGG(c, size.X, size.Y, 1)
 
-	nodes := []sdNode{
-		{
-			positive: []Point2f{Pt2f(1, 0), Pt2f(0, 1)},
-			negative: []Point2f{Pt2f(1, 4), Pt2f(2, 3)},
-		},
-		{
-			positive: []Point2f{Pt2f(1, 2), Pt2f(0, 1)},
-			negative: []Point2f{Pt2f(1, 2), Pt2f(2, 3)},
-		},
-		{
-			positive: []Point2f{Pt2f(1, 2), Pt2f(0, 3)},
-			negative: []Point2f{Pt2f(1, 2), Pt2f(2, 1)},
-		},
-		{
-			positive: []Point2f{Pt2f(1, 4), Pt2f(0, 3)},
-			negative: []Point2f{Pt2f(1, 0), Pt2f(2, 1)},
-		},
-	}
-
-	// nodes := []sdNode{
-	// 	{
-	// 		positive: []Point2f{Pt2f(1, 0), Pt2f(2, 1)},
-	// 		negative: []Point2f{Pt2f(1, 0), Pt2f(0, 1)},
-	// 	},
-	// 	{
-	// 		positive: []Point2f{Pt2f(1, 2), Pt2f(2, 1)},
-	// 		negative: []Point2f{Pt2f(1, 2), Pt2f(0, 1)},
-	// 	},
-	// 	{
-	// 		positive: []Point2f{Pt2f(1, 2), Pt2f(2, 3)},
-	// 		negative: []Point2f{Pt2f(1, 2), Pt2f(0, 3)},
-	// 	},
-	// 	{
-	// 		positive: []Point2f{Pt2f(1, 4), Pt2f(2, 3)},
-	// 		negative: []Point2f{Pt2f(1, 4), Pt2f(0, 3)},
-	// 	},
-	// }
-
 	subDigits := calcSubDigits(digit)
 
+	var (
+		nodes = nodesV1
+		//nodes = nodesV2
+	)
 	n := minInt(len(nodes), len(subDigits))
 
 	c.MoveTo(1, 0)

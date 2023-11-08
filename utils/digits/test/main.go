@@ -189,7 +189,7 @@ func testDigit() {
 	as = append(as, math.MaxInt)
 
 	for _, a := range as {
-		digit, rest := digits.Digit(a, dmin, dmax)
+		rest, digit := digits.RestDigit(a, dmin, dmax)
 		fmt.Printf("%20d %20d %3d\n", a, rest, digit)
 	}
 }

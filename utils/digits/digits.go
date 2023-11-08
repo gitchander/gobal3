@@ -33,7 +33,7 @@ func (d *Digiter) Base() int {
 	return d.base
 }
 
-func (d *Digiter) Digit(x int) (digit, rest int) {
+func (d *Digiter) RestDigit(x int) (rest, digit int) {
 
 	q, r := quoRem(x, d.base)
 
@@ -46,8 +46,9 @@ func (d *Digiter) Digit(x int) (digit, rest int) {
 		r -= d.base
 	}
 
-	digit = r
 	rest = q
+	digit = r
+
 	return
 }
 
@@ -55,7 +56,7 @@ func (d *Digiter) Digit(x int) (digit, rest int) {
 func (d *Digiter) IntToDigits(v int, ds []int) (rest int) {
 	var digit int
 	for i := range ds {
-		digit, v = d.Digit(v)
+		v, digit = d.RestDigit(v)
 		ds[i] = digit
 	}
 	rest = v
@@ -69,7 +70,7 @@ func (d *Digiter) IntToDigitsN(v int, n int) (ds []int, rest int) {
 		if (v == 0) && (len(ds) > 0) {
 			break
 		}
-		digit, v = d.Digit(v)
+		v, digit = d.RestDigit(v)
 		ds = append(ds, digit)
 	}
 	rest = v
