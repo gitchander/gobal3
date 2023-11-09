@@ -42,8 +42,39 @@ func calcRestDigit1(x int, min, max int) (rest, digit int) {
 		r += min
 	}
 
-	digit = r
 	rest = q
+	digit = r
+
+	return
+}
+
+func calcRestDigit1_mod(x int, min, max int) (rest, digit int) {
+
+	checkBaseRange(min, max)
+
+	base := max - min + 1
+
+	var q, r int
+
+	switch {
+	case x < min:
+		dx := min - 1
+		q, r = quoRem(x-dx, base)
+		q--
+		r += dx + base
+	case x > max:
+		dx := max + 1
+		q, r = quoRem(x-dx, base)
+		q++
+		r += dx - base
+	default:
+		q = 0
+		r = x
+	}
+
+	rest = q
+	digit = r
+
 	return
 }
 
@@ -73,9 +104,80 @@ func calcRestDigit2(x int, min, max int) (rest, digit int) {
 	return
 }
 
+func calcRestDigit3(x int, min, max int) (rest, digit int) {
+
+	checkBaseRange(min, max)
+
+	base := max - min + 1
+
+	rest, digit = quoRem(x, base)
+
+	var (
+		restD  int
+		digitD int
+	)
+
+	fmt.Println()
+	fmt.Println(">>>>", rest, digit)
+
+	for digit < min {
+		if rest == math.MinInt {
+			panic("overflow min")
+		}
+
+		rest--
+		restD--
+
+		digit += base
+		digitD += base
+	}
+	for digit > max {
+		if rest == math.MaxInt {
+			panic("overflow max")
+		}
+
+		rest++
+		restD++
+
+		digit -= base
+		digitD -= base
+	}
+
+	// fmt.Println("restD", restD)
+	// fmt.Println("digitD", digitD)
+
+	fmt.Printf("restD %d, digitD %d\n", restD, digitD)
+
+	return
+}
+
+func calcRestDigit4(x int, min, max int) (rest, digit int) {
+
+	checkBaseRange(min, max)
+
+	base := max - min + 1
+
+	rest, digit = quoRem(x, base)
+
+	if digit < min {
+		k := ceilDiv(min-digit, base)
+		rest -= k
+		digit += base * k
+	}
+	if digit > max {
+		k := ceilDiv(digit-max, base)
+		rest += k
+		digit -= base * k
+	}
+
+	return
+}
+
 func RestDigit(x int, min, max int) (rest, digit int) {
 	//return calcRestDigit1(x, min, max)
-	return calcRestDigit2(x, min, max)
+	//return calcRestDigit2(x, min, max)
+	//return calcRestDigit3(x, min, max)
+	return calcRestDigit4(x, min, max)
 }
 
 func checkBaseRange(min, max int) {

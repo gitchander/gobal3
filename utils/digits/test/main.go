@@ -14,7 +14,7 @@ func main() {
 	//testCalcDigitsN()
 	//testDigits()
 	//testCalcDigits2()
-	testDigit()
+	testRestDigit()
 }
 
 func checkError(err error) {
@@ -25,17 +25,17 @@ func checkError(err error) {
 
 func testCalcDigits() {
 	var (
-		// digiter      = digits.NewDigiter(0, 1)
-		// digitWidth   = 1
-		// digitsNumber = 64
+		digiter      = digits.NewDigiter(0, 1)
+		digitWidth   = 1
+		digitsNumber = 64
 
 		// digiter      = digits.NewDigiter(0, 9)
 		// digitWidth   = 1
 		// digitsNumber = 25
 
-		digiter      = digits.NewDigiter(-1, 1)
-		digitWidth   = 3
-		digitsNumber = 41
+		// digiter      = digits.NewDigiter(-1, 1)
+		// digitWidth   = 3
+		// digitsNumber = 41
 
 		// digiter      = digits.NewDigiter(5, 8)
 		// digitWidth   = 1
@@ -65,11 +65,7 @@ func testCalcDigits() {
 		// digitWidth   = 3
 		// digitsNumber = 43
 	)
-	var as []int
-	as = appendIntsMinMax(as, math.MinInt, math.MinInt+15)
-	as = appendIntsMinMax(as, -20, 20)
-	as = appendIntsMinMax(as, math.MaxInt-15, math.MaxInt)
-	as = append(as, math.MaxInt)
+	as := makeInts1(20)
 	ds := make([]int, digitsNumber)
 	for _, a := range as {
 		rest := digiter.IntToDigits(a, ds)
@@ -81,13 +77,6 @@ func testCalcDigits() {
 			panic(fmt.Errorf("%d != %d", b, a))
 		}
 	}
-}
-
-func appendIntsMinMax(as []int, min, max int) []int {
-	for a := min; a < max; a++ {
-		as = append(as, a)
-	}
-	return as
 }
 
 func testCalcDigitsN() {
@@ -173,23 +162,36 @@ func testCalcDigits2() {
 	}
 }
 
-func testDigit() {
+func testRestDigit() {
 
 	var (
 		dmin, dmax = -1, 1
 		//dmin, dmax = 0, 1
 		//dmin, dmax = 0, 19
-		//dmin, dmax = -10, -5
+		//dmin, dmax = -10, -4
+		//dmin, dmax = 7, 9
 	)
 
-	var as []int
-	as = appendIntsMinMax(as, math.MinInt, math.MinInt+100)
-	as = appendIntsMinMax(as, -100, 100)
-	as = appendIntsMinMax(as, math.MaxInt-100, math.MaxInt)
-	as = append(as, math.MaxInt)
+	as := makeInts1(20)
 
 	for _, a := range as {
 		rest, digit := digits.RestDigit(a, dmin, dmax)
 		fmt.Printf("%20d %20d %3d\n", a, rest, digit)
 	}
+}
+
+func makeInts1(d int) []int {
+	var as []int
+	as = appendIntsMinMax(as, math.MinInt, math.MinInt+d)
+	as = appendIntsMinMax(as, -d, d+1)
+	as = appendIntsMinMax(as, math.MaxInt-d, math.MaxInt)
+	as = append(as, math.MaxInt)
+	return as
+}
+
+func appendIntsMinMax(as []int, min, max int) []int {
+	for a := min; a < max; a++ {
+		as = append(as, a)
+	}
+	return as
 }
