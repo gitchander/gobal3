@@ -330,7 +330,7 @@ func bitsOpAdd3(a, b, c int) (hi, lo int) {
 }
 
 func testBig() {
-	//s:= "01T01TTT10T10001T01010101010101010101010TTTTTTT00000TTTT"
+	//s := "01T01TTT10T10001T01010101010101010101010TTTTTTT00000TTTT"
 	s := "0"
 	b, err := bal3.ParseBt(s)
 	checkError(err)

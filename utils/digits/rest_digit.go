@@ -5,26 +5,16 @@ import (
 	"math"
 )
 
-// quoRemMinMax
+// RestDigit
 // a <= b
 
-// val: ....................... | a ... b | .......................
-// rem: ... | a ... b | a ... b | a ... b | a ... b | a ... b | ...
-// quo: ... |   -2    |   -1    |    0    |    1    |    2    | ...
+// value: ....................... | a ... b | .......................
+// rest:  ... |   -2    |   -1    |    0    |    1    |    2    | ...
+// digit: ... | a ... b | a ... b | a ... b | a ... b | a ... b | ...
 
-//------------------------------------------------------------------------------
-
-// a = -1
-// b = +1
-// base = (b - a) + 1 = (1 - 1) + 1 = 3
-
-//     __
-// ...|10|-9|-8|-7|-6|-5|-4|-3|-2|-1| 0| 1| 2| 3| 4| 5| 6| 7| 8| 9|10|...
-// ...+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+...
-// ...|-1  0  1|-1  0  1|-1  0  1|-1  0  1|-1  0  1|-1  0  1|-1  0  1|... <- digits
-// ...|   -3   |   -2   |   -1   |    0   |    1   |    2   |    3   |... <- rest
-
-//------------------------------------------------------------------------------
+// min <= max
+// base = max - min + 1
+// x = rest * base + digit
 
 func calcRestDigit1(x int, min, max int) (rest, digit int) {
 
@@ -112,53 +102,6 @@ func calcRestDigit3(x int, min, max int) (rest, digit int) {
 
 	rest, digit = quoRem(x, base)
 
-	var (
-		restD  int
-		digitD int
-	)
-
-	fmt.Println()
-	fmt.Println(">>>>", rest, digit)
-
-	for digit < min {
-		if rest == math.MinInt {
-			panic("overflow min")
-		}
-
-		rest--
-		restD--
-
-		digit += base
-		digitD += base
-	}
-	for digit > max {
-		if rest == math.MaxInt {
-			panic("overflow max")
-		}
-
-		rest++
-		restD++
-
-		digit -= base
-		digitD -= base
-	}
-
-	// fmt.Println("restD", restD)
-	// fmt.Println("digitD", digitD)
-
-	fmt.Printf("restD %d, digitD %d\n", restD, digitD)
-
-	return
-}
-
-func calcRestDigit4(x int, min, max int) (rest, digit int) {
-
-	checkBaseRange(min, max)
-
-	base := max - min + 1
-
-	rest, digit = quoRem(x, base)
-
 	if digit < min {
 		k := ceilDiv(min-digit, base)
 		rest -= k
@@ -175,9 +118,9 @@ func calcRestDigit4(x int, min, max int) (rest, digit int) {
 
 func RestDigit(x int, min, max int) (rest, digit int) {
 	//return calcRestDigit1(x, min, max)
+	//return calcRestDigit1_mod(x, min, max)
 	//return calcRestDigit2(x, min, max)
-	//return calcRestDigit3(x, min, max)
-	return calcRestDigit4(x, min, max)
+	return calcRestDigit3(x, min, max)
 }
 
 func checkBaseRange(min, max int) {

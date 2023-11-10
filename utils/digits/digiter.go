@@ -34,22 +34,7 @@ func (d *Digiter) Base() int {
 }
 
 func (d *Digiter) RestDigit(x int) (rest, digit int) {
-
-	q, r := quoRem(x, d.base)
-
-	for r < d.min {
-		q--
-		r += d.base
-	}
-	for r > d.max {
-		q++
-		r -= d.base
-	}
-
-	rest = q
-	digit = r
-
-	return
+	return RestDigit(x, d.min, d.max)
 }
 
 // dl - digit interval

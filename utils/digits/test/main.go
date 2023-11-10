@@ -65,7 +65,7 @@ func testCalcDigits() {
 		// digitWidth   = 3
 		// digitsNumber = 43
 	)
-	as := makeInts1(20)
+	as := makeLimitInts(20)
 	ds := make([]int, digitsNumber)
 	for _, a := range as {
 		rest := digiter.IntToDigits(a, ds)
@@ -172,20 +172,24 @@ func testRestDigit() {
 		//dmin, dmax = 7, 9
 	)
 
-	as := makeInts1(20)
-
+	as := makeLimitInts(10)
 	for _, a := range as {
 		rest, digit := digits.RestDigit(a, dmin, dmax)
 		fmt.Printf("%20d %20d %3d\n", a, rest, digit)
 	}
 }
 
-func makeInts1(d int) []int {
+func makeLimitInts(d int) []int {
+	if d < 0 {
+		return nil
+	}
 	var as []int
-	as = appendIntsMinMax(as, math.MinInt, math.MinInt+d)
+	as = appendIntsMinMax(as, math.MinInt, math.MinInt+d+1)
 	as = appendIntsMinMax(as, -d, d+1)
-	as = appendIntsMinMax(as, math.MaxInt-d, math.MaxInt)
-	as = append(as, math.MaxInt)
+	if d > 0 {
+		as = appendIntsMinMax(as, math.MaxInt-d+1, math.MaxInt)
+		as = append(as, math.MaxInt)
+	}
 	return as
 }
 
