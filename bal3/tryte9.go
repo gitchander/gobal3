@@ -3,8 +3,11 @@ package bal3
 // 9 trits
 type Tryte9 uint32
 
-var tc9 = MakeTryteCore[Tryte9](9)
-var TC9 = tc9
+var (
+	tc9 = MakeTryteCore[Tryte9](9)
+
+	TC9 = tc9
+)
 
 func (a Tryte9) ToInt64() int64 {
 	return tc9.ToInt64(a)

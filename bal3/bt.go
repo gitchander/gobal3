@@ -12,31 +12,36 @@ func NewBt() *Bt {
 }
 
 func (b *Bt) setTrit(i int, t Trit) {
-	wordIndex, tritIndex := quoRemInt(i, tritsPerWord)
+	wordIndex, tritIndex := quoRem(i, tritsPerWord)
 	b.words[wordIndex] = setTrit(b.words[wordIndex], tritIndex, t)
 }
 
 func (b *Bt) getTrit(i int) Trit {
-	wordIndex, tritIndex := quoRemInt(i, tritsPerWord)
+	wordIndex, tritIndex := quoRem(i, tritsPerWord)
 	return getTrit(b.words[wordIndex], tritIndex)
 }
 
 func (b *Bt) backward(f func(i int, t Trit) bool) {
+
 	ws := b.words
+
+	// words backward
 	for wi := len(ws); wi > 0; {
 		wi--
 
 		w := ws[wi]
 
+		// trits backward
 		for ti := tritsPerWord; ti > 0; {
 			ti--
 
 			var (
-				i = wi*tritsPerWord + ti
+				i = (wi * tritsPerWord) + ti
 				t = getTrit(w, ti)
 			)
-			if f(i, t) {
-				break
+
+			if !(f(i, t)) {
+				return
 			}
 		}
 	}
@@ -81,19 +86,19 @@ func (b *Bt) Sign() int {
 	return v
 }
 
-// x == 0
-func (b *Bt) IsZero() bool {
-	return b.Sign() == 0
-}
-
 // x < 0
 func (b *Bt) IsNegative() bool {
 	return b.Sign() == -1
 }
 
+// x == 0
+func (b *Bt) IsZero() bool {
+	return b.Sign() == 0
+}
+
 // x > 0
 func (b *Bt) IsPositive() bool {
-	return b.Sign() == 1
+	return b.Sign() == +1
 }
 
 //------------------------------------------------------------------------------
@@ -104,7 +109,7 @@ func (p *Bt) Neg() *Bt {
 		var v word
 		for j := 0; j < tritsPerWord; j++ {
 			t := getTrit(w, j)
-			t = trico.Neg(t)
+			t = tritNeg(t)
 			v = setTrit(v, j, t)
 		}
 		ws[i] = v
@@ -120,8 +125,13 @@ func (b *Bt) String() string {
 
 func (b *Bt) Format() string {
 	// todo
+
+	n := b.TritLen()
+	if n == 0 {
+		n = 1
+	}
+
 	var (
-		n  = b.TritLen()
 		bs = make([]byte, n)
 		j  = n - 1
 		k  = j

@@ -15,23 +15,7 @@ const (
 	tbs_1 = 0b_10 // +1
 )
 
-var tritValues = [...]Trit{
-	tv_T,
-	tv_0,
-	tv_1,
-}
-
 type Trit int
-
-func tritsCompare(a, b Trit) int {
-	if a == b {
-		return 0
-	}
-	if a < b {
-		return -1
-	}
-	return +1
-}
 
 func tritToChar(t Trit) (c byte, ok bool) {
 	switch t {
@@ -97,7 +81,7 @@ var tableBitsToTrit = [...]Trit{
 	3: 0,  // 3 (11) ->  0
 }
 
-func getTrit[T Unsigned](x T, i int) Trit {
+func getTrit[T coreTryte](x T, i int) Trit {
 
 	offset := i * bitsPerTrit
 
@@ -107,12 +91,12 @@ func getTrit[T Unsigned](x T, i int) Trit {
 }
 
 var tableTritToBits = [...]byte{
-	0: 0b_01, // 0 (-1) -> 01
-	1: 0b_00, // 1 ( 0) -> 00
-	2: 0b_10, // 2 (+1) -> 10
+	0: 0b_01, // ((-1 + 1) = 0) -> 01
+	1: 0b_00, // (( 0 + 1) = 1) -> 00
+	2: 0b_10, // ((+1 + 1) = 2) -> 10
 }
 
-func setTrit[T Unsigned](x T, i int, t Trit) T {
+func setTrit[T coreTryte](x T, i int, t Trit) T {
 
 	offset := i * bitsPerTrit
 
@@ -125,48 +109,65 @@ func setTrit[T Unsigned](x T, i int, t Trit) T {
 	return x
 }
 
-func setTritsN[T Unsigned](n int, t Trit) T {
-	var y T
-	for i := 0; i < n; i++ {
-		y = setTrit(y, i, t)
-	}
-	return y
-}
-
 //------------------------------------------------------------------------------
 
-// Mul table
-
-// +---+---+---+---+
-// |   | T | 0 | 1 |
-// +---+---+---+---+
-// | T | 1 | 0 | T |
-// +---+---+---+---+
-// | 0 | 0 | 0 | 0 |
-// +---+---+---+---+
-// | 1 | T | 0 | 1 |
-// +---+---+---+---+
-
-var tableMul = mustParseTable(
-	"10T",
-	"000",
-	"T01",
-)
-
-func tritsMulV1(a, b Trit) Trit {
-	return tritByTable(tableMul, a, b)
+// sum 4 trits: [-4..4]
+func splitTrits1(v int) (hi, lo Trit) {
+	const (
+		N = -1
+		Z = 0
+		P = +1
+	)
+	switch v {
+	case -4:
+		return N, N // -4 = (-3) + (-1)
+	case -3:
+		return N, Z // -3 = (-3) + ( 0)
+	case -2:
+		return N, P // -2 = (-3) + (+1)
+	case -1:
+		return Z, N // -1 = ( 0) + (-1)
+	case 0:
+		return Z, Z //  0 = ( 0) + ( 0)
+	case +1:
+		return Z, P // +1 = ( 0) + (+1)
+	case +2:
+		return P, N // +2 = (+3) + (-1)
+	case +3:
+		return P, Z // +3 = (+3) + ( 0)
+	case +4:
+		return P, P // +4 = (+3) + (+1)
+	default:
+		panic(fmt.Errorf("splitTrits1: invalid value %d", v))
+	}
 }
 
-func tritsMulV2(a, b Trit) Trit {
-	return a * b
-}
-
-func tritsMulV3(a, b Trit) Trit {
-	return trico.Xamax(a, b)
+func splitTrits2(v int) (hi, lo Trit) {
+	switch v {
+	case -4:
+		return tv_T, tv_T
+	case -3:
+		return tv_T, tv_0
+	case -2:
+		return tv_T, tv_1
+	case -1:
+		return tv_0, tv_T
+	case 0:
+		return tv_0, tv_0
+	case +1:
+		return tv_0, tv_1
+	case +2:
+		return tv_1, tv_T
+	case +3:
+		return tv_1, tv_0
+	case +4:
+		return tv_1, tv_1
+	default:
+		panic(fmt.Errorf("splitTrits2: invalid value %d", v))
+	}
 }
 
 var (
-	// tritsMul = tritsMulV1
-	tritsMul = tritsMulV2
-	//tritsMul = tritsMulV3
+	splitTrits = splitTrits1
+	// splitTrits = splitTrits2
 )

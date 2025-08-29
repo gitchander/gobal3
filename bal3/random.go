@@ -13,5 +13,18 @@ func newRandNext() *rand.Rand {
 }
 
 func randTrit(r *random.Rand) Trit {
-	return random.RandByCorpus(r, tritValues[:])
+	return random.RandByCorpus(r, tritsAll[:])
+}
+
+func randTryte[T coreTryte](n int, r *Rand) T {
+	var a T
+	for i := 0; i < n; i++ {
+		a = setTrit(a, i, randTrit(r))
+	}
+	return a
+}
+
+func randTryteSh[T coreTryte](n int, r *Rand) T {
+	a := randTryte[T](n, r)
+	return tryteShiftRight(n, a, r.Intn(n))
 }

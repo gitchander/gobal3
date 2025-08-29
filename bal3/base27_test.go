@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func testBase27[T Unsigned](tc TryteCore[T], a T) error {
+func testBase27[T coreTryte](tc TryteCore[T], a T) error {
 
 	sa := FormatBase27(tc, a)
 
@@ -25,7 +25,7 @@ func testBase27[T Unsigned](tc TryteCore[T], a T) error {
 	return nil
 }
 
-func testBase27Bounds[T Unsigned](tc TryteCore[T]) error {
+func testBase27Bounds[T coreTryte](tc TryteCore[T]) error {
 	min, max := tc.LimitsInt64()
 	for av := min; av <= max; av++ {
 		a, _ := tc.Int64ToTrite(av)
@@ -37,7 +37,7 @@ func testBase27Bounds[T Unsigned](tc TryteCore[T]) error {
 	return nil
 }
 
-func testBase27Rand[T Unsigned](tc TryteCore[T]) error {
+func testBase27Rand[T coreTryte](tc TryteCore[T]) error {
 	r := newRandNext()
 	for i := 0; i < 1000; i++ {
 		a := tc.RandSh(r)

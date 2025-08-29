@@ -1,8 +1,8 @@
 module github.com/gitchander/gobal3
 
-go 1.21
+go 1.24
 
-toolchain go1.21.0
+toolchain go1.24.3
 
 require (
 	github.com/fogleman/gg v1.3.0

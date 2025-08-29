@@ -2,11 +2,11 @@ package bal3
 
 //------------------------------------------------------------------------------
 
-type double[T Unsigned] struct {
+type double[T coreTryte] struct {
 	Hi, Lo T
 }
 
-func makeDouble[T Unsigned](hi, lo T) double[T] {
+func makeDouble[T coreTryte](hi, lo T) double[T] {
 	return double[T]{
 		Hi: hi,
 		Lo: lo,
@@ -15,11 +15,11 @@ func makeDouble[T Unsigned](hi, lo T) double[T] {
 
 //------------------------------------------------------------------------------
 
-type doubleCore[T Unsigned] struct {
+type doubleCore[T coreTryte] struct {
 	tc TryteCore[T]
 }
 
-func makeDoubleCore[T Unsigned](tc TryteCore[T]) doubleCore[T] {
+func makeDoubleCore[T coreTryte](tc TryteCore[T]) doubleCore[T] {
 	return doubleCore[T]{
 		tc: tc,
 	}
@@ -183,19 +183,19 @@ func (dc doubleCore[T]) Compare(a, b double[T]) int {
 	return tc.Compare(a.Lo, b.Lo)
 }
 
-// a == n
-func (dc doubleCore[T]) Equal(a, b double[T]) bool {
-	return dc.Compare(a, b) == 0
-}
-
 // a < b
 func (dc doubleCore[T]) Less(a, b double[T]) bool {
 	return dc.Compare(a, b) == -1
 }
 
+// a == n
+func (dc doubleCore[T]) Equal(a, b double[T]) bool {
+	return dc.Compare(a, b) == 0
+}
+
 // a > b
 func (dc doubleCore[T]) Greater(a, b double[T]) bool {
-	return dc.Compare(a, b) == 1
+	return dc.Compare(a, b) == +1
 }
 
 //------------------------------------------------------------------------------

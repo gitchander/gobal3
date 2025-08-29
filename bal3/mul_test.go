@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func testMul[T Unsigned](tc TryteCore[T], a, b T) error {
+func testMul[T coreTryte](tc TryteCore[T], a, b T) error {
 
 	hi, lo := tc.Mul(a, b)
 
@@ -20,7 +20,7 @@ func testMul[T Unsigned](tc TryteCore[T], a, b T) error {
 	return nil
 }
 
-func testMulBounds[T Unsigned](tc TryteCore[T]) error {
+func testMulBounds[T coreTryte](tc TryteCore[T]) error {
 	min, max := tc.LimitsInt64()
 	for av := min; av <= max; av++ {
 		for bv := min; bv <= max; bv++ {
@@ -37,7 +37,7 @@ func testMulBounds[T Unsigned](tc TryteCore[T]) error {
 	return nil
 }
 
-func testMulRand[T Unsigned](tc TryteCore[T]) error {
+func testMulRand[T coreTryte](tc TryteCore[T]) error {
 	r := newRandNext()
 	for i := 0; i < 1000; i++ {
 		var (
@@ -91,5 +91,29 @@ func TestMulT9Rand(t *testing.T) {
 	err := testMulRand(TC9)
 	if err != nil {
 		t.Fatal(err)
+	}
+}
+
+func TestTrytesMul(t *testing.T) {
+	samples := [][3]int64{
+		{0, 0, 0},
+		{0, 1, 0},
+		{1, 3, 3},
+		{5, 7, 35},
+		{423542, 223424, 94629447808},
+	}
+	tc := TC9
+	for i, v := range samples {
+		var (
+			a, _ = tc.Int64ToTrite(v[0])
+			b, _ = tc.Int64ToTrite(v[1])
+			c, _ = tc.Int64ToTrite(v[2])
+		)
+		// t.Log(a, b, c)
+
+		ab := a.Mul(b)
+		if !(c.Equal(ab)) {
+			t.Fatalf("sample[%d]: wrong %v", i, v)
+		}
 	}
 }

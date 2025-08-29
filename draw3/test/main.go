@@ -25,7 +25,11 @@ func main() {
 	// for i := range digits {
 	// 	digits[i] = randDigit(r)
 	// }
-	digits := makeIntsMinMax(-40, 41)
+
+	var (
+		//digits = makeIntsMinMax(0, 10)
+		digits = makeIntsMinMax(-40, 41)
+	)
 
 	b := td.Bounds(len(digits))
 

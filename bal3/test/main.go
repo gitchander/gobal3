@@ -12,15 +12,14 @@ import (
 
 func main() {
 	//testToString()
-	//testIncTC4()
+	testIncTC4()
 	//testIncTC6()
 	//testIncTC9()
 	//testFormatBase27()
 	//testParseBase27()
 	//testLimits()
 	//testQuoRemT32Random()
-
-	testBig()
+	//testBig()
 }
 
 func checkError(err error) {
@@ -75,6 +74,9 @@ func testFormatBase27() {
 	tc := bal3.TC32
 
 	const (
+		// min int64 = -40
+		// max int64 = +40
+
 		min int64 = 10000000
 		max int64 = 10000100
 	)
@@ -82,7 +84,7 @@ func testFormatBase27() {
 	for i := min; i <= max; i++ {
 		a, _ := tc.Int64ToTrite(i)
 		s := bal3.FormatBase27(tc, a)
-		fmt.Println(i, a, s)
+		fmt.Printf("%3d %5s %3s\n", i, a, s)
 	}
 }
 
@@ -330,11 +332,17 @@ func bitsOpAdd3(a, b, c int) (hi, lo int) {
 }
 
 func testBig() {
-	//s := "01T01TTT10T10001T01010101010101010101010TTTTTTT00000TTTT"
-	s := "0"
+	var (
+		//s = "0"
+		s = "000T101T01TTT10T10001T01010101010101010101010TTTTTTT00000TTTT"
+	)
 	b, err := bal3.ParseBt(s)
 	checkError(err)
 	fmt.Println(b)
 	b.Neg()
 	fmt.Println(b)
+
+	fmt.Println(b.IsNegative())
+	fmt.Println(b.IsZero())
+	fmt.Println(b.IsPositive())
 }

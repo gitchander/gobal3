@@ -129,7 +129,7 @@ func TestQuoRemT32Samples(t *testing.T) {
 	}
 }
 
-func testQuoRemRange[T Unsigned](tc TryteCore[T]) error {
+func testQuoRemRange[T coreTryte](tc TryteCore[T]) error {
 	r := newRandNext()
 	for i := 0; i < 1000; i++ {
 		a := tc.RandSh(r)
@@ -163,7 +163,7 @@ func testQuoRemT16(a, b Tryte16) error {
 		haveRem = rem.ToInt64()
 	)
 
-	wantQuo, wantRem := quoRemInt64(av, bv)
+	wantQuo, wantRem := quoRem(av, bv)
 
 	printAll := func() {
 		fmt.Printf("have: quoRem(%d, %d) => { quo: %d, rem: %d }\n", av, bv, haveQuo, haveRem)
@@ -192,7 +192,7 @@ func testQuoRemT16(a, b Tryte16) error {
 	return nil
 }
 
-func testQuoRemDouble[T Unsigned](tc TryteCore[T], a, b T) error {
+func testQuoRemDouble[T coreTryte](tc TryteCore[T], a, b T) error {
 
 	var (
 		av = tc.ToInt64(a)
@@ -205,7 +205,7 @@ func testQuoRemDouble[T Unsigned](tc TryteCore[T], a, b T) error {
 		haveRem = tc.ToInt64(rem)
 	)
 
-	wantQuo, wantRem := quoRemInt64(av, bv)
+	wantQuo, wantRem := quoRem(av, bv)
 
 	printAll := func() {
 		fmt.Printf("have: quoRem(%d, %d) => { quo: %d, rem: %d }\n", av, bv, haveQuo, haveRem)

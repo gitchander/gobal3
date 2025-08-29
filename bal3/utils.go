@@ -1,18 +1,5 @@
 package bal3
 
-import (
-	"errors"
-	"fmt"
-)
-
-var errNegativeShift = errors.New("negative shift amount")
-
-func checkShiftAmount(i int) {
-	if i < 0 {
-		panic(errNegativeShift)
-	}
-}
-
 // TryteMinMax
 // n - number of trits.
 // func tryteBounds(n int) (min, max int64) {
@@ -36,7 +23,7 @@ func not(b bool) bool {
 
 const bitsPerByte = 8
 
-func bitsPerUnsigned[T Unsigned]() int {
+func bitsPerUnsigned[T coreTryte]() int {
 	x := uint64(^T(0))
 	count := 0
 	for x != 0 {
@@ -81,32 +68,6 @@ func ceilDiv(a, b int) int {
 	return (a + (b - 1)) / b
 }
 
-// sum 4 trits: [-4..4]
-func splitTrits2(v int) (t1, t0 Trit) {
-	switch v {
-	case -4:
-		return tv_T, tv_T
-	case -3:
-		return tv_T, tv_0
-	case -2:
-		return tv_T, tv_1
-	case -1:
-		return tv_0, tv_T
-	case 0:
-		return tv_0, tv_0
-	case 1:
-		return tv_0, tv_1
-	case 2:
-		return tv_1, tv_T
-	case 3:
-		return tv_1, tv_0
-	case 4:
-		return tv_1, tv_1
-	default:
-		panic(fmt.Errorf("splitTrits2: invalid value %d", v))
-	}
-}
-
 //------------------------------------------------------------------------------
 
 func quoRemBal3(a int64) (q, r int64) {
@@ -118,7 +79,7 @@ func quoRemBal3(a int64) (q, r int64) {
 		base = max - min + 1
 	)
 
-	q, r = quoRemInt64(a, base)
+	q, r = quoRem(a, base)
 
 	if r < min {
 		q--
@@ -132,13 +93,9 @@ func quoRemBal3(a int64) (q, r int64) {
 	return q, r
 }
 
-func quoRemInt(a, b int) (quo, rem int) {
-	quo = a / b
-	rem = a % b
-	return
-}
+//------------------------------------------------------------------------------
 
-func quoRemInt64(a, b int64) (quo, rem int64) {
+func quoRem[T Signed](a, b T) (quo, rem T) {
 	quo = a / b
 	rem = a % b
 	return
@@ -178,6 +135,12 @@ func mustParseTable(sss ...string) [][]Trit {
 }
 
 func tritByTable(table [][]Trit, a, b Trit) Trit {
+
+	// trit to index: (trit + 1)
+	// (-1 + 1) = 0
+	// ( 0 + 1) = 1
+	// (+1 + 1) = 2
+
 	return table[a+1][b+1]
 }
 

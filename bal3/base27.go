@@ -33,7 +33,7 @@ const (
 
 var coderB27 = mustMakeBase27Coder(negativeChars + "0" + positiveChars)
 
-var intervalBase27 = ivl.Ivl(-13, (13 + 1))
+var intervalBase27 = ivl.Ivl((-13 + 0), (+13 + 1))
 
 //------------------------------------------------------------------------------
 
@@ -94,7 +94,7 @@ func (p *base27Coder) charToDigit(char byte) (digit int, ok bool) {
 
 //------------------------------------------------------------------------------
 
-func FormatBase27[T Unsigned](tc TryteCore[T], a T) string {
+func FormatBase27[T coreTryte](tc TryteCore[T], a T) string {
 
 	const tritsPerDigit = 3
 
@@ -156,7 +156,7 @@ func FormatBase27[T Unsigned](tc TryteCore[T], a T) string {
 	return string(cs[k:])
 }
 
-func ParseBase27[T Unsigned](tc TryteCore[T], s string) (T, error) {
+func ParseBase27[T coreTryte](tc TryteCore[T], s string) (T, error) {
 
 	const tritsPerDigit = 3
 

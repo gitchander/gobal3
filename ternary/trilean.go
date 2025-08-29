@@ -12,6 +12,7 @@ var (
 	tritCharsV1 = [...]byte{'T', '0', '1'}
 	tritCharsV2 = [...]byte{'-', '0', '+'}
 	tritCharsV3 = [...]byte{'N', '0', 'P'}
+	tritCharsV4 = [...]byte{'N', '0', '1'}
 
 	tritChars = tritCharsV1
 )

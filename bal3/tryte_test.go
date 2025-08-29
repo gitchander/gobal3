@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func testTritsAdd[T Unsigned](tc TryteCore[T], a, b T, carryIn Trit) error {
+func testTritsAdd[T coreTryte](tc TryteCore[T], a, b T, carryIn Trit) error {
 
 	res, carryOut := tc.Add(a, b, carryIn)
 
@@ -20,7 +20,7 @@ func testTritsAdd[T Unsigned](tc TryteCore[T], a, b T, carryIn Trit) error {
 	return nil
 }
 
-func testTritsSub[T Unsigned](tc TryteCore[T], a, b T, carryIn Trit) error {
+func testTritsSub[T coreTryte](tc TryteCore[T], a, b T, carryIn Trit) error {
 
 	res, carryOut := tc.Sub(a, b, carryIn)
 
@@ -35,7 +35,7 @@ func testTritsSub[T Unsigned](tc TryteCore[T], a, b T, carryIn Trit) error {
 	return nil
 }
 
-func testTritsAddSub[T Unsigned](tc TryteCore[T], a, b T, carryIn Trit) error {
+func testTritsAddSub[T coreTryte](tc TryteCore[T], a, b T, carryIn Trit) error {
 	err := testTritsAdd(tc, a, b, carryIn)
 	if err != nil {
 		return err
@@ -43,7 +43,7 @@ func testTritsAddSub[T Unsigned](tc TryteCore[T], a, b T, carryIn Trit) error {
 	return testTritsSub(tc, a, b, carryIn)
 }
 
-func testAddSubRand[T Unsigned](tc TryteCore[T]) error {
+func testAddSubRand[T coreTryte](tc TryteCore[T]) error {
 	r := newRandNext()
 	for i := 0; i < 1000; i++ {
 		var (
@@ -66,7 +66,7 @@ func TestAddTryte4(t *testing.T) {
 		a, _ := tc.Int64ToTrite(av)
 		for bv := min; bv <= max; bv++ {
 			b, _ := tc.Int64ToTrite(bv)
-			for _, carryIn := range tritValues {
+			for _, carryIn := range tritsAll {
 				err := testTritsAddSub(tc, a, b, carryIn)
 				if err != nil {
 					t.Fatal(err)
@@ -104,7 +104,7 @@ func TestAddT8Samples(t *testing.T) {
 
 	min, max := tc.Limits()
 
-	type sample[T Unsigned] struct {
+	type sample[T coreTryte] struct {
 		a       T
 		b       T
 		carryIn Trit
