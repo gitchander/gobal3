@@ -18,16 +18,13 @@ package bal3
 
 //------------------------------------------------------------------------------
 
-func tritsSubV1(a, b Trit, c0 Trit) (s, c1 Trit) {
-	b = trico.Neg(b)
+func tritsSubV1(a, b Trit, c0 Trit) (hi, lo Trit) {
+	b = tritNeg(b)
 	return tritsAdd(a, b, c0)
 }
 
-func tritsSubV2(a, b Trit, c0 Trit) (s, c1 Trit) {
-	t1, t0 := splitTrits(int(a - b + c0))
-	s = t0
-	c1 = t1
-	return
+func tritsSubV2(a, b Trit, c0 Trit) (hi, lo Trit) {
+	return splitTrits(int(a - b + c0))
 }
 
 var (
@@ -37,14 +34,17 @@ var (
 
 //------------------------------------------------------------------------------
 
+// c0 - carryIn
+// c1 - carryOut
+
 func trytesSub[T coreTryte](n int, x, y T, c0 Trit) (res T, c1 Trit) {
 	var (
-		s     Trit
-		carry Trit = c0
+		carry, t Trit
 	)
+	carry = c0
 	for i := 0; i < n; i++ {
-		s, carry = tritsSub(getTrit(x, i), getTrit(y, i), carry)
-		res = setTrit(res, i, s)
+		carry, t = tritsSub(getTrit(x, i), getTrit(y, i), carry)
+		res = setTrit(res, i, t)
 	}
 	return res, carry
 }

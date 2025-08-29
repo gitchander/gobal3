@@ -41,7 +41,7 @@ func testIncTC4() {
 	for i := min; i <= max; i++ {
 		s := bal3.FormatBase27(tc, a)
 		ai64 := a.ToInt64()
-		fmt.Printf("%3d %4s %2s\n", ai64, a, s)
+		fmt.Printf("%+4d %4s %2s\n", ai64, a, s)
 		a, _ = tc.Add(a, 0, 1) // inc 1 trit
 	}
 }
