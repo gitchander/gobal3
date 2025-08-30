@@ -1,10 +1,12 @@
-package bal3
+package base27
 
 import (
 	"errors"
 	"fmt"
 
 	ivl "github.com/gitchander/gobal3/utils/interval"
+
+	"github.com/gitchander/gobal3/bal3"
 )
 
 //------------------------------------------------------------------------------
@@ -30,6 +32,8 @@ const (
 	negativeChars = "XYGHJKLMNPRST"
 	positiveChars = "123456789ABCD"
 )
+
+const tritsPerDigit = 3
 
 var coderB27 = mustMakeBase27Coder(negativeChars + "0" + positiveChars)
 
@@ -94,12 +98,12 @@ func (p *base27Coder) charToDigit(char byte) (digit int, ok bool) {
 
 //------------------------------------------------------------------------------
 
-func FormatBase27[T coreTryte](tc TryteCore[T], a T) string {
-
-	const tritsPerDigit = 3
+func FormatBase27[T bal3.CoreTryte](tc bal3.TryteCore[T], a T) string {
 
 	var (
-		dn = ceilDiv(tc.n, tritsPerDigit) // number of digits
+		n = tc.TotalTrits()
+
+		dn = ceilDiv(n, tritsPerDigit) // number of digits
 		cs = make([]byte, dn)
 
 		j = dn - 1
@@ -124,10 +128,10 @@ func FormatBase27[T coreTryte](tc TryteCore[T], a T) string {
 	var b T
 	count := 0 // count of trits in 'b'.
 
-	for i := 0; i < tc.n; i++ {
+	for i := 0; i < n; i++ {
 
-		t := getTrit(a, i)       // t = a[i]
-		b = setTrit(b, count, t) // b[count] = t
+		t := tc.GetTrit(a, i)       // t = a[i]
+		b = tc.SetTrit(b, count, t) // b[count] = t
 		count++
 
 		if count == tritsPerDigit {
@@ -156,12 +160,13 @@ func FormatBase27[T coreTryte](tc TryteCore[T], a T) string {
 	return string(cs[k:])
 }
 
-func ParseBase27[T coreTryte](tc TryteCore[T], s string) (T, error) {
+func ParseBase27[T bal3.CoreTryte](tc bal3.TryteCore[T], s string) (T, error) {
 
-	const tritsPerDigit = 3
-
-	var a T
-	count := 0 // count of trits in 'a'.
+	var (
+		n     = tc.TotalTrits()
+		a     T
+		count = 0 // count of trits in 'a'.
+	)
 
 	bs := []byte(s)
 	for _, char := range bs {
@@ -173,16 +178,19 @@ func ParseBase27[T coreTryte](tc TryteCore[T], s string) (T, error) {
 			return 0, fmt.Errorf("invalid char %c", char)
 		}
 		b, _ := tc.Int64ToTrite(int64(digit))
-		for j := tritsPerDigit; j > 0; j-- {
-			if count >= tc.n {
-				return 0, fmt.Errorf("number of trits more than %d", tc.n)
+
+		for i := tritsPerDigit; i > 0; { // backward iterate
+			i--
+
+			if count >= n {
+				return 0, fmt.Errorf("number of trits more than %d", n)
 			}
-			t := getTrit(b, j-1)
+			t := tc.GetTrit(b, i)
 			if (count > 0) || (t != 0) {
 				count++
 			}
 			a = tc.Shl(a, 1) // a = a << 1
-			a = setTrit(a, 0, t)
+			a = tc.SetTrit(a, 0, t)
 		}
 	}
 	return a, nil

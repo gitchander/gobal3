@@ -6,12 +6,12 @@ import (
 	ivl "github.com/gitchander/gobal3/utils/interval"
 )
 
-type TryteCore[T coreTryte] struct {
+type TryteCore[T CoreTryte] struct {
 	n int
 }
 
 // n - number of trits
-func MakeTryteCore[T coreTryte](n int) TryteCore[T] {
+func MakeTryteCore[T CoreTryte](n int) TryteCore[T] {
 	bits := bitsPerUnsigned[T]()
 	maxTrits := bits / 2
 	if n > maxTrits {
@@ -23,6 +23,16 @@ func MakeTryteCore[T coreTryte](n int) TryteCore[T] {
 // TotalTrits returns the total number of trits.
 func (tc TryteCore[T]) TotalTrits() int {
 	return tc.n
+}
+
+//------------------------------------------------------------------------------
+
+func (tc TryteCore[T]) GetTrit(a T, i int) Trit {
+	return getTrit(a, i)
+}
+
+func (tc TryteCore[T]) SetTrit(a T, i int, t Trit) T {
+	return setTrit(a, i, t)
 }
 
 //------------------------------------------------------------------------------
@@ -247,8 +257,10 @@ func (tc TryteCore[T]) RandSh(r *Rand) T {
 
 // Len returns the minimum number of trits required to represent x; the result is 0 for x == 0.
 func (tc TryteCore[T]) Len(x T) int {
-	for i := tc.n; i > 0; i-- {
-		t := getTrit(x, i-1)
+	for i := tc.n; i > 0; { // backward iterate
+		i--
+
+		t := getTrit(x, i)
 		if t != 0 {
 			return i
 		}

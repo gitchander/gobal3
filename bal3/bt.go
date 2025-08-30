@@ -26,13 +26,13 @@ func (b *Bt) backward(f func(i int, t Trit) bool) {
 	ws := b.words
 
 	// words backward
-	for wi := len(ws); wi > 0; {
+	for wi := len(ws); wi > 0; { // backward iterate
 		wi--
 
 		w := ws[wi]
 
 		// trits backward
-		for ti := tritsPerWord; ti > 0; {
+		for ti := tritsPerWord; ti > 0; { // backward iterate
 			ti--
 
 			var (
@@ -49,14 +49,15 @@ func (b *Bt) backward(f func(i int, t Trit) bool) {
 
 // TritLen returns the length of the absolute value of b in trits. The trit length of 0 is 0.
 func (b *Bt) TritLen() int {
-	// todo
+
 	ws := b.words
-	for wi := len(ws); wi > 0; {
+
+	for wi := len(ws); wi > 0; { // backward iterate
 		wi--
 
 		w := ws[wi]
 
-		for ti := tritsPerWord; ti > 0; {
+		for ti := tritsPerWord; ti > 0; { // backward iterate
 			ti--
 
 			t := getTrit(w, ti)

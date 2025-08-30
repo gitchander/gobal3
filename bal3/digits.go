@@ -8,7 +8,7 @@ var digiter = digits.NewDigiter(tritMin, tritMax)
 
 //------------------------------------------------------------------------------
 
-func intToTriteV1[T coreTryte](tc TryteCore[T], v int) (a T, rest int) {
+func intToTriteV1[T CoreTryte](tc TryteCore[T], v int) (a T, rest int) {
 	var t int
 	for i := 0; i < tc.n; i++ {
 		v, t = digiter.RestDigit(v)
@@ -18,10 +18,12 @@ func intToTriteV1[T coreTryte](tc TryteCore[T], v int) (a T, rest int) {
 	return
 }
 
-func tryteToInt64V1[T coreTryte](tc TryteCore[T], a T, rest int64) (int64, bool) {
+func tryteToInt64V1[T CoreTryte](tc TryteCore[T], a T, rest int64) (int64, bool) {
 	base := int64(digiter.Base())
 	v := rest
-	for i := (tc.n - 1); i >= 0; i-- {
+	for i := tc.n; i > 0; { // backward iterate
+		i--
+
 		v = (v * base) + int64(getTrit(a, i))
 	}
 	return v, true
@@ -29,7 +31,7 @@ func tryteToInt64V1[T coreTryte](tc TryteCore[T], a T, rest int64) (int64, bool)
 
 //------------------------------------------------------------------------------
 
-func intToTriteV2[T coreTryte](tc TryteCore[T], v int) (a T, rest int) {
+func intToTriteV2[T CoreTryte](tc TryteCore[T], v int) (a T, rest int) {
 	ds := make([]int, tc.n)
 	rest = digiter.IntToDigits(v, ds)
 	for i, d := range ds {
@@ -39,7 +41,7 @@ func intToTriteV2[T coreTryte](tc TryteCore[T], v int) (a T, rest int) {
 	return
 }
 
-func tryteToIntV2[T coreTryte](tc TryteCore[T], a T, rest int) int {
+func tryteToIntV2[T CoreTryte](tc TryteCore[T], a T, rest int) int {
 	ds := make([]int, tc.n)
 	for i := range ds {
 		t := getTrit(a, i)
@@ -54,7 +56,7 @@ func tryteToIntV2[T coreTryte](tc TryteCore[T], a T, rest int) int {
 
 //------------------------------------------------------------------------------
 
-func int64ToTriteV3[T coreTryte](tc TryteCore[T], v int64) (a T, rest int64) {
+func int64ToTriteV3[T CoreTryte](tc TryteCore[T], v int64) (a T, rest int64) {
 	var t int64
 	for i := 0; i < tc.n; i++ {
 		v, t = quoRemBal3(v)
@@ -66,13 +68,13 @@ func int64ToTriteV3[T coreTryte](tc TryteCore[T], v int64) (a T, rest int64) {
 
 //------------------------------------------------------------------------------
 
-func int64ToTrite[T coreTryte](tc TryteCore[T], v int64) (a T, rest int64) {
+func int64ToTrite[T CoreTryte](tc TryteCore[T], v int64) (a T, rest int64) {
 	//return intToTriteV1(tc, v)
 	//return intToTriteV2(tc, v)
 	return int64ToTriteV3(tc, v)
 }
 
-func tryteToInt64[T coreTryte](tc TryteCore[T], a T, rest int64) (int64, bool) {
+func tryteToInt64[T CoreTryte](tc TryteCore[T], a T, rest int64) (int64, bool) {
 	return tryteToInt64V1(tc, a, rest)
 	//return tryteToIntV2(tc, a, rest)
 }

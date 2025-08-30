@@ -10,7 +10,10 @@ func RandBool(r *Rand) bool {
 	return (r.Uint32() & 1) == 1
 }
 
-func RandIntMinMax(r *Rand, min, max int) int {
+// In interval:
+// [min..max)
+// [min..max-1]
+func RandIntIn(r *Rand, min, max int) int {
 	return min + r.Intn(max-min)
 }
 

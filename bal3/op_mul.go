@@ -42,10 +42,10 @@ var (
 
 //------------------------------------------------------------------------------
 
-func trytesMul[T coreTryte](n int, a, b T) (hi, lo T) {
+func trytesMul[T CoreTryte](n int, a, b T) (hi, lo T) {
 	var (
 		w        T
-		wLo, wHi T
+		w_lo, w_hi T
 		carry    Trit
 	)
 	for i := 0; i < n; i++ {
@@ -55,20 +55,20 @@ func trytesMul[T coreTryte](n int, a, b T) (hi, lo T) {
 			w = setTrit(w, j, tritsMul(ai, bj))
 		}
 
-		wLo = tryteShiftLeft(n, w, i)        // w << i
-		wHi = tryteShiftRight(n, w, (n - i)) // w >> (n - i)
+		w_lo = tryteShiftLeft(n, w, i)        // w << i
+		w_hi = tryteShiftRight(n, w, (n - i)) // w >> (n - i)
 
 		carry = 0
-		lo, carry = trytesAdd(n, lo, wLo, carry)
-		hi, carry = trytesAdd(n, hi, wHi, carry)
+		lo, carry = trytesAdd(n, lo, w_lo, carry)
+		hi, carry = trytesAdd(n, hi, w_hi, carry)
 	}
 	return hi, lo
 }
 
-func trytesMulLo[T coreTryte](n int, a, b T) (lo T) {
+func trytesMulLo[T CoreTryte](n int, a, b T) (lo T) {
 	var (
 		w     T
-		wLo   T
+		w_lo   T
 		carry Trit
 	)
 	for i := 0; i < n; i++ {
@@ -78,10 +78,10 @@ func trytesMulLo[T coreTryte](n int, a, b T) (lo T) {
 			w = setTrit(w, j, tritsMul(ai, bj))
 		}
 
-		wLo = tryteShiftLeft(n, w, i) // w << i
+		w_lo = tryteShiftLeft(n, w, i) // w << i
 
 		carry = 0
-		lo, carry = trytesAdd(n, lo, wLo, carry)
+		lo, carry = trytesAdd(n, lo, w_lo, carry)
 	}
 	return lo
 }

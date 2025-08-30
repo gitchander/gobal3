@@ -70,7 +70,9 @@ func (d *Digiter) DigitsToInt(digits []int, rest int) (int, error) {
 
 func (d *Digiter) digitsToIntV1(ds []int, rest int) int {
 	v := rest
-	for i := len(ds) - 1; i >= 0; i-- {
+	for i := len(ds); i > 0; { // backward iterate
+		i--
+
 		v = (v * d.base) + ds[i]
 	}
 	return v
@@ -79,7 +81,9 @@ func (d *Digiter) digitsToIntV1(ds []int, rest int) int {
 func (d *Digiter) digitsToIntV2(digits []int, rest int) (int, error) {
 	base := d.base
 	v := rest
-	for i := len(digits) - 1; i >= 0; i-- {
+	for i := len(digits); i > 0; { // backward iterate
+		i--
+
 		digit := digits[i]
 		err := d.checkDigit(digit)
 		if err != nil {

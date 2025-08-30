@@ -129,7 +129,7 @@ func TestQuoRemT32Samples(t *testing.T) {
 	}
 }
 
-func testQuoRemRange[T coreTryte](tc TryteCore[T]) error {
+func testQuoRemRange[T CoreTryte](tc TryteCore[T]) error {
 	r := newRandNext()
 	for i := 0; i < 1000; i++ {
 		a := tc.RandSh(r)
@@ -192,7 +192,7 @@ func testQuoRemT16(a, b Tryte16) error {
 	return nil
 }
 
-func testQuoRemDouble[T coreTryte](tc TryteCore[T], a, b T) error {
+func testQuoRemDouble[T CoreTryte](tc TryteCore[T], a, b T) error {
 
 	var (
 		av = tc.ToInt64(a)

@@ -37,11 +37,12 @@ var (
 // c0 - carryIn
 // c1 - carryOut
 
-func trytesSub[T coreTryte](n int, x, y T, c0 Trit) (res T, c1 Trit) {
+func trytesSub[T CoreTryte](n int, x, y T, c0 Trit) (res T, c1 Trit) {
 	var (
-		carry, t Trit
+		carry = c0
+
+		t Trit
 	)
-	carry = c0
 	for i := 0; i < n; i++ {
 		carry, t = tritsSub(getTrit(x, i), getTrit(y, i), carry)
 		res = setTrit(res, i, t)

@@ -14,7 +14,8 @@ func _[T constraints.Unsigned]() {}
 type (
 	// Unsigned = customUnsigned
 	// Unsigned = constraints.Unsigned
+
 	Signed = constraints.Signed
 
-	coreTryte = constraints.Unsigned
+	CoreTryte = constraints.Unsigned
 )

@@ -1,11 +1,14 @@
-package bal3
+package base27
 
 import (
 	"fmt"
 	"testing"
+
+	"github.com/gitchander/gobal3/bal3"
+	"github.com/gitchander/gobal3/utils/random"
 )
 
-func testBase27[T coreTryte](tc TryteCore[T], a T) error {
+func testBase27[T bal3.CoreTryte](tc bal3.TryteCore[T], a T) error {
 
 	sa := FormatBase27(tc, a)
 
@@ -25,7 +28,7 @@ func testBase27[T coreTryte](tc TryteCore[T], a T) error {
 	return nil
 }
 
-func testBase27Bounds[T coreTryte](tc TryteCore[T]) error {
+func testBase27Bounds[T bal3.CoreTryte](tc bal3.TryteCore[T]) error {
 	min, max := tc.LimitsInt64()
 	for av := min; av <= max; av++ {
 		a, _ := tc.Int64ToTrite(av)
@@ -37,8 +40,8 @@ func testBase27Bounds[T coreTryte](tc TryteCore[T]) error {
 	return nil
 }
 
-func testBase27Rand[T coreTryte](tc TryteCore[T]) error {
-	r := newRandNext()
+func testBase27Rand[T bal3.CoreTryte](tc bal3.TryteCore[T]) error {
+	r := random.NewRandNext()
 	for i := 0; i < 1000; i++ {
 		a := tc.RandSh(r)
 		err := testBase27(tc, a)
@@ -50,14 +53,14 @@ func testBase27Rand[T coreTryte](tc TryteCore[T]) error {
 }
 
 func TestBase27T4Bounds(t *testing.T) {
-	err := testBase27Bounds(TC4)
+	err := testBase27Bounds(bal3.TC4)
 	if err != nil {
 		t.Fatal(err)
 	}
 }
 
 func TestBase27T32Rand(t *testing.T) {
-	err := testBase27Rand(TC32)
+	err := testBase27Rand(bal3.TC32)
 	if err != nil {
 		t.Fatal(err)
 	}

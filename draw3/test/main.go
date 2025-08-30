@@ -55,7 +55,7 @@ func randDigit(r *random.Rand) int {
 		min = -40
 		max = +40
 	)
-	return random.RandIntMinMax(r, min, max+1)
+	return random.RandIntIn(r, min, max+1)
 }
 
 func randTrit(r *random.Rand) bal3.Trit {

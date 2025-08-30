@@ -1,6 +1,6 @@
 package bal3
 
-type tryteGeneral[T coreTryte] interface {
+type tryteGeneral[T CoreTryte] interface {
 	isTryte()
 
 	Neg() T

@@ -56,13 +56,16 @@ func mustTritToChar(t Trit) byte {
 
 // Converting bits to trit
 
-// | bits: |
-// | 1   0 | trit |
+// +-------+------+
+// | bits: |      |
+// +---+---+ trit |
+// | 1 | 0 |      |
 // +---+---+------+
 // | 0 | 0 |   0  |
 // | 0 | 1 |  -1  |
-// | 1 | 0 |   1  |
+// | 1 | 0 |  +1  |
 // | 1 | 1 |   0  |
+// +---+---+------+
 
 // +-------+-------+-------+-------+-------+
 // | bits  | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 |
@@ -81,7 +84,7 @@ var tableBitsToTrit = [...]Trit{
 	3: 0,  // 3 (11) ->  0
 }
 
-func getTrit[T coreTryte](x T, i int) Trit {
+func getTrit[T CoreTryte](x T, i int) Trit {
 
 	offset := i * bitsPerTrit
 
@@ -96,7 +99,7 @@ var tableTritToBits = [...]byte{
 	2: 0b_10, // ((+1 + 1) = 2) -> 10
 }
 
-func setTrit[T coreTryte](x T, i int, t Trit) T {
+func setTrit[T CoreTryte](x T, i int, t Trit) T {
 
 	offset := i * bitsPerTrit
 

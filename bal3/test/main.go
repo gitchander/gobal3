@@ -7,6 +7,7 @@ import (
 	"math/big"
 
 	"github.com/gitchander/gobal3/bal3"
+	"github.com/gitchander/gobal3/bal3/base27"
 	"github.com/gitchander/gobal3/utils/random"
 )
 
@@ -39,7 +40,7 @@ func testIncTC4() {
 	var a bal3.Tryte4
 	a, _ = tc.Int64ToTrite(min)
 	for i := min; i <= max; i++ {
-		s := bal3.FormatBase27(tc, a)
+		s := base27.FormatBase27(tc, a)
 		ai64 := a.ToInt64()
 		fmt.Printf("%+4d %4s %2s\n", ai64, a, s)
 		a, _ = tc.Add(a, 0, 1) // inc 1 trit
@@ -52,7 +53,7 @@ func testIncTC6() {
 	var a bal3.Tryte6
 	a, _ = tc.Int64ToTrite(min)
 	for i := min; i <= max; i++ {
-		s := bal3.FormatBase27(tc, a)
+		s := base27.FormatBase27(tc, a)
 		fmt.Printf("%4d %6s %2s\n", tc.ToInt64(a), a, s)
 		a, _ = tc.Add(a, 0, 1) // inc 1 trit
 	}
@@ -64,7 +65,7 @@ func testIncTC9() {
 	var a bal3.Tryte9
 	a, _ = tc.Int64ToTrite(min)
 	for i := min; i <= max; i++ {
-		s := bal3.FormatBase27(tc, a)
+		s := base27.FormatBase27(tc, a)
 		fmt.Printf("%5d %9s %3s\n", tc.ToInt64(a), a, s)
 		a, _ = tc.Add(a, 0, 1) // inc 1 trit
 	}
@@ -83,7 +84,7 @@ func testFormatBase27() {
 
 	for i := min; i <= max; i++ {
 		a, _ := tc.Int64ToTrite(i)
-		s := bal3.FormatBase27(tc, a)
+		s := base27.FormatBase27(tc, a)
 		fmt.Printf("%3d %5s %3s\n", i, a, s)
 	}
 }
@@ -102,9 +103,9 @@ func testParseBase27() {
 
 	tc := bal3.TC8
 
-	a, err := bal3.ParseBase27(tc, "4DD")
+	a, err := base27.ParseBase27(tc, "4DD")
 	checkError(err)
-	s := bal3.FormatBase27(tc, a)
+	s := base27.FormatBase27(tc, a)
 	fmt.Println(tc.ToInt64(a), a, s)
 }
 

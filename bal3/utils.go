@@ -23,7 +23,7 @@ func not(b bool) bool {
 
 const bitsPerByte = 8
 
-func bitsPerUnsigned[T coreTryte]() int {
+func bitsPerUnsigned[T CoreTryte]() int {
 	x := uint64(^T(0))
 	count := 0
 	for x != 0 {
@@ -45,17 +45,6 @@ func maxInt(a, b int) int {
 		return a
 	}
 	return b
-}
-
-func hasDuplicate[T comparable](as []T) bool {
-	m := make(map[T]struct{})
-	for _, a := range as {
-		if _, ok := m[a]; ok {
-			return true
-		}
-		m[a] = struct{}{}
-	}
-	return false
 }
 
 func setAllInts(as []int, v int) {
@@ -99,70 +88,6 @@ func quoRem[T Signed](a, b T) (quo, rem T) {
 	quo = a / b
 	rem = a % b
 	return
-}
-
-//------------------------------------------------------------------------------
-
-func parseTable(sss ...string) ([][]Trit, error) {
-	cols := 0
-	for _, ss := range sss {
-		cols = maxInt(cols, len(ss))
-	}
-	ttt := make([][]Trit, len(sss))
-	for i, ss := range sss {
-		var (
-			chars = []byte(ss)
-			tt    = make([]Trit, cols)
-		)
-		for j, char := range chars {
-			t, err := charToTrit(char)
-			if err != nil {
-				return nil, err
-			}
-			tt[j] = t
-		}
-		ttt[i] = tt
-	}
-	return ttt, nil
-}
-
-func mustParseTable(sss ...string) [][]Trit {
-	table, err := parseTable(sss...)
-	if err != nil {
-		panic(err)
-	}
-	return table
-}
-
-func tritByTable(table [][]Trit, a, b Trit) Trit {
-
-	// trit to index: (trit + 1)
-	// (-1 + 1) = 0
-	// ( 0 + 1) = 1
-	// (+1 + 1) = 2
-
-	return table[a+1][b+1]
-}
-
-//------------------------------------------------------------------------------
-
-// forward iterate
-func forward(n int, f func(i int) bool) {
-	for i := 0; i < n; i++ {
-		if !f(i) {
-			return
-		}
-	}
-}
-
-// backward iterate
-func backward(n int, f func(i int) bool) {
-	for i := n; i > 0; {
-		i--
-		if !f(i) {
-			return
-		}
-	}
 }
 
 //------------------------------------------------------------------------------

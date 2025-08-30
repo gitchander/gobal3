@@ -2,11 +2,11 @@ package bal3
 
 //------------------------------------------------------------------------------
 
-type double[T coreTryte] struct {
+type double[T CoreTryte] struct {
 	Hi, Lo T
 }
 
-func makeDouble[T coreTryte](hi, lo T) double[T] {
+func makeDouble[T CoreTryte](hi, lo T) double[T] {
 	return double[T]{
 		Hi: hi,
 		Lo: lo,
@@ -15,11 +15,11 @@ func makeDouble[T coreTryte](hi, lo T) double[T] {
 
 //------------------------------------------------------------------------------
 
-type doubleCore[T coreTryte] struct {
+type doubleCore[T CoreTryte] struct {
 	tc TryteCore[T]
 }
 
-func makeDoubleCore[T coreTryte](tc TryteCore[T]) doubleCore[T] {
+func makeDoubleCore[T CoreTryte](tc TryteCore[T]) doubleCore[T] {
 	return doubleCore[T]{
 		tc: tc,
 	}
@@ -46,10 +46,10 @@ func (dc doubleCore[T]) wantShl(a double[T], i int) double[T] {
 
 func (dc doubleCore[T]) wantShr(a double[T], i int) double[T] {
 	checkShiftAmount(i)
-	m := dc.TotalTrits()
+	n := dc.TotalTrits()
 	var b double[T]
-	for j := m - 1 - i; j >= 0; j-- {
-		b = dc.SetTrit(b, j, dc.GetTrit(a, j+i))
+	for j := (n - i) - 1; j >= 0; j-- { // backward iterate
+		b = dc.SetTrit(b, j, dc.GetTrit(a, i+j))
 	}
 	return b
 }

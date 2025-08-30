@@ -103,8 +103,8 @@ func testDigits() {
 
 func formatDigits(ds []int, digitWidth int) string {
 	var b strings.Builder
-	for i := len(ds); i > 0; i-- {
-		digit := ds[i-1]
+	for i := len(ds) - 1; i >= 0; i-- { // backward iterate
+		digit := ds[i]
 		fmt.Fprintf(&b, "%[1]*[2]d", digitWidth, digit)
 	}
 	return frameSquare(b.String())

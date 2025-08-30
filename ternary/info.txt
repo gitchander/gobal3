@@ -24,7 +24,6 @@ Commutative Property:
 min(a, b) = min(b, a)
 max(a, b) = max(b, a)
 
-
 min(a, -1) = -1
 min(a, 0) <= 0
 min(a, 1) = a

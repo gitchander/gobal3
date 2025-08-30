@@ -44,8 +44,8 @@ func randomBaseMinMaxV1(r *rand.Rand) (min, max int) {
 }
 
 func randomBaseMinMaxV2(r *rand.Rand) (min, max int) {
-	a := -random.RandIntMinMax(r, 0, 20)
-	b := random.RandIntMinMax(r, 0, 20)
+	a := -random.RandIntIn(r, 0, 20)
+	b := random.RandIntIn(r, 0, 20)
 	return a, b
 }
 
