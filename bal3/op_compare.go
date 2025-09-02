@@ -20,7 +20,7 @@ func tritsCompare(a, b Trit) int {
 //            | +1: a > b
 //            \
 
-func trytesCompare[T CoreTryte](n int, a, b T) int {
+func trytesCompare[Tryte CoreTryte](n int, a, b Tryte) int {
 
 	for i := n; i > 0; { // backward iterate
 		i--

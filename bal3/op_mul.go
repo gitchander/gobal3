@@ -7,7 +7,7 @@ package bal3
 // Mul table
 
 // +---+---+---+---+
-// |   | T | 0 | 1 |
+// | * | T | 0 | 1 |
 // +---+---+---+---+
 // | T | 1 | 0 | T |
 // +---+---+---+---+
@@ -42,11 +42,11 @@ var (
 
 //------------------------------------------------------------------------------
 
-func trytesMul[T CoreTryte](n int, a, b T) (hi, lo T) {
+func trytesMul[Tryte CoreTryte](n int, a, b Tryte) (hi, lo Tryte) {
 	var (
-		w        T
-		w_lo, w_hi T
-		carry    Trit
+		w          Tryte
+		w_lo, w_hi Tryte
+		carry      Trit
 	)
 	for i := 0; i < n; i++ {
 		ai := getTrit(a, i)
@@ -65,10 +65,10 @@ func trytesMul[T CoreTryte](n int, a, b T) (hi, lo T) {
 	return hi, lo
 }
 
-func trytesMulLo[T CoreTryte](n int, a, b T) (lo T) {
+func trytesMulLo[Tryte CoreTryte](n int, a, b Tryte) (lo Tryte) {
 	var (
-		w     T
-		w_lo   T
+		w     Tryte
+		w_lo  Tryte
 		carry Trit
 	)
 	for i := 0; i < n; i++ {

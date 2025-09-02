@@ -59,7 +59,7 @@ func quoRemT16_v2(a, b Tryte16) (quo, rem Tryte16) {
 // d*(1/2)_base10 = d*0.5_base10 = d*A
 // d*A = d*B + d*C
 
-func tryteQuoRemLo[T CoreTryte](tc TryteCore[T], a, b T) (q, r T) {
+func tryteQuoRemLo[Tryte CoreTryte](tc TryteCore[Tryte], a, b Tryte) (q, r Tryte) {
 
 	k := tc.n / 2
 
@@ -77,15 +77,15 @@ func tryteQuoRemLo[T CoreTryte](tc TryteCore[T], a, b T) (q, r T) {
 	}
 
 	//---------------------------------------------------------------
-	dd := b          // double divisor
-	var halfDivPos T // positive
+	dd := b              // double divisor
+	var halfDivPos Tryte // positive
 
 	{
 		// 0.5_base10 = (0.1111111...)_bal3
 
 		// |<---n--->|<---n--->|
 		// |000...000,111...111|
-		var factor T // set lo n trits.
+		var factor Tryte // set lo n trits.
 		for i := 0; i < k; i++ {
 			factor = setTrit(factor, i, 1)
 		}
@@ -198,7 +198,7 @@ func tryteQuoRemLo[T CoreTryte](tc TryteCore[T], a, b T) (q, r T) {
 
 //------------------------------------------------------------------------------
 
-func tryteQuoRem[T CoreTryte](tc TryteCore[T], a, b T) (q, r T) {
+func tryteQuoRem[Tryte CoreTryte](tc TryteCore[Tryte], a, b Tryte) (q, r Tryte) {
 
 	if tc.IsZero(b) {
 		panic(errDivisionByZero)
@@ -223,31 +223,31 @@ func tryteQuoRem[T CoreTryte](tc TryteCore[T], a, b T) (q, r T) {
 
 //------------------------------------------------------------------------------
 
-type divParams[T CoreTryte] struct {
-	dc doubleCore[T]
+type divParams[Tryte CoreTryte] struct {
+	dc doubleCore[Tryte]
 
-	d   double[T] // d - divisor: { hi: 0, lo: b }
-	hd  double[T] // hd - half divisor (d/2)
-	hdn double[T] // hdn - half divisor negative (-d/2)
+	d   double[Tryte] // d - divisor: { hi: 0, lo: b }
+	hd  double[Tryte] // hd - half divisor (d/2)
+	hdn double[Tryte] // hdn - half divisor negative (-d/2)
 
 	signD int
 
-	r double[T]
+	r double[Tryte]
 }
 
-func makeDivParams[T CoreTryte](tc TryteCore[T], a, b T) *divParams[T] {
+func makeDivParams[Tryte CoreTryte](tc TryteCore[Tryte], a, b Tryte) *divParams[Tryte] {
 
-	dc := makeDoubleCore[T](tc)
+	dc := makeDoubleCore[Tryte](tc)
 
 	var (
-		r = makeDouble[T](0, a)
-		d = makeDouble[T](0, b)
+		r = makeDouble[Tryte](0, a)
+		d = makeDouble[Tryte](0, b)
 	)
 
 	var (
-		//		d   Double[T] // d - divisor: { hi: 0, lo: b }
-		hd  double[T] // hd - half divisor (d/2)
-		hdn double[T] // hdn - half divisor negative (-d/2)
+		//		d   Double[Tryte] // d - divisor: { hi: 0, lo: b }
+		hd  double[Tryte] // hd - half divisor (d/2)
+		hdn double[Tryte] // hdn - half divisor negative (-d/2)
 	)
 
 	// 0.5_base10 = (0.1111111...)_bal3
@@ -269,7 +269,7 @@ func makeDivParams[T CoreTryte](tc TryteCore[T], a, b T) *divParams[T] {
 	hd, _ = dc.Add(d1, d2, 0)
 	hdn = dc.Neg(hd)
 
-	return &divParams[T]{
+	return &divParams[Tryte]{
 		dc: dc,
 
 		d:   d,
@@ -440,7 +440,7 @@ func correctionQuoRemV2[T CoreTryte](tc TryteCore[T], a, b T, q, r T) (cq, cr T)
 	return q, r
 }
 
-func correctionQuoRem[T CoreTryte](tc TryteCore[T], a, b T, q, r T) (cq, cr T) {
+func correctionQuoRem[Tryte CoreTryte](tc TryteCore[Tryte], a, b Tryte, q, r Tryte) (cq, cr Tryte) {
 	return correctionQuoRemV1(tc, a, b, q, r)
 	//return correctionQuoRemV2(tc, a, b, q, r)
 }

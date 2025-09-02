@@ -123,23 +123,23 @@ func splitTrits1(v int) (hi, lo Trit) {
 	)
 	switch v {
 	case -4:
-		return N, N // -4 = (-3) + (-1)
+		return N, N
 	case -3:
-		return N, Z // -3 = (-3) + ( 0)
+		return N, Z
 	case -2:
-		return N, P // -2 = (-3) + (+1)
+		return N, P
 	case -1:
-		return Z, N // -1 = ( 0) + (-1)
+		return Z, N
 	case 0:
-		return Z, Z //  0 = ( 0) + ( 0)
+		return Z, Z
 	case +1:
-		return Z, P // +1 = ( 0) + (+1)
+		return Z, P
 	case +2:
-		return P, N // +2 = (+3) + (-1)
+		return P, N
 	case +3:
-		return P, Z // +3 = (+3) + ( 0)
+		return P, Z
 	case +4:
-		return P, P // +4 = (+3) + (+1)
+		return P, P
 	default:
 		panic(fmt.Errorf("splitTrits1: invalid value %d", v))
 	}

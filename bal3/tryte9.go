@@ -41,6 +41,10 @@ func (a Tryte9) Div(b Tryte9) Tryte9 {
 	return quo
 }
 
+func (a Tryte9) Sign() int {
+	return tc9.Sign(a)
+}
+
 func (a Tryte9) Compare(b Tryte9) int {
 	return tc9.Compare(a, b)
 }

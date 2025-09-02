@@ -16,15 +16,15 @@ func randTrit(r *random.Rand) Trit {
 	return random.RandByCorpus(r, tritsAll[:])
 }
 
-func randTryte[T CoreTryte](n int, r *Rand) T {
-	var a T
+func randTryte[Tryte CoreTryte](n int, r *Rand) Tryte {
+	var a Tryte
 	for i := 0; i < n; i++ {
 		a = setTrit(a, i, randTrit(r))
 	}
 	return a
 }
 
-func randTryteSh[T CoreTryte](n int, r *Rand) T {
-	a := randTryte[T](n, r)
+func randTryteSh[Tryte CoreTryte](n int, r *Rand) Tryte {
+	a := randTryte[Tryte](n, r)
 	return tryteShiftRight(n, a, r.Intn(n))
 }

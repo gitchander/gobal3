@@ -94,6 +94,13 @@ func TestMulT9Rand(t *testing.T) {
 	}
 }
 
+func TestMulT27Rand(t *testing.T) {
+	err := testMulRand(TC27)
+	if err != nil {
+		t.Fatal(err)
+	}
+}
+
 func TestTrytesMul(t *testing.T) {
 	samples := [][3]int64{
 		{0, 0, 0},

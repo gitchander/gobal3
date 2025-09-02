@@ -1,7 +1,5 @@
 package bal3
 
-//------------------------------------------------------------------------------
-
 func parseTable(sss ...string) ([][]Trit, error) {
 	cols := 0
 	for _, ss := range sss {

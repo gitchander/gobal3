@@ -38,6 +38,10 @@ func (a Tryte32) Div(b Tryte32) Tryte32 {
 	return quo
 }
 
+func (a Tryte32) Sign() int {
+	return tc32.Sign(a)
+}
+
 func (a Tryte32) Compare(b Tryte32) int {
 	return tc32.Compare(a, b)
 }

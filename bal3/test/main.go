@@ -13,9 +13,10 @@ import (
 
 func main() {
 	//testToString()
-	testIncTC4()
+	//testIncTC4()
 	//testIncTC6()
 	//testIncTC9()
+	testIncTC27()
 	//testFormatBase27()
 	//testParseBase27()
 	//testLimits()
@@ -29,9 +30,38 @@ func checkError(err error) {
 	}
 }
 
+func mergeSlices[T any](as ...[]T) []T {
+	var bs []T
+	for _, a := range as {
+		bs = append(bs, a...)
+	}
+	return bs
+}
+
+func makeInt64s(min, max int64) []int64 {
+	var (
+		n  = max - min
+		as = make([]int64, n)
+	)
+	for i := int64(0); i < n; i++ {
+		as[i] = min + i
+	}
+	return as
+}
+
+func makeValues(min, max int64) []int64 {
+	const m int64 = 27
+	return mergeSlices[int64](
+		makeInt64s(min, min+m),
+		makeInt64s(-m, +m+1),
+		makeInt64s(max-m+1, max+1),
+	)
+}
+
 func testToString() {
 	tc := bal3.TC6
-	fmt.Println(tc.Int64ToTrite(5))
+	t, _ := tc.Int64ToTrite(-50)
+	fmt.Println(t.ToInt64())
 }
 
 func testIncTC4() {
@@ -68,6 +98,17 @@ func testIncTC9() {
 		s := base27.FormatBase27(tc, a)
 		fmt.Printf("%5d %9s %3s\n", tc.ToInt64(a), a, s)
 		a, _ = tc.Add(a, 0, 1) // inc 1 trit
+	}
+}
+
+func testIncTC27() {
+	tc := bal3.TC27
+	min, max := tc.LimitsInt64()
+	values := makeValues(min, max)
+	for _, value := range values {
+		a, _ := tc.Int64ToTrite(value)
+		s := base27.FormatBase27(tc, a)
+		fmt.Printf("%15d %28s %10s\n", tc.ToInt64(a), a, s)
 	}
 }
 

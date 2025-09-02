@@ -16,6 +16,11 @@ type tryteGeneral[T CoreTryte] interface {
 	Shl(i int) T
 	Shr(i int) T
 
+	Sign() int
+	// IsNegative() bool
+	// IsZero() bool
+	// IsPositive() bool
+
 	Compare(T) int
 	Equal(T) bool
 	Less(T) bool
@@ -26,8 +31,10 @@ func (Tryte4) isTryte()  {}
 func (Tryte8) isTryte()  {}
 func (Tryte16) isTryte() {}
 func (Tryte32) isTryte() {}
+
 func (Tryte6) isTryte()  {}
 func (Tryte9) isTryte()  {}
+func (Tryte27) isTryte() {}
 
 var (
 	_ tryteGeneral[Tryte4]  = Tryte4(0)
@@ -35,6 +42,7 @@ var (
 	_ tryteGeneral[Tryte16] = Tryte16(0)
 	_ tryteGeneral[Tryte32] = Tryte32(0)
 
-	_ tryteGeneral[Tryte6] = Tryte6(0)
-	_ tryteGeneral[Tryte9] = Tryte9(0)
+	_ tryteGeneral[Tryte6]  = Tryte6(0)
+	_ tryteGeneral[Tryte9]  = Tryte9(0)
+	_ tryteGeneral[Tryte27] = Tryte27(0)
 )
