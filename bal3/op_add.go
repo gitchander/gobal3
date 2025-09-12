@@ -41,7 +41,7 @@ var (
 // c0 - carryIn
 // c1 - carryOut
 
-func trytesAdd[Tryte CoreTryte](n int, x, y Tryte, c0 Trit) (res Tryte, c1 Trit) {
+func trytesAdd[Tryte GenericTryte](n int, x, y Tryte, c0 Trit) (res Tryte, c1 Trit) {
 	var (
 		carry, t Trit
 	)

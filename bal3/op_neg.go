@@ -15,7 +15,7 @@ var (
 	// tritNeg = tritNeg2
 )
 
-func tryteNeg[Tryte CoreTryte](n int, a Tryte) Tryte {
+func tryteNeg[Tryte GenericTryte](n int, a Tryte) Tryte {
 	var b Tryte
 	for i := 0; i < n; i++ {
 		t := getTrit(a, i)

@@ -23,7 +23,7 @@ func not(b bool) bool {
 
 const bitsPerByte = 8
 
-func bitsPerUnsigned[T CoreTryte]() int {
+func bitsPerUnsigned[T GenericTryte]() int {
 	x := uint64(^T(0))
 	count := 0
 	for x != 0 {
@@ -84,7 +84,7 @@ func quoRemBal3(a int64) (q, r int64) {
 
 //------------------------------------------------------------------------------
 
-func quoRem[T Signed](a, b T) (quo, rem T) {
+func quoRem[T signed](a, b T) (quo, rem T) {
 	quo = a / b
 	rem = a % b
 	return

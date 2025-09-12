@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func testMul[T CoreTryte](tc TryteCore[T], a, b T) error {
+func testMul[T GenericTryte](tc TryteCore[T], a, b T) error {
 
 	hi, lo := tc.Mul(a, b)
 
@@ -20,7 +20,7 @@ func testMul[T CoreTryte](tc TryteCore[T], a, b T) error {
 	return nil
 }
 
-func testMulBounds[T CoreTryte](tc TryteCore[T]) error {
+func testMulBounds[T GenericTryte](tc TryteCore[T]) error {
 	min, max := tc.LimitsInt64()
 	for av := min; av <= max; av++ {
 		for bv := min; bv <= max; bv++ {
@@ -37,7 +37,7 @@ func testMulBounds[T CoreTryte](tc TryteCore[T]) error {
 	return nil
 }
 
-func testMulRand[T CoreTryte](tc TryteCore[T]) error {
+func testMulRand[T GenericTryte](tc TryteCore[T]) error {
 	r := newRandNext()
 	for i := 0; i < 1000; i++ {
 		var (

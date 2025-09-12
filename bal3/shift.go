@@ -26,7 +26,7 @@ var tryteMaskTable = makeTryteMaskTable()
 
 //------------------------------------------------------------------------------
 
-func shiftLeftV1[T CoreTryte](n int, a T, i int) T {
+func shiftLeftV1[T GenericTryte](n int, a T, i int) T {
 	var (
 		mask   = T(tryteMaskTable[n-1])
 		offset = i * bitsPerTrit
@@ -34,7 +34,7 @@ func shiftLeftV1[T CoreTryte](n int, a T, i int) T {
 	return (a << offset) & mask
 }
 
-func shiftRightV1[T CoreTryte](n int, a T, i int) T {
+func shiftRightV1[T GenericTryte](n int, a T, i int) T {
 	var (
 		mask   = T(tryteMaskTable[n-1])
 		offset = i * bitsPerTrit
@@ -44,7 +44,7 @@ func shiftRightV1[T CoreTryte](n int, a T, i int) T {
 
 //------------------------------------------------------------------------------
 
-func shiftLeftV2[T CoreTryte](n int, a T, i int) T {
+func shiftLeftV2[T GenericTryte](n int, a T, i int) T {
 	checkShiftAmount(i)
 	var b T
 	for j := i; j < n; j++ {
@@ -53,7 +53,7 @@ func shiftLeftV2[T CoreTryte](n int, a T, i int) T {
 	return b
 }
 
-func shiftRightV2[T CoreTryte](n int, a T, i int) T {
+func shiftRightV2[T GenericTryte](n int, a T, i int) T {
 	checkShiftAmount(i)
 	var b T
 	for j := (n - i) - 1; j >= 0; j-- { // backward iterate
@@ -66,14 +66,14 @@ func shiftRightV2[T CoreTryte](n int, a T, i int) T {
 
 // Shl - shift left
 // a << i
-func tryteShiftLeft[Tryte CoreTryte](n int, a Tryte, i int) Tryte {
+func tryteShiftLeft[Tryte GenericTryte](n int, a Tryte, i int) Tryte {
 	//return shiftLeftV1(n, a, i)
 	return shiftLeftV2(n, a, i)
 }
 
 // Shr - shift right
 // a >> i
-func tryteShiftRight[Tryte CoreTryte](n int, a Tryte, i int) Tryte {
+func tryteShiftRight[Tryte GenericTryte](n int, a Tryte, i int) Tryte {
 	//return shiftRightV1(n, a, i)
 	return shiftRightV2(n, a, i)
 }

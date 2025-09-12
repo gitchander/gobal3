@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func testDoubleAdd[T CoreTryte](dc doubleCore[T], a, b double[T], carryIn Trit) error {
+func testDoubleAdd[T GenericTryte](dc doubleCore[T], a, b double[T], carryIn Trit) error {
 
 	res, carryOut := dc.Add(a, b, carryIn)
 
@@ -20,7 +20,7 @@ func testDoubleAdd[T CoreTryte](dc doubleCore[T], a, b double[T], carryIn Trit) 
 	return nil
 }
 
-func testDoubleSub[T CoreTryte](dc doubleCore[T], a, b double[T], carryIn Trit) error {
+func testDoubleSub[T GenericTryte](dc doubleCore[T], a, b double[T], carryIn Trit) error {
 
 	res, carryOut := dc.Sub(a, b, carryIn)
 
@@ -35,7 +35,7 @@ func testDoubleSub[T CoreTryte](dc doubleCore[T], a, b double[T], carryIn Trit) 
 	return nil
 }
 
-func testDoubleAddSub[T CoreTryte](dc doubleCore[T], a, b double[T], carryIn Trit) error {
+func testDoubleAddSub[T GenericTryte](dc doubleCore[T], a, b double[T], carryIn Trit) error {
 	err := testDoubleAdd(dc, a, b, carryIn)
 	if err != nil {
 		return err
@@ -150,7 +150,7 @@ func TestDoubleAddSubT8Samples(t *testing.T) {
 
 	min, max := dc.Limits()
 
-	type sample[T CoreTryte] struct {
+	type sample[T GenericTryte] struct {
 		a double[T]
 		b double[T]
 	}
@@ -171,7 +171,7 @@ func TestDoubleAddSubT8Samples(t *testing.T) {
 	}
 }
 
-func testDoubleMul[T CoreTryte](dc doubleCore[T], a, b double[T]) error {
+func testDoubleMul[T GenericTryte](dc doubleCore[T], a, b double[T]) error {
 
 	hi, lo := dc.Mul(a, b)
 
@@ -186,7 +186,7 @@ func testDoubleMul[T CoreTryte](dc doubleCore[T], a, b double[T]) error {
 	return nil
 }
 
-func testDoubleMulRand[T CoreTryte](tc TryteCore[T]) error {
+func testDoubleMulRand[T GenericTryte](tc TryteCore[T]) error {
 	dc := makeDoubleCore(tc)
 	r := newRandNext()
 	for i := 0; i < 1000; i++ {

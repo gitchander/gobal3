@@ -2,11 +2,11 @@ package bal3
 
 //------------------------------------------------------------------------------
 
-type double[T CoreTryte] struct {
+type double[T GenericTryte] struct {
 	Hi, Lo T
 }
 
-func makeDouble[T CoreTryte](hi, lo T) double[T] {
+func makeDouble[T GenericTryte](hi, lo T) double[T] {
 	return double[T]{
 		Hi: hi,
 		Lo: lo,
@@ -15,11 +15,11 @@ func makeDouble[T CoreTryte](hi, lo T) double[T] {
 
 //------------------------------------------------------------------------------
 
-type doubleCore[T CoreTryte] struct {
+type doubleCore[T GenericTryte] struct {
 	tc TryteCore[T]
 }
 
-func makeDoubleCore[T CoreTryte](tc TryteCore[T]) doubleCore[T] {
+func makeDoubleCore[T GenericTryte](tc TryteCore[T]) doubleCore[T] {
 	return doubleCore[T]{
 		tc: tc,
 	}

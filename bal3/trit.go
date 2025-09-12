@@ -84,7 +84,7 @@ var tableBitsToTrit = [...]Trit{
 	3: 0,  // 3 (11) ->  0
 }
 
-func getTrit[T CoreTryte](x T, i int) Trit {
+func getTrit[T GenericTryte](x T, i int) Trit {
 
 	offset := i * bitsPerTrit
 
@@ -99,7 +99,7 @@ var tableTritToBits = [...]byte{
 	2: 0b_10, // ((+1 + 1) = 2) -> 10
 }
 
-func setTrit[T CoreTryte](x T, i int, t Trit) T {
+func setTrit[T GenericTryte](x T, i int, t Trit) T {
 
 	offset := i * bitsPerTrit
 

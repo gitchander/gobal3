@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func testTritsAdd[T CoreTryte](tc TryteCore[T], a, b T, carryIn Trit) error {
+func testTritsAdd[T GenericTryte](tc TryteCore[T], a, b T, carryIn Trit) error {
 
 	res, carryOut := tc.Add(a, b, carryIn)
 
@@ -20,7 +20,7 @@ func testTritsAdd[T CoreTryte](tc TryteCore[T], a, b T, carryIn Trit) error {
 	return nil
 }
 
-func testTritsSub[T CoreTryte](tc TryteCore[T], a, b T, carryIn Trit) error {
+func testTritsSub[T GenericTryte](tc TryteCore[T], a, b T, carryIn Trit) error {
 
 	res, carryOut := tc.Sub(a, b, carryIn)
 
@@ -35,7 +35,7 @@ func testTritsSub[T CoreTryte](tc TryteCore[T], a, b T, carryIn Trit) error {
 	return nil
 }
 
-func testTritsAddSub[T CoreTryte](tc TryteCore[T], a, b T, carryIn Trit) error {
+func testTritsAddSub[T GenericTryte](tc TryteCore[T], a, b T, carryIn Trit) error {
 	err := testTritsAdd(tc, a, b, carryIn)
 	if err != nil {
 		return err
@@ -43,7 +43,7 @@ func testTritsAddSub[T CoreTryte](tc TryteCore[T], a, b T, carryIn Trit) error {
 	return testTritsSub(tc, a, b, carryIn)
 }
 
-func testAddSubRand[T CoreTryte](tc TryteCore[T]) error {
+func testAddSubRand[T GenericTryte](tc TryteCore[T]) error {
 	r := newRandNext()
 	for i := 0; i < 1000; i++ {
 		var (
@@ -104,7 +104,7 @@ func TestAddT8Samples(t *testing.T) {
 
 	min, max := tc.Limits()
 
-	type sample[T CoreTryte] struct {
+	type sample[T GenericTryte] struct {
 		a       T
 		b       T
 		carryIn Trit

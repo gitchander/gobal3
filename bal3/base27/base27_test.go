@@ -8,7 +8,7 @@ import (
 	"github.com/gitchander/gobal3/utils/random"
 )
 
-func testBase27[T bal3.CoreTryte](tc bal3.TryteCore[T], a T) error {
+func testBase27[T genericTryte](tc bal3.TryteCore[T], a T) error {
 
 	sa := FormatBase27(tc, a)
 
@@ -28,7 +28,7 @@ func testBase27[T bal3.CoreTryte](tc bal3.TryteCore[T], a T) error {
 	return nil
 }
 
-func testBase27Bounds[T bal3.CoreTryte](tc bal3.TryteCore[T]) error {
+func testBase27Bounds[T genericTryte](tc bal3.TryteCore[T]) error {
 	min, max := tc.LimitsInt64()
 	for av := min; av <= max; av++ {
 		a, _ := tc.Int64ToTrite(av)
@@ -40,7 +40,7 @@ func testBase27Bounds[T bal3.CoreTryte](tc bal3.TryteCore[T]) error {
 	return nil
 }
 
-func testBase27Rand[T bal3.CoreTryte](tc bal3.TryteCore[T]) error {
+func testBase27Rand[T genericTryte](tc bal3.TryteCore[T]) error {
 	r := random.NewRandNext()
 	for i := 0; i < 1000; i++ {
 		a := tc.RandSh(r)

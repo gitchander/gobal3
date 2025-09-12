@@ -9,6 +9,8 @@ import (
 	"github.com/gitchander/gobal3/bal3"
 )
 
+type genericTryte = bal3.GenericTryte
+
 //------------------------------------------------------------------------------
 
 // Negative chars arguments:
@@ -98,7 +100,7 @@ func (p *base27Coder) charToDigit(char byte) (digit int, ok bool) {
 
 //------------------------------------------------------------------------------
 
-func FormatBase27[T bal3.CoreTryte](tc bal3.TryteCore[T], a T) string {
+func FormatBase27[T genericTryte](tc bal3.TryteCore[T], a T) string {
 
 	var (
 		n = tc.TotalTrits()
@@ -160,7 +162,7 @@ func FormatBase27[T bal3.CoreTryte](tc bal3.TryteCore[T], a T) string {
 	return string(cs[k:])
 }
 
-func ParseBase27[T bal3.CoreTryte](tc bal3.TryteCore[T], s string) (T, error) {
+func ParseBase27[T genericTryte](tc bal3.TryteCore[T], s string) (T, error) {
 
 	var (
 		n     = tc.TotalTrits()

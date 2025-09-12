@@ -6,12 +6,11 @@ import (
 	ivl "github.com/gitchander/gobal3/utils/interval"
 )
 
-type TryteCore[T CoreTryte] struct {
-	n int
+type TryteCore[T GenericTryte] struct {
+	n int // number of trits
 }
 
-// n - number of trits
-func MakeTryteCore[T CoreTryte](n int) TryteCore[T] {
+func MakeTryteCore[T GenericTryte](n int) TryteCore[T] {
 	bits := bitsPerUnsigned[T]()
 	maxTrits := bits / 2
 	if n > maxTrits {

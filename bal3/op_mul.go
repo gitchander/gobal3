@@ -42,7 +42,7 @@ var (
 
 //------------------------------------------------------------------------------
 
-func trytesMul[Tryte CoreTryte](n int, a, b Tryte) (hi, lo Tryte) {
+func trytesMul[Tryte GenericTryte](n int, a, b Tryte) (hi, lo Tryte) {
 	var (
 		w          Tryte
 		w_lo, w_hi Tryte
@@ -65,7 +65,7 @@ func trytesMul[Tryte CoreTryte](n int, a, b Tryte) (hi, lo Tryte) {
 	return hi, lo
 }
 
-func trytesMulLo[Tryte CoreTryte](n int, a, b Tryte) (lo Tryte) {
+func trytesMulLo[Tryte GenericTryte](n int, a, b Tryte) (lo Tryte) {
 	var (
 		w     Tryte
 		w_lo  Tryte

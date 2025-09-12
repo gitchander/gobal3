@@ -12,10 +12,7 @@ type customUnsigned interface {
 func _[T constraints.Unsigned]() {}
 
 type (
-	// Unsigned = customUnsigned
-	// Unsigned = constraints.Unsigned
+	signed = constraints.Signed
 
-	Signed = constraints.Signed
-
-	CoreTryte = constraints.Unsigned
+	GenericTryte = constraints.Unsigned
 )

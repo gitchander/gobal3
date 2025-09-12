@@ -59,7 +59,7 @@ func quoRemT16_v2(a, b Tryte16) (quo, rem Tryte16) {
 // d*(1/2)_base10 = d*0.5_base10 = d*A
 // d*A = d*B + d*C
 
-func tryteQuoRemLo[Tryte CoreTryte](tc TryteCore[Tryte], a, b Tryte) (q, r Tryte) {
+func tryteQuoRemLo[Tryte GenericTryte](tc TryteCore[Tryte], a, b Tryte) (q, r Tryte) {
 
 	k := tc.n / 2
 
@@ -198,7 +198,7 @@ func tryteQuoRemLo[Tryte CoreTryte](tc TryteCore[Tryte], a, b Tryte) (q, r Tryte
 
 //------------------------------------------------------------------------------
 
-func tryteQuoRem[Tryte CoreTryte](tc TryteCore[Tryte], a, b Tryte) (q, r Tryte) {
+func tryteQuoRem[Tryte GenericTryte](tc TryteCore[Tryte], a, b Tryte) (q, r Tryte) {
 
 	if tc.IsZero(b) {
 		panic(errDivisionByZero)
@@ -223,7 +223,7 @@ func tryteQuoRem[Tryte CoreTryte](tc TryteCore[Tryte], a, b Tryte) (q, r Tryte) 
 
 //------------------------------------------------------------------------------
 
-type divParams[Tryte CoreTryte] struct {
+type divParams[Tryte GenericTryte] struct {
 	dc doubleCore[Tryte]
 
 	d   double[Tryte] // d - divisor: { hi: 0, lo: b }
@@ -235,7 +235,7 @@ type divParams[Tryte CoreTryte] struct {
 	r double[Tryte]
 }
 
-func makeDivParams[Tryte CoreTryte](tc TryteCore[Tryte], a, b Tryte) *divParams[Tryte] {
+func makeDivParams[Tryte GenericTryte](tc TryteCore[Tryte], a, b Tryte) *divParams[Tryte] {
 
 	dc := makeDoubleCore[Tryte](tc)
 
@@ -377,7 +377,7 @@ func (p *divParams[T]) outRem() T {
 
 // correction q and r
 
-func correctionQuoRemV1[T CoreTryte](tc TryteCore[T], a, b T, q, r T) (cq, cr T) {
+func correctionQuoRemV1[T GenericTryte](tc TryteCore[T], a, b T, q, r T) (cq, cr T) {
 	one, _ := tc.Int64ToTrite(1)
 	var (
 		signA = tc.Sign(a)
@@ -407,7 +407,7 @@ func correctionQuoRemV1[T CoreTryte](tc TryteCore[T], a, b T, q, r T) (cq, cr T)
 	return q, r
 }
 
-func correctionQuoRemV2[T CoreTryte](tc TryteCore[T], a, b T, q, r T) (cq, cr T) {
+func correctionQuoRemV2[T GenericTryte](tc TryteCore[T], a, b T, q, r T) (cq, cr T) {
 
 	var (
 		signA = tc.Sign(a)
@@ -440,7 +440,7 @@ func correctionQuoRemV2[T CoreTryte](tc TryteCore[T], a, b T, q, r T) (cq, cr T)
 	return q, r
 }
 
-func correctionQuoRem[Tryte CoreTryte](tc TryteCore[Tryte], a, b Tryte, q, r Tryte) (cq, cr Tryte) {
+func correctionQuoRem[Tryte GenericTryte](tc TryteCore[Tryte], a, b Tryte, q, r Tryte) (cq, cr Tryte) {
 	return correctionQuoRemV1(tc, a, b, q, r)
 	//return correctionQuoRemV2(tc, a, b, q, r)
 }

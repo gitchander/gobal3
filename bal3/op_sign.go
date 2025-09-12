@@ -6,7 +6,7 @@ package bal3
 //           | +1: x > 0
 //           \
 
-func tryteSign[Tryte CoreTryte](n int, x Tryte) int {
+func tryteSign[Tryte GenericTryte](n int, x Tryte) int {
 
 	for i := n; i > 0; { // backward iterate
 		i--
