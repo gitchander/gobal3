@@ -16,10 +16,11 @@ func main() {
 	//testIncTC4()
 	//testIncTC6()
 	//testIncTC9()
-	testIncTC27()
+	//testIncTC27()
 	//testFormatBase27()
 	//testParseBase27()
 	//testLimits()
+	testQuoRemSimple()
 	//testQuoRemT32Random()
 	//testBig()
 }
@@ -174,6 +175,9 @@ func testLimits() {
 	min, max = bal3.TC16.LimitsInt64()
 	printLimits("tryte16", min, max)
 
+	min, max = bal3.TC27.LimitsInt64()
+	printLimits("tryte27", min, max)
+
 	min, max = bal3.TC32.LimitsInt64()
 	printLimits("tryte32", min, max)
 
@@ -223,6 +227,43 @@ func testQuoRemT16Samples() {
 		fmt.Printf("have: quoRem(%d, %d) => { quo: %d, rem: %d }\n", av, bv, haveQuo, haveRem)
 		fmt.Printf("want: quoRem(%d, %d) => { quo: %d, rem: %d }\n", av, bv, wantQuo, wantRem)
 		fmt.Println()
+	}
+}
+
+func quoRem(a, b int) (quo, rem int) {
+	quo = a / b
+	rem = a % b
+	return
+}
+
+func testQuoRemSimple() {
+
+	const (
+		b = 8
+
+		a0 = -20
+		a1 = 20
+	)
+
+	for a := a0; a < a1; a++ {
+
+		quo, rem := quoRem(a, b)
+
+		tc := bal3.TC32
+
+		var (
+			ta, _ = tc.Int64ToTrite(int64(a))
+			tb, _ = tc.Int64ToTrite(int64(b))
+		)
+
+		quoT, remT := tc.QuoRem(ta, tb)
+
+		//fmt.Printf("%s / %s\n", ta, tb)
+		//fmt.Printf("%d / %d = [ (%d,%d), (%d,%d) ]\n", a, b, quo, rem, quoT.ToInt64(), remT.ToInt64())
+		fmt.Printf("%3d / %3d = [ (%3d,%3d), (%3d,%3d) ]\n", a, b, quo, rem, quoT.ToInt64(), remT.ToInt64())
+
+		// fmt.Println(quo, quo.ToInt64())
+		// fmt.Println(rem, rem.ToInt64())
 	}
 }
 

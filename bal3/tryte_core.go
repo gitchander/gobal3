@@ -1,10 +1,6 @@
 package bal3
 
-import (
-	"fmt"
-
-	ivl "github.com/gitchander/gobal3/utils/interval"
-)
+// ivl "github.com/gitchander/gobal3/utils/interval"
 
 type TryteCore[T GenericTryte] struct {
 	n int // number of trits
@@ -106,11 +102,7 @@ func (tc TryteCore[T]) IsPositive(x T) bool {
 //------------------------------------------------------------------------------
 
 func (tc TryteCore[T]) SetAllTrits(t Trit) T {
-	var a T
-	for i := 0; i < tc.n; i++ {
-		a = setTrit(a, i, t)
-	}
-	return a
+	return tryteSetAllTrits[T](tc.n, t)
 }
 
 //------------------------------------------------------------------------------
@@ -133,55 +125,23 @@ func (tc TryteCore[T]) ToInt64(a T) int64 {
 //------------------------------------------------------------------------------
 
 func (tc TryteCore[T]) Format(a T) string {
-	var (
-		bs = make([]byte, tc.n)
-		j  = tc.n - 1
-		k  = j
-	)
-	for i := 0; i < tc.n; i++ {
-		t := getTrit(a, i)
-		if t != 0 {
-			k = j
-		}
-		bs[j] = mustTritToChar(t)
-		j--
+	s, err := tryteFormat(tc.n, a)
+	if err != nil {
+		panic(err)
 	}
-	return string(bs[k:])
+	return s
 }
 
 func (tc TryteCore[T]) FormatAllTrits(a T) string {
-	var (
-		bs = make([]byte, tc.n)
-		j  = tc.n - 1
-	)
-	for i := 0; i < tc.n; i++ {
-		t := getTrit(a, i)
-		bs[j] = mustTritToChar(t)
-		j--
+	s, err := tryteFormatAllTrits(tc.n, a)
+	if err != nil {
+		panic(err)
 	}
-	return string(bs)
+	return s
 }
 
 func (tc TryteCore[T]) Parse(s string) (T, error) {
-	var v T
-	var count int
-	bs := []byte(s)
-	for _, b := range bs {
-		if b == '_' {
-			continue
-		}
-		t, err := charToTrit(b)
-		if err != nil {
-			return v, err
-		}
-		v = tc.Shl(v, 1)     // v = v << 1
-		v = setTrit(v, 0, t) // v[0] = t
-		count++
-	}
-	if l := ivl.Ivl(1, tc.n+1); not(l.Contains(count)) {
-		return v, fmt.Errorf("invalid number of trits: have %d, want %v", count, l)
-	}
-	return v, nil
+	return tryteParse[T](tc.n, s)
 }
 
 func (tc TryteCore[T]) MustParse(s string) T {
@@ -204,13 +164,13 @@ func (tc TryteCore[T]) Neg(a T) (b T) {
 // Shl - shift left
 // a << i
 func (tc TryteCore[T]) Shl(a T, i int) T {
-	return tryteShiftLeft(tc.n, a, i)
+	return tryteShl(tc.n, a, i)
 }
 
 // Shr - shift right
 // a >> i
 func (tc TryteCore[T]) Shr(a T, i int) T {
-	return tryteShiftRight(tc.n, a, i)
+	return tryteShr(tc.n, a, i)
 }
 
 //------------------------------------------------------------------------------
@@ -256,64 +216,28 @@ func (tc TryteCore[T]) RandSh(r *Rand) T {
 
 // Len returns the minimum number of trits required to represent x; the result is 0 for x == 0.
 func (tc TryteCore[T]) Len(x T) int {
-	for i := tc.n; i > 0; { // backward iterate
-		i--
-
-		t := getTrit(x, i)
-		if t != 0 {
-			return i
-		}
-	}
-	return 0
+	return tryteLen(tc.n, x)
 }
 
 //------------------------------------------------------------------------------
 
 func (tc TryteCore[T]) DoUnary(a T, f UnaryFunc) T {
-	var b T
-	for i := 0; i < tc.n; i++ {
-		var (
-			ai = getTrit(a, i)
-			bi = f(ai)
-		)
-		b = setTrit(b, i, bi)
-	}
-	return b
+	return tryteDoUnary(tc.n, a, f)
 }
 
 func (tc TryteCore[T]) DoBinary(a, b T, f BinaryFunc) T {
-	var c T
-	for i := 0; i < tc.n; i++ {
-		var (
-			ai = getTrit(a, i)
-			bi = getTrit(b, i)
-			ci = f(ai, bi)
-		)
-		c = setTrit(c, i, ci)
-	}
-	return c
+	return tryteDoBinary(tc.n, a, b, f)
 }
 
 //------------------------------------------------------------------------------
 
-func (tc TryteCore[T]) MinValue() T {
-	return setTritsN[T](tc.n, tv_T)
-}
-
-func (tc TryteCore[T]) MaxValue() T {
-	return setTritsN[T](tc.n, tv_1)
-}
-
 // Bounds
 func (tc TryteCore[T]) Limits() (min, max T) {
-	n := tc.TotalTrits()
-	min = setTritsN[T](n, tv_T)
-	max = setTritsN[T](n, tv_1)
-	return min, max
+	return tryteLimits[T](tc.n)
 }
 
 func (tc TryteCore[T]) LimitsInt64() (min, max int64) {
-	tmin, tmax := tc.Limits()
+	tmin, tmax := tryteLimits[T](tc.n)
 	min = tc.ToInt64(tmin)
 	max = tc.ToInt64(tmax)
 	return min, max

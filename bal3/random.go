@@ -26,5 +26,5 @@ func randTryte[Tryte GenericTryte](n int, r *Rand) Tryte {
 
 func randTryteSh[Tryte GenericTryte](n int, r *Rand) Tryte {
 	a := randTryte[Tryte](n, r)
-	return tryteShiftRight(n, a, r.Intn(n))
+	return tryteShr(n, a, r.Intn(n))
 }

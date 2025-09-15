@@ -37,15 +37,17 @@ var (
 // c0 - carryIn
 // c1 - carryOut
 
-func trytesSub[Tryte GenericTryte](n int, x, y Tryte, c0 Trit) (res Tryte, c1 Trit) {
+// z = x - y
+
+func trytesSub[Tryte GenericTryte](n int, x, y Tryte, c0 Trit) (z Tryte, c1 Trit) {
 	var (
 		carry, t Trit
 	)
 	carry = c0
 	for i := 0; i < n; i++ {
 		carry, t = tritsSub(getTrit(x, i), getTrit(y, i), carry)
-		res = setTrit(res, i, t)
+		z = setTrit(z, i, t)
 	}
 	c1 = carry
-	return res, c1
+	return z, c1
 }

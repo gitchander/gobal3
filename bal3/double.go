@@ -226,23 +226,36 @@ func (dc doubleCore[T]) RandSh(r *Rand) double[T] {
 
 //------------------------------------------------------------------------------
 
-func (dc doubleCore[T]) Add(a, b double[T], carryIn Trit) (c double[T], carryOut Trit) {
+// c0 - carryIn
+// c1 - carryOut
+
+// z = a + b
+
+func (dc doubleCore[T]) Add(a, b double[T], c0 Trit) (z double[T], c1 Trit) {
 	tc := dc.tc
 	var lo, hi T
-	carry := carryIn
+	carry := c0
 	lo, carry = tc.Add(a.Lo, b.Lo, carry)
 	hi, carry = tc.Add(a.Hi, b.Hi, carry)
-	return makeDouble(hi, lo), carry
+	c1 = carry
+	return makeDouble(hi, lo), c1
 }
 
-func (dc doubleCore[T]) Sub(a, b double[T], carryIn Trit) (c double[T], carryOut Trit) {
+//------------------------------------------------------------------------------
+
+// z = a - b
+
+func (dc doubleCore[T]) Sub(a, b double[T], c0 Trit) (z double[T], c1 Trit) {
 	tc := dc.tc
 	var lo, hi T
-	carry := carryIn
+	carry := c0
 	lo, carry = tc.Sub(a.Lo, b.Lo, carry)
 	hi, carry = tc.Sub(a.Hi, b.Hi, carry)
-	return makeDouble(hi, lo), carry
+	c1 = carry
+	return makeDouble(hi, lo), c1
 }
+
+//------------------------------------------------------------------------------
 
 // Bounds
 func (dc doubleCore[T]) Limits() (min, max double[T]) {
@@ -250,13 +263,13 @@ func (dc doubleCore[T]) Limits() (min, max double[T]) {
 	n := dc.tc.TotalTrits()
 
 	min = double[T]{
-		Hi: setTritsN[T](n, tv_T),
-		Lo: setTritsN[T](n, tv_T),
+		Hi: tryteSetAllTrits[T](n, tv_T),
+		Lo: tryteSetAllTrits[T](n, tv_T),
 	}
 
 	max = double[T]{
-		Hi: setTritsN[T](n, tv_1),
-		Lo: setTritsN[T](n, tv_1),
+		Hi: tryteSetAllTrits[T](n, tv_1),
+		Lo: tryteSetAllTrits[T](n, tv_1),
 	}
 
 	return min, max

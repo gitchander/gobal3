@@ -55,8 +55,8 @@ func trytesMul[Tryte GenericTryte](n int, a, b Tryte) (hi, lo Tryte) {
 			w = setTrit(w, j, tritsMul(ai, bj))
 		}
 
-		w_lo = tryteShiftLeft(n, w, i)        // w << i
-		w_hi = tryteShiftRight(n, w, (n - i)) // w >> (n - i)
+		w_lo = tryteShl(n, w, i)       // w << i
+		w_hi = tryteShr(n, w, (n - i)) // w >> (n - i)
 
 		carry = 0
 		lo, carry = trytesAdd(n, lo, w_lo, carry)
@@ -78,7 +78,7 @@ func trytesMulLo[Tryte GenericTryte](n int, a, b Tryte) (lo Tryte) {
 			w = setTrit(w, j, tritsMul(ai, bj))
 		}
 
-		w_lo = tryteShiftLeft(n, w, i) // w << i
+		w_lo = tryteShl(n, w, i) // w << i
 
 		carry = 0
 		lo, carry = trytesAdd(n, lo, w_lo, carry)

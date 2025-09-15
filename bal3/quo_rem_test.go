@@ -153,8 +153,11 @@ func testQuoRemT16(a, b Tryte16) error {
 	)
 
 	var (
-		quoRemT16 = quoRemT16_v1
+		//quoRemT16 = quoRemT16_v1
 		//quoRemT16 = quoRemT16_v2
+
+		tc        = tc16
+		quoRemT16 = tc.QuoRem
 	)
 
 	quo, rem := quoRemT16(a, b)

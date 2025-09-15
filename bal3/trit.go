@@ -4,6 +4,13 @@ import (
 	"fmt"
 )
 
+const (
+	// radix
+	base = 3
+
+	prefix = "0t"
+)
+
 // trit bits:
 const (
 	bitsPerTrit = 2
@@ -15,21 +22,87 @@ const (
 	tbs_1 = 0b_10 // +1
 )
 
+//------------------------------------------------------------------------------
+
+const (
+	tritMin = -1
+	tritMax = +1
+)
+
+// {-1, 0, +1}
+
+const (
+	tv_T = -1
+	tv_0 = 0
+	tv_1 = +1
+)
+
+// const (
+// 	tritNegative = -1
+// 	tritZero     = 0
+// 	tritPositive = +1
+// )
+
+//------------------------------------------------------------------------------
+
+// {T, 0, 1}
+
+const (
+	tc_T = 'T'
+	tc_0 = '0'
+	tc_1 = '1'
+)
+
+// const (
+// 	tc_T = 'N'
+// 	tc_0 = '0'
+// 	tc_1 = '1'
+// )
+
+// const (
+// 	tc_T = 'N'
+// 	tc_0 = 'Z'
+// 	tc_1 = 'P'
+// )
+
+var tritChars = [...]byte{
+	tc_T,
+	tc_0,
+	tc_1,
+}
+
+//------------------------------------------------------------------------------
+
 type Trit int
 
-func tritToChar(t Trit) (c byte, ok bool) {
+var tritsAll = [...]Trit{
+	tv_T,
+	tv_0,
+	tv_1,
+}
+
+func tritToChar(t Trit) (byte, error) {
+	var char byte
 	switch t {
 	case tv_T:
-		c = tc_T
+		char = tc_T
 	case tv_0:
-		c = tc_0
+		char = tc_0
 	case tv_1:
-		c = tc_1
+		char = tc_1
 	default:
-		return 0, false
+		return 0, errInvalidTrit(t)
 	}
-	return c, true
+	return char, nil
 }
+
+// func mustTritToChar(t Trit) byte {
+// 	c, ok := tritToChar(t)
+// 	if !ok {
+// 		panic(errInvalidTrit(t))
+// 	}
+// 	return c
+// }
 
 func charToTrit(char byte) (Trit, error) {
 	var t Trit
@@ -44,14 +117,6 @@ func charToTrit(char byte) (Trit, error) {
 		return 0, fmt.Errorf("invalid trit char %q", char)
 	}
 	return t, nil
-}
-
-func mustTritToChar(t Trit) byte {
-	c, ok := tritToChar(t)
-	if !ok {
-		panic(errInvalidTrit(t))
-	}
-	return c
 }
 
 // Converting bits to trit

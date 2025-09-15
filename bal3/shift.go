@@ -66,14 +66,20 @@ func shiftRightV2[T GenericTryte](n int, a T, i int) T {
 
 // Shl - shift left
 // a << i
-func tryteShiftLeft[Tryte GenericTryte](n int, a Tryte, i int) Tryte {
+
+// Shl, tryteShiftLeft
+
+func tryteShl[Tryte GenericTryte](n int, a Tryte, i int) Tryte {
 	//return shiftLeftV1(n, a, i)
 	return shiftLeftV2(n, a, i)
 }
 
 // Shr - shift right
 // a >> i
-func tryteShiftRight[Tryte GenericTryte](n int, a Tryte, i int) Tryte {
+
+// Shr, tryteShiftRight
+
+func tryteShr[Tryte GenericTryte](n int, a Tryte, i int) Tryte {
 	//return shiftRightV1(n, a, i)
 	return shiftRightV2(n, a, i)
 }

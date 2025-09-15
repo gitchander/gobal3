@@ -1,5 +1,9 @@
 package bal3
 
+import (
+	"fmt"
+)
+
 // https://rosettacode.org/wiki/Balanced_ternary
 
 // Balanced ternary
@@ -124,8 +128,7 @@ func (b *Bt) String() string {
 	return b.Format()
 }
 
-func (b *Bt) Format() string {
-	// todo
+func (b *Bt) tryteFormat() (string, error) {
 
 	n := b.TritLen()
 	if n == 0 {
@@ -142,10 +145,23 @@ func (b *Bt) Format() string {
 		if t != 0 {
 			k = j
 		}
-		bs[j] = mustTritToChar(t)
+		char, err := tritToChar(t)
+		if err != nil {
+			return "", fmt.Errorf("trit[%d] error: %w", i, err)
+		}
+
+		bs[j] = char
 		j--
 	}
-	return string(bs[k:])
+	return string(bs[k:]), nil
+}
+
+func (b *Bt) Format() string {
+	s, err := b.tryteFormat()
+	if err != nil {
+		panic(err)
+	}
+	return s
 }
 
 func (b *Bt) setLen(n int) {
