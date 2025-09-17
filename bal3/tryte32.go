@@ -65,3 +65,7 @@ func (a Tryte32) Shr(i int) Tryte32 {
 func (a Tryte32) IsZero() bool {
 	return tc32.IsZero(a)
 }
+
+func (a Tryte32) ToBigInt() *BigInt {
+	return tc32.ToBigInt(a)
+}

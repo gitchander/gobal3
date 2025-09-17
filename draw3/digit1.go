@@ -1,50 +1,54 @@
 package draw3
 
 import (
-	"image"
-
 	"github.com/fogleman/gg"
+
+	"github.com/gitchander/gobal3/geom"
 )
+
+var Pt2f = geom.Pt2f
 
 var (
 	nodesV1 = []sdNode{
 		{
-			positive: []Point2f{Pt2f(1, 0), Pt2f(0, 1)},
-			negative: []Point2f{Pt2f(1, 4), Pt2f(2, 3)},
+			positive: []geom.Point2f{Pt2f(1, 0), Pt2f(0, 1)},
+			negative: []geom.Point2f{Pt2f(1, 4), Pt2f(2, 3)},
 		},
 		{
-			positive: []Point2f{Pt2f(1, 2), Pt2f(0, 1)},
-			negative: []Point2f{Pt2f(1, 2), Pt2f(2, 3)},
+			positive: []geom.Point2f{Pt2f(1, 2), Pt2f(0, 1)},
+			negative: []geom.Point2f{Pt2f(1, 2), Pt2f(2, 3)},
 		},
 		{
-			positive: []Point2f{Pt2f(1, 2), Pt2f(0, 3)},
-			negative: []Point2f{Pt2f(1, 2), Pt2f(2, 1)},
+			positive: []geom.Point2f{Pt2f(1, 2), Pt2f(0, 3)},
+			negative: []geom.Point2f{Pt2f(1, 2), Pt2f(2, 1)},
 		},
 		{
-			positive: []Point2f{Pt2f(1, 4), Pt2f(0, 3)},
-			negative: []Point2f{Pt2f(1, 0), Pt2f(2, 1)},
+			positive: []geom.Point2f{Pt2f(1, 4), Pt2f(0, 3)},
+			negative: []geom.Point2f{Pt2f(1, 0), Pt2f(2, 1)},
 		},
 	}
 
 	nodesV2 = []sdNode{
 		{
-			positive: []Point2f{Pt2f(1, 0), Pt2f(2, 1)},
-			negative: []Point2f{Pt2f(1, 0), Pt2f(0, 1)},
+			positive: []geom.Point2f{Pt2f(1, 0), Pt2f(2, 1)},
+			negative: []geom.Point2f{Pt2f(1, 0), Pt2f(0, 1)},
 		},
 		{
-			positive: []Point2f{Pt2f(1, 2), Pt2f(2, 1)},
-			negative: []Point2f{Pt2f(1, 2), Pt2f(0, 1)},
+			positive: []geom.Point2f{Pt2f(1, 2), Pt2f(2, 1)},
+			negative: []geom.Point2f{Pt2f(1, 2), Pt2f(0, 1)},
 		},
 		{
-			positive: []Point2f{Pt2f(1, 2), Pt2f(2, 3)},
-			negative: []Point2f{Pt2f(1, 2), Pt2f(0, 3)},
+			positive: []geom.Point2f{Pt2f(1, 2), Pt2f(2, 3)},
+			negative: []geom.Point2f{Pt2f(1, 2), Pt2f(0, 3)},
 		},
 		{
-			positive: []Point2f{Pt2f(1, 4), Pt2f(2, 3)},
-			negative: []Point2f{Pt2f(1, 4), Pt2f(0, 3)},
+			positive: []geom.Point2f{Pt2f(1, 4), Pt2f(2, 3)},
+			negative: []geom.Point2f{Pt2f(1, 4), Pt2f(0, 3)},
 		},
 	}
 )
+
+type Size = geom.Point2f
 
 type TritsDrawer interface {
 	SetDigitSize(digitSize Size)
@@ -53,7 +57,7 @@ type TritsDrawer interface {
 	// n - number of trits
 	Bounds(n int) Size
 
-	Draw(c *gg.Context, p Point2f, digits []int)
+	Draw(c *gg.Context, p geom.Point2f, digits []int)
 }
 
 type TritsDrawer1 struct {
@@ -77,14 +81,14 @@ func (p *TritsDrawer1) Bounds(n int) Size {
 	}
 }
 
-func (p *TritsDrawer1) drawDigit(c *gg.Context, pos Point2f, digit int) {
+func (p *TritsDrawer1) drawDigit(c *gg.Context, pos geom.Point2f, digit int) {
 
 	c.Push()
 	defer c.Pop()
 
 	var (
-		size = image.Pt(2, 4)
-		//size = image.Pt(4, 8)
+		size = geom.MakePoint2i(2, 4)
+		//size = geom.MakePoint2i(4, 8)
 	)
 
 	w := minFloat64(p.digitSize.X/float64(size.X), p.digitSize.Y/float64(size.Y))
@@ -131,14 +135,14 @@ func (p *TritsDrawer1) drawDigit(c *gg.Context, pos Point2f, digit int) {
 	c.Stroke()
 }
 
-func (p *TritsDrawer1) Draw(c *gg.Context, pos Point2f, digits []int) {
+func (p *TritsDrawer1) Draw(c *gg.Context, pos geom.Point2f, digits []int) {
 	for _, digit := range digits {
 		p.drawDigit(c, pos, digit)
 		pos.X += p.digitSize.X
 	}
 }
 
-func drawPolyline(c *gg.Context, ps []Point2f) {
+func drawPolyline(c *gg.Context, ps []geom.Point2f) {
 	n := len(ps)
 	if n > 0 {
 		p := ps[0]

@@ -75,11 +75,13 @@ var tritChars = [...]byte{
 
 type Trit int
 
-var tritsAll = [...]Trit{
+var allTrits = [...]Trit{
 	tv_T,
 	tv_0,
 	tv_1,
 }
+
+//------------------------------------------------------------------------------
 
 func tritToChar(t Trit) (byte, error) {
 	var char byte
@@ -170,7 +172,8 @@ func setTrit[T GenericTryte](x T, i int, t Trit) T {
 
 	x &^= T(tbs_Mask) << offset // reset trit bits
 
-	y := T(tableTritToBits[t+1])
+	index := tritToIndex(t)
+	y := T(tableTritToBits[index])
 
 	x |= y << offset
 

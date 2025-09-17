@@ -1,5 +1,9 @@
 package draw3
 
+import (
+	"github.com/gitchander/gobal3/geom"
+)
+
 func minInt(a, b int) int {
 	if a < b {
 		return a
@@ -16,6 +20,6 @@ func minFloat64(a, b float64) float64 {
 
 // subDigit
 type sdNode struct {
-	positive []Point2f
-	negative []Point2f
+	positive []geom.Point2f
+	negative []geom.Point2f
 }

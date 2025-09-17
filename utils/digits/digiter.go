@@ -3,7 +3,7 @@ package digits
 import (
 	"fmt"
 
-	"github.com/gitchander/gobal3/utils/overflows"
+	"github.com/gitchander/overflow"
 )
 
 type Digiter struct {
@@ -104,16 +104,16 @@ func (d *Digiter) digitsToIntV2(digits []int, rest int) (int, error) {
 			k = -base
 		}
 
-		vb, ok := overflows.MulInt((v + k), base)
+		vb, ok := overflow.Int.Mul((v + k), base)
 		if !ok {
 			fmt.Println("digits:", digits, len(digits))
 			return 0, fmt.Errorf("mul overflow: %d * %d", v, k)
 		}
-		s1, ok := overflows.AddInt(-(k * base), digit)
+		s1, ok := overflow.Int.Add(-(k * base), digit)
 		if !ok {
 			return 0, fmt.Errorf("add overflow: s1")
 		}
-		s2, ok := overflows.AddInt(vb, s1)
+		s2, ok := overflow.Int.Add(vb, s1)
 		if !ok {
 			return 0, fmt.Errorf("add overflow: s2")
 		}

@@ -243,4 +243,8 @@ func (tc TryteCore[T]) LimitsInt64() (min, max int64) {
 	return min, max
 }
 
+func (tc TryteCore[T]) ToBigInt(a T) *BigInt {
+	return tryteToBigInt(tc.n, a, nil)
+}
+
 //------------------------------------------------------------------------------

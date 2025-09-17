@@ -48,13 +48,13 @@ func tryteParse[Tryte GenericTryte](n int, s string) (Tryte, error) {
 	var v Tryte
 	var count int
 	bs := []byte(s)
-	for _, b := range bs {
+	for i, b := range bs {
 		if b == '_' {
 			continue
 		}
 		t, err := charToTrit(b)
 		if err != nil {
-			return v, err
+			return v, fmt.Errorf("char[%d] error: %w", i, err)
 		}
 		v = tryteShl(n, v, 1) // v = v << 1
 		v = setTrit(v, 0, t)  // v[0] = t

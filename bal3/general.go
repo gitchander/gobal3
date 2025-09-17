@@ -25,6 +25,8 @@ type tryteGeneral[T GenericTryte] interface {
 	Equal(T) bool
 	Less(T) bool
 	IsZero() bool
+
+	ToBigInt() *BigInt
 }
 
 func (Tryte4) isTryte()  {}

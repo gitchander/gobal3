@@ -68,3 +68,7 @@ func (a Tryte27) Shr(i int) Tryte27 {
 func (a Tryte27) IsZero() bool {
 	return tc27.IsZero(a)
 }
+
+func (a Tryte27) ToBigInt() *BigInt {
+	return tc27.ToBigInt(a)
+}

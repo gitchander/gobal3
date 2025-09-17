@@ -66,7 +66,7 @@ func TestAddTryte4(t *testing.T) {
 		a, _ := tc.Int64ToTrite(av)
 		for bv := min; bv <= max; bv++ {
 			b, _ := tc.Int64ToTrite(bv)
-			for _, carryIn := range tritsAll {
+			for _, carryIn := range allTrits {
 				err := testTritsAddSub(tc, a, b, carryIn)
 				if err != nil {
 					t.Fatal(err)

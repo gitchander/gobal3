@@ -7,25 +7,25 @@ import (
 // https://rosettacode.org/wiki/Balanced_ternary
 
 // Balanced ternary
-type Bt struct {
+type BigTryte struct {
 	words []word
 }
 
-func NewBt() *Bt {
-	return &Bt{}
+func NewBigTryte() *BigTryte {
+	return &BigTryte{}
 }
 
-func (b *Bt) setTrit(i int, t Trit) {
+func (b *BigTryte) setTrit(i int, t Trit) {
 	wordIndex, tritIndex := quoRem(i, tritsPerWord)
 	b.words[wordIndex] = setTrit(b.words[wordIndex], tritIndex, t)
 }
 
-func (b *Bt) getTrit(i int) Trit {
+func (b *BigTryte) getTrit(i int) Trit {
 	wordIndex, tritIndex := quoRem(i, tritsPerWord)
 	return getTrit(b.words[wordIndex], tritIndex)
 }
 
-func (b *Bt) backward(f func(i int, t Trit) bool) {
+func (b *BigTryte) backward(f TritIterateFunc) {
 
 	ws := b.words
 
@@ -52,7 +52,7 @@ func (b *Bt) backward(f func(i int, t Trit) bool) {
 }
 
 // TritLen returns the length of the absolute value of b in trits. The trit length of 0 is 0.
-func (b *Bt) TritLen() int {
+func (b *BigTryte) TritLen() int {
 
 	ws := b.words
 
@@ -75,7 +75,7 @@ func (b *Bt) TritLen() int {
 
 //------------------------------------------------------------------------------
 
-func (b *Bt) Sign() int {
+func (b *BigTryte) Sign() int {
 	var v int
 	b.backward(func(i int, t Trit) bool {
 		switch {
@@ -92,23 +92,23 @@ func (b *Bt) Sign() int {
 }
 
 // x < 0
-func (b *Bt) IsNegative() bool {
+func (b *BigTryte) IsNegative() bool {
 	return b.Sign() == -1
 }
 
 // x == 0
-func (b *Bt) IsZero() bool {
+func (b *BigTryte) IsZero() bool {
 	return b.Sign() == 0
 }
 
 // x > 0
-func (b *Bt) IsPositive() bool {
+func (b *BigTryte) IsPositive() bool {
 	return b.Sign() == +1
 }
 
 //------------------------------------------------------------------------------
 
-func (p *Bt) Neg() *Bt {
+func (p *BigTryte) Neg() *BigTryte {
 	ws := p.words
 	for i, w := range ws {
 		var v word
@@ -124,11 +124,11 @@ func (p *Bt) Neg() *Bt {
 
 //------------------------------------------------------------------------------
 
-func (b *Bt) String() string {
+func (b *BigTryte) String() string {
 	return b.Format()
 }
 
-func (b *Bt) tryteFormat() (string, error) {
+func (b *BigTryte) tryteFormat() (string, error) {
 
 	n := b.TritLen()
 	if n == 0 {
@@ -156,7 +156,7 @@ func (b *Bt) tryteFormat() (string, error) {
 	return string(bs[k:]), nil
 }
 
-func (b *Bt) Format() string {
+func (b *BigTryte) Format() string {
 	s, err := b.tryteFormat()
 	if err != nil {
 		panic(err)
@@ -164,7 +164,7 @@ func (b *Bt) Format() string {
 	return s
 }
 
-func (b *Bt) setLen(n int) {
+func (b *BigTryte) setLen(n int) {
 	wn := ceilDiv(n, tritsPerWord)
 	if cap(b.words) < wn {
 		b.words = make([]word, wn)
@@ -172,7 +172,7 @@ func (b *Bt) setLen(n int) {
 	b.words = b.words[:wn]
 }
 
-func ParseBt(s string) (*Bt, error) {
+func ParseBigTryte(s string) (*BigTryte, error) {
 	var (
 		chars = []byte(s)
 		ts    = make([]Trit, 0, len(chars))
@@ -190,11 +190,15 @@ func ParseBt(s string) (*Bt, error) {
 
 	reverseSlice(ts)
 
-	b := new(Bt)
+	b := new(BigTryte)
 	b.setLen(len(ts))
 	for i, t := range ts {
 		b.setTrit(i, t)
 	}
 
 	return b, nil
+}
+
+func (b *BigTryte) ToBigInt() *BigInt {
+	return bigTryteToBigInt(b, nil)
 }

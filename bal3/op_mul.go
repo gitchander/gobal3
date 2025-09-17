@@ -67,9 +67,8 @@ func trytesMul[Tryte GenericTryte](n int, a, b Tryte) (hi, lo Tryte) {
 
 func trytesMulLo[Tryte GenericTryte](n int, a, b Tryte) (lo Tryte) {
 	var (
-		w     Tryte
-		w_lo  Tryte
-		carry Trit
+		w    Tryte
+		w_lo Tryte
 	)
 	for i := 0; i < n; i++ {
 		ai := getTrit(a, i)
@@ -80,8 +79,7 @@ func trytesMulLo[Tryte GenericTryte](n int, a, b Tryte) (lo Tryte) {
 
 		w_lo = tryteShl(n, w, i) // w << i
 
-		carry = 0
-		lo, carry = trytesAdd(n, lo, w_lo, carry)
+		lo, _ = trytesAdd(n, lo, w_lo, 0)
 	}
 	return lo
 }

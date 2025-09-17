@@ -13,7 +13,7 @@ func newRandNext() *rand.Rand {
 }
 
 func randTrit(r *random.Rand) Trit {
-	return random.RandByCorpus(r, tritsAll[:])
+	return random.RandByCorpus(r, allTrits[:])
 }
 
 func randTryte[Tryte GenericTryte](n int, r *Rand) Tryte {

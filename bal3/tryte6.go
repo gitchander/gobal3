@@ -65,3 +65,7 @@ func (a Tryte6) Shr(i int) Tryte6 {
 func (a Tryte6) IsZero() bool {
 	return tc6.IsZero(a)
 }
+
+func (a Tryte6) ToBigInt() *BigInt {
+	return tc6.ToBigInt(a)
+}

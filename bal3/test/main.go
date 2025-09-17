@@ -20,9 +20,9 @@ func main() {
 	//testFormatBase27()
 	//testParseBase27()
 	//testLimits()
-	testQuoRemSimple()
+	//testQuoRemSimple()
 	//testQuoRemT32Random()
-	//testBig()
+	testBig()
 }
 
 func checkError(err error) {
@@ -417,13 +417,16 @@ func bitsOpAdd3(a, b, c int) (hi, lo int) {
 func testBig() {
 	var (
 		//s = "0"
-		s = "000T101T01TTT10T10001T01010101010101010101010TTTTTTT00000TTTT"
+		//s = "111111"
+		s = "001T111TT1TT1T101T01TTT10T10001T01010101010101010101010TTTTTTT00000TTTT000TTTTTT0T00T"
 	)
-	b, err := bal3.ParseBt(s)
+	b, err := bal3.ParseBigTryte(s)
 	checkError(err)
 	fmt.Println(b)
 	b.Neg()
 	fmt.Println(b)
+
+	fmt.Println(b.ToBigInt())
 
 	fmt.Println(b.IsNegative())
 	fmt.Println(b.IsZero())

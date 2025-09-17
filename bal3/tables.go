@@ -32,11 +32,9 @@ func mustParseTable(sss ...string) [][]Trit {
 }
 
 func tritByTable(table [][]Trit, a, b Trit) Trit {
-
-	// trit to index: (trit + 1)
-	// (-1 + 1) = 0
-	// ( 0 + 1) = 1
-	// (+1 + 1) = 2
-
-	return table[a+1][b+1]
+	var (
+		ai = tritToIndex(a)
+		bi = tritToIndex(b)
+	)
+	return table[ai][bi]
 }

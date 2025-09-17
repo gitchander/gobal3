@@ -162,7 +162,7 @@ func TestDoubleAddSubT8Samples(t *testing.T) {
 	}
 	var err error
 	for _, sample := range samples {
-		for _, carryIn := range tritsAll {
+		for _, carryIn := range allTrits {
 			err = testDoubleAddSub(dc, sample.a, sample.b, carryIn)
 			if err != nil {
 				t.Fatal(err)

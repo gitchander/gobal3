@@ -78,3 +78,5 @@ func tryteToInt64[T GenericTryte](tc TryteCore[T], a T, rest int64) (int64, bool
 	return tryteToInt64V1(tc, a, rest)
 	//return tryteToIntV2(tc, a, rest)
 }
+
+//------------------------------------------------------------------------------
