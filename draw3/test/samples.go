@@ -102,7 +102,7 @@ func exampleDrawSamples() error {
 		dirName    = "images"
 		filePrefix = "digits"
 
-		//digits = []int{+1}
+		//digits = []int{0}
 		//digits = []int{-1, 0, 1, -1, 0, 1}
 		digits = randDigits(random.NewRandNext(), 9)
 
@@ -148,6 +148,13 @@ func exampleDrawSamples() error {
 			fileName:  filePrefix + "_d5.png",
 			digitSize: digitSize,
 			factorX:   opt.MakePresentFloat64(0.5),
+		},
+		{
+			digits:    digits,
+			dd:        draw3.DigitDrawer6{},
+			dirName:   dirName,
+			fileName:  filePrefix + "_d6.png",
+			digitSize: digitSize,
 		},
 	}
 	for _, sample := range samples {

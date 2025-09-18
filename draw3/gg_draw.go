@@ -12,7 +12,8 @@ type DigitDrawer interface {
 	DrawDigit(c *gg.Context, b geom.Bounds, digit int)
 }
 
-func DrawDigits(c *gg.Context, dd DigitDrawer, digitSize geom.Point2f, digits []int) {
+func DrawDigits(c *gg.Context, dd DigitDrawer,
+	digitSize geom.Point2f, digits []int) {
 
 	const (
 		factorX = 1
@@ -38,7 +39,8 @@ func DrawDigits(c *gg.Context, dd DigitDrawer, digitSize geom.Point2f, digits []
 	}
 }
 
-func DrawDigitsWithFactor(c *gg.Context, dd DigitDrawer, digitSize geom.Point2f, factorX float64, digits []int) {
+func DrawDigitsWithFactor(c *gg.Context, dd DigitDrawer,
+	digitSize geom.Point2f, factorX float64, digits []int) {
 	const (
 		factorY = 1
 	)

@@ -30,25 +30,25 @@ func (DigitDrawer5) DrawDigit(c *gg.Context, b geom.Bounds, digit int) {
 	c.QuadraticTo(60, 20, 60, 60)
 	c.LineTo(60, 170)
 
-	d := digit
-
 	// Horizontal line
 	{
-		c.MoveTo(30, 100)
-		c.LineTo(60+20, 100)
+		c.MoveTo(30, 105)
+		c.LineTo(60+20, 105)
 	}
 
 	c.Stroke()
 
+	d := digit
+
 	// Negative
 	if d == -1 {
-		c.DrawCircle(38, 130, 8)
+		c.DrawCircle(38, 105+30, 8)
 		c.Fill()
 	}
 
 	// Positive
 	if d == +1 {
-		c.DrawCircle(38, 70, 8)
+		c.DrawCircle(38, 105-30, 8)
 		c.Fill()
 	}
 }
