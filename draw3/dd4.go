@@ -6,11 +6,11 @@ import (
 	"github.com/gitchander/gobal3/geom"
 )
 
-type DigitDrawer3 struct{}
+type DigitDrawer4 struct{}
 
-var _ DigitDrawer = DigitDrawer3{}
+var _ DigitDrawer = DigitDrawer4{}
 
-func (DigitDrawer3) DrawDigit(c *gg.Context, b geom.Bounds, digit int) {
+func (DigitDrawer4) DrawDigit(c *gg.Context, b geom.Bounds, digit int) {
 
 	b = geom.BoundsAspect(b, AspectRatio)
 	v := b.Vmin()
@@ -26,23 +26,23 @@ func (DigitDrawer3) DrawDigit(c *gg.Context, b geom.Bounds, digit int) {
 	c.SetLineCap(gg.LineCapRound)
 	c.SetRGB(0, 0, 0)
 
-	c.MoveTo(10, 40)
-	c.QuadraticTo(50, 10, 50, 50)
-	c.LineTo(50, 180)
+	c.MoveTo(10, 50)
+	c.QuadraticTo(60, 20, 60, 60)
+	c.LineTo(60, 170)
 
 	d := digit
 
 	// Negative or Positive
 	if (d == -1) || (d == +1) {
-		c.MoveTo(30, 100)
-		c.LineTo(70, 100)
+		c.MoveTo(60-14, 112)
+		c.LineTo(60+14, 100)
 	}
 
 	c.Stroke()
 
 	// Negative
 	if d == -1 {
-		c.DrawCircle(28, 54, 8)
+		c.DrawCircle(38, 59, 8)
 		c.Fill()
 	}
 }

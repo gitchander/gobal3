@@ -13,16 +13,48 @@ type DigitDrawer interface {
 }
 
 func DrawDigits(c *gg.Context, dd DigitDrawer, digitSize geom.Point2f, digits []int) {
+
+	const (
+		factorX = 1
+		factorY = 1
+	)
+
 	var (
+		dX = digitSize.X
+		dY = digitSize.Y
+
 		y = 0
 
-		y0 = float64(y+0) * digitSize.Y
-		y1 = float64(y+1) * digitSize.Y
+		y0 = dY * (float64(y)*factorY + 0)
+		y1 = dY * (float64(y)*factorY + 1)
 	)
 	for x, digit := range digits {
 		var (
-			x0 = float64(x+0) * digitSize.X
-			x1 = float64(x+1) * digitSize.X
+			x0 = dX * (float64(x)*factorX + 0)
+			x1 = dX * (float64(x)*factorX + 1)
+		)
+		b := geom.MakeBounds(x0, y0, x1, y1)
+		dd.DrawDigit(c, b, digit)
+	}
+}
+
+func DrawDigitsWithFactor(c *gg.Context, dd DigitDrawer, digitSize geom.Point2f, factorX float64, digits []int) {
+	const (
+		factorY = 1
+	)
+	var (
+		dX = digitSize.X
+		dY = digitSize.Y
+
+		y = 0
+
+		y0 = dY * (float64(y)*factorY + 0)
+		y1 = dY * (float64(y)*factorY + 1)
+	)
+	for x, digit := range digits {
+		var (
+			x0 = dX * (float64(x)*factorX + 0)
+			x1 = dX * (float64(x)*factorX + 1)
 		)
 		b := geom.MakeBounds(x0, y0, x1, y1)
 		dd.DrawDigit(c, b, digit)

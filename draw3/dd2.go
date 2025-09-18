@@ -8,6 +8,8 @@ import (
 
 type DigitDrawer2 struct{}
 
+var _ DigitDrawer = DigitDrawer2{}
+
 func (DigitDrawer2) DrawDigit(c *gg.Context, b geom.Bounds, digit int) {
 
 	b = geom.BoundsAspect(b, AspectRatio)
