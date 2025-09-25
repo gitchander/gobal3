@@ -24,25 +24,29 @@ func (DigitDrawer3) DrawDigit(c *gg.Context, b geom.Bounds, digit int) {
 	lw := 10.0
 	c.SetLineWidth(lw * v)
 	c.SetLineCap(gg.LineCapRound)
-	c.SetRGB(0, 0, 0)
 
-	c.MoveTo(10, 40)
-	c.QuadraticTo(50, 10, 50, 50)
-	c.LineTo(50, 180)
+	x0 := 65.0
+
+	c.MoveTo(x0-50, 60)
+	c.QuadraticTo(x0, 20, x0, 70)
+	c.LineTo(x0, 160)
 
 	d := digit
 
 	// Negative or Positive
 	if (d == -1) || (d == +1) {
-		c.MoveTo(30, 100)
-		c.LineTo(70, 100)
+		const (
+			dx = 15.0
+		)
+		c.MoveTo(x0-dx, 110)
+		c.LineTo(x0+dx, 100)
 	}
 
 	c.Stroke()
 
 	// Negative
 	if d == -1 {
-		c.DrawCircle(28, 54, 8)
+		c.DrawCircle(x0-23, 68, 8)
 		c.Fill()
 	}
 }

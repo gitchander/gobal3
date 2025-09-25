@@ -6,11 +6,11 @@ import (
 	"github.com/gitchander/gobal3/geom"
 )
 
-type DigitDrawer6 struct{}
+type DigitDrawer7 struct{}
 
-var _ DigitDrawer = DigitDrawer6{}
+var _ DigitDrawer = DigitDrawer7{}
 
-func (DigitDrawer6) DrawDigit(c *gg.Context, b geom.Bounds, digit int) {
+func (DigitDrawer7) DrawDigit(c *gg.Context, b geom.Bounds, digit int) {
 
 	b = geom.BoundsAspect(b, AspectRatio)
 	v := b.Vmin()
@@ -25,20 +25,26 @@ func (DigitDrawer6) DrawDigit(c *gg.Context, b geom.Bounds, digit int) {
 	c.SetLineWidth(lw * v)
 	c.SetLineCap(gg.LineCapRound)
 
-	var dx, dy float64
-	dx, dy = 20, 20
+	const (
+		dx = 16
+		dy = 16
+	)
+
+	var (
+		dx1 = dx * 3.5
+		dy1 = dy * 3.5
+	)
 
 	var (
 		drawT = func(x, y float64) {
 			c.MoveTo(x, y)
-			c.LineTo(x+dx, y+dy)
-			c.CubicTo(x-dx, y-dy, x-3*dx, y+dy, x-dx, y+3*dy)
-			c.LineTo(x, y+4*dy)
+			c.LineTo(x+2*dx, y+2*dy)
+			c.CubicTo((x+2*dx)-dx1, (y+2*dy)-dy1, x-dx1, (y+4*dy)-dy1, x, y+4*dy)
 		}
 
 		draw1 = func(x, y float64) {
 			c.MoveTo(x, y)
-			c.CubicTo(x+2*dx, y+2*dy, x, y+4*dy, x-2*dx, y+2*dy)
+			c.CubicTo(x+dx1, y+dy1, (x-2*dx)+dx1, (y+2*dy)+dy1, x-2*dx, y+2*dy)
 			c.LineTo(x, y+4*dy)
 		}
 
@@ -51,11 +57,23 @@ func (DigitDrawer6) DrawDigit(c *gg.Context, b geom.Bounds, digit int) {
 	digits := []int{digit}
 
 	var (
-		x0 = 50.0 + 0.5*dx
-		y0 = 100.0 - 1.5*dy
+		x0 = 50.0
+		y0 = 100.0 - 2*dy
 	)
-	c.MoveTo(x0-2*dx, y0-2*dy)
-	c.LineTo(x0, y0)
+
+	var (
+		drawTail = true
+
+		// tx = 1.5 * dx
+		// ty = 1.5 * dy
+
+		tx = 2.0 * dx
+		ty = 2.0 * dy
+	)
+	if drawTail {
+		c.MoveTo(x0-tx, y0-ty)
+		c.LineTo(x0, y0)
+	}
 	for _, digit := range digits {
 		switch digit {
 		case -1:
@@ -67,7 +85,10 @@ func (DigitDrawer6) DrawDigit(c *gg.Context, b geom.Bounds, digit int) {
 		}
 		y0 += 4 * dy
 	}
-	c.LineTo(x0+1*dx, y0+1*dy)
+	if drawTail {
+		c.MoveTo(x0, y0)
+		c.LineTo(x0+tx, y0+ty)
+	}
 
 	c.Stroke()
 }

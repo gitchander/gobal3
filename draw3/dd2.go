@@ -24,7 +24,6 @@ func (DigitDrawer2) DrawDigit(c *gg.Context, b geom.Bounds, digit int) {
 	lw := 10.0
 	c.SetLineWidth(lw * v)
 	c.SetLineCap(gg.LineCapRound)
-	c.SetRGB(0, 0, 0)
 
 	c.MoveTo(10, 60)
 	c.LineTo(50, 20)

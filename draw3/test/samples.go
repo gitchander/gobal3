@@ -53,7 +53,10 @@ func makeSample(ds Sample) error {
 	c := gg.NewContext(contextSize.X, contextSize.Y)
 
 	c.SetColor(color.White)
+	c.Fill()
 	c.Clear()
+
+	c.SetColor(color.Black)
 
 	if ds.factorX.Present {
 		draw3.DrawDigitsWithFactor(c, ds.dd, ds.digitSize, ds.factorX.Value, ds.digits)
@@ -102,12 +105,13 @@ func exampleDrawSamples() error {
 		dirName    = "images"
 		filePrefix = "digits"
 
-		//digits = []int{0}
-		//digits = []int{-1, 0, 1, -1, 0, 1}
+		//digits = []int{-1}
+		//digits = []int{-1, 0, 1, -1, -1, 0, 1}
 		digits = randDigits(random.NewRandNext(), 9)
 
 		//digitSize = geom.Point2f{X: 16, Y: 32}
 		//digitSize = geom.Point2f{X: 20, Y: 40}
+		//digitSize = geom.Point2f{X: 30, Y: 60}
 		digitSize = geom.Point2f{X: 50, Y: 100}
 	)
 
@@ -154,6 +158,13 @@ func exampleDrawSamples() error {
 			dd:        draw3.DigitDrawer6{},
 			dirName:   dirName,
 			fileName:  filePrefix + "_d6.png",
+			digitSize: digitSize,
+		},
+		{
+			digits:    digits,
+			dd:        draw3.DigitDrawer7{},
+			dirName:   dirName,
+			fileName:  filePrefix + "_d7.png",
 			digitSize: digitSize,
 		},
 	}
