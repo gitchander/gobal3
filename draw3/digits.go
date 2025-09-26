@@ -2,6 +2,7 @@ package draw3
 
 import (
 	"github.com/gitchander/gobal3/utils/digits"
+	"github.com/gitchander/gobal3/utils/random"
 )
 
 func calcSubDigits(v int) []int {
@@ -16,4 +17,16 @@ func calcSubDigits(v int) []int {
 		ds[i] = d
 	}
 	return ds
+}
+
+func RandTrit(r *random.Rand) int {
+	return r.Intn(3) - 1 // [-1, 0, +1]
+}
+
+func RandDigits(r *random.Rand, n int) []int {
+	digits := make([]int, n)
+	for i := range digits {
+		digits[i] = RandTrit(r)
+	}
+	return digits
 }

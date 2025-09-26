@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"image/color"
 	"strconv"
+
+	"github.com/gitchander/gobal3/utils/gocolor"
 )
 
 func formatInt(a int) string {
@@ -27,7 +29,7 @@ func parseColorByParam(s string, defaultColor color.Color) (color.Color, error) 
 	if s == "" {
 		return defaultColor, nil
 	}
-	return ParseColor(s)
+	return gocolor.ParseColor(s)
 }
 
 //------------------------------------------------------------------------------

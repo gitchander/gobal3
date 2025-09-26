@@ -1,13 +1,8 @@
-package main
+package gocolor
 
 import (
 	"fmt"
 	"image/color"
-)
-
-var (
-	DefaultColorBG = color.Transparent
-	DefaultColorFG = color.Black
 )
 
 func ParseColor(s string) (color.Color, error) {

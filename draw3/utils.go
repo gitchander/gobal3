@@ -23,3 +23,14 @@ type sdNode struct {
 	positive []geom.Point2f
 	negative []geom.Point2f
 }
+
+func matrixSize[T any](aa [][]T) geom.Point2i {
+	var (
+		x = 0
+		y = len(aa)
+	)
+	for _, a := range aa {
+		x = max(x, len(a))
+	}
+	return geom.MakePoint2i(x, y)
+}

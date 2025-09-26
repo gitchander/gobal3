@@ -13,70 +13,45 @@ type DigitDrawer interface {
 }
 
 func DrawDigits(c *gg.Context, dd DigitDrawer,
-	digitSize geom.Point2f, digits []int) {
+	digitSize, stride geom.Point2f, digits []int) {
 
-	const (
-		factorX = 1
-		factorY = 1
-	)
-
+	y := 0
 	var (
-		dX = digitSize.X
-		dY = digitSize.Y
-
-		y = 0
-
-		y0 = dY * (float64(y)*factorY + 0)
-		y1 = dY * (float64(y)*factorY + 1)
+		y0 = float64(y) * stride.Y
+		y1 = y0 + digitSize.Y
 	)
 	for x, digit := range digits {
 		var (
-			x0 = dX * (float64(x)*factorX + 0)
-			x1 = dX * (float64(x)*factorX + 1)
+			x0 = float64(x) * stride.X
+			x1 = x0 + digitSize.X
 		)
 		b := geom.MakeBounds(x0, y0, x1, y1)
 		dd.DrawDigit(c, b, digit)
 	}
 }
 
-func DrawDigitsWithFactor(c *gg.Context, dd DigitDrawer,
-	digitSize geom.Point2f, factorX float64, digits []int) {
-	const (
-		factorY = 1
-	)
-	var (
-		dX = digitSize.X
-		dY = digitSize.Y
+//------------------------------------------------------------------------------
 
-		y = 0
+func DrawDigits2D(c *gg.Context, dd DigitDrawer,
+	digitSize, stride geom.Point2f, d2d *Digits2D) {
 
-		y0 = dY * (float64(y)*factorY + 0)
-		y1 = dY * (float64(y)*factorY + 1)
-	)
-	for x, digit := range digits {
-		var (
-			x0 = dX * (float64(x)*factorX + 0)
-			x1 = dX * (float64(x)*factorX + 1)
-		)
-		b := geom.MakeBounds(x0, y0, x1, y1)
-		dd.DrawDigit(c, b, digit)
-	}
-}
-
-func DrawMatrix(c *gg.Context, matrixSize geom.Point2i,
-	dd DigitDrawer, digitSize geom.Point2f, digits []int) {
+	matrixSize := d2d.Size()
 
 	for y := 0; y < matrixSize.Y; y++ {
 		var (
-			y0 = float64(y+0) * digitSize.Y
-			y1 = float64(y+1) * digitSize.Y
+			y0 = float64(y) * stride.Y
+			y1 = y0 + digitSize.Y
 		)
 		for x := 0; x < matrixSize.X; x++ {
 			var (
-				x0 = float64(x+0) * digitSize.X
-				x1 = float64(x+1) * digitSize.X
+				x0 = float64(x) * stride.X
+				x1 = x0 + digitSize.X
 			)
+
 			b := geom.MakeBounds(x0, y0, x1, y1)
+
+			digit, _ := d2d.GetValueXY(x, y)
+
 			if true {
 				if ((x + y) % 2) == 0 {
 					c.SetRGB(0.7, 0.9, 1.0)
@@ -86,16 +61,16 @@ func DrawMatrix(c *gg.Context, matrixSize geom.Point2i,
 				drawBounds(c, b)
 				c.Fill()
 			}
-			if len(digits) > 0 {
-				digit := digits[0]
-				digits = digits[1:]
 
+			// draw text
+			if true {
 				c.SetRGB(0, 0, 0)
 				c.DrawString(fmt.Sprintf("%d", digit), b.Min.X, b.Min.Y+c.FontHeight())
-
-				c.SetRGB(0, 0, 0)
-				dd.DrawDigit(c, b, digit)
 			}
+
+			c.SetRGB(0, 0, 0)
+			dd.DrawDigit(c, b, digit)
+
 		}
 	}
 }
