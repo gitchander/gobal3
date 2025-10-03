@@ -10,9 +10,9 @@ var (
 	bigBase = big.NewInt(3)
 
 	bigAllTrits = [3]*big.Int{
-		big.NewInt(tv_T),
-		big.NewInt(tv_0),
-		big.NewInt(tv_1),
+		big.NewInt(-1),
+		big.NewInt(0),
+		big.NewInt(+1),
 	}
 )
 

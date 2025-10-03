@@ -11,7 +11,7 @@ func tryteLen[T GenericTryte](n int, x T) int {
 
 		t := getTrit(x, i)
 		if t != 0 {
-			return i
+			return i + 1
 		}
 	}
 	return 0
@@ -81,8 +81,8 @@ func tryteSetAllTrits[Tryte GenericTryte](n int, t Trit) Tryte {
 //------------------------------------------------------------------------------
 
 func tryteLimits[T GenericTryte](n int) (min, max T) {
-	min = tryteSetAllTrits[T](n, tv_T)
-	max = tryteSetAllTrits[T](n, tv_1)
+	min = tryteSetAllTrits[T](n, -1)
+	max = tryteSetAllTrits[T](n, +1)
 	return min, max
 }
 

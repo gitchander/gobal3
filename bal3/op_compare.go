@@ -36,3 +36,5 @@ func trytesCompare[Tryte GenericTryte](n int, a, b Tryte) int {
 	}
 	return 0
 }
+
+//------------------------------------------------------------------------------

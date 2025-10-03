@@ -4,124 +4,105 @@ import (
 	"fmt"
 )
 
-const (
-	// radix
-	base = 3
-
-	prefix = "0t"
-)
-
-// trit bits:
-const (
-	bitsPerTrit = 2
-
-	tbs_Mask = 0b_11
-
-	tbs_T = 0b_01 // -1
-	tbs_0 = 0b_00 //  0
-	tbs_1 = 0b_10 // +1
-)
-
-//------------------------------------------------------------------------------
-
-const (
-	tritMin = -1
-	tritMax = +1
-)
-
-// {-1, 0, +1}
-
-const (
-	tv_T = -1
-	tv_0 = 0
-	tv_1 = +1
-)
-
-// const (
-// 	tritNegative = -1
-// 	tritZero     = 0
-// 	tritPositive = +1
-// )
-
-//------------------------------------------------------------------------------
-
-// {T, 0, 1}
-
-const (
-	tc_T = 'T'
-	tc_0 = '0'
-	tc_1 = '1'
-)
-
-// const (
-// 	tc_T = 'N'
-// 	tc_0 = '0'
-// 	tc_1 = '1'
-// )
-
-// const (
-// 	tc_T = 'N'
-// 	tc_0 = 'Z'
-// 	tc_1 = 'P'
-// )
-
-var tritChars = [...]byte{
-	tc_T,
-	tc_0,
-	tc_1,
-}
+// https://en.wikipedia.org/wiki/Balanced_ternary
 
 //------------------------------------------------------------------------------
 
 type Trit int
 
-var allTrits = [...]Trit{
-	tv_T,
-	tv_0,
-	tv_1,
+var allTrits = [...]Trit{-1, 0, +1}
+
+//------------------------------------------------------------------------------
+
+var mapTritToChar = map[Trit]byte{
+	-1: 'T',
+	0:  '0',
+	+1: '1',
+}
+
+var mapCharToTrit = map[byte]Trit{
+
+	// Representations of -1:
+	'T': -1,
+	'N': -1,
+	'-': -1,
+
+	// 'Θ' - Greek letter theta
+	// 'Θ': -1,
+
+	// Representations of 0:
+	'0': 0,
+	'Z': 0,
+	'|': 0,
+
+	// Representations of +1:
+	'1': 1,
+	'P': 1,
+	'+': 1,
+}
+
+func tritToChar(t Trit) (byte, error) {
+	char, ok := mapTritToChar[t]
+	if ok {
+		return char, nil
+	}
+	return 0, fmt.Errorf("invalid trit value %d", t)
+}
+
+func charToTrit(char byte) (Trit, error) {
+	t, ok := mapCharToTrit[char]
+	if ok {
+		return t, nil
+	}
+	return 0, fmt.Errorf("invalid trit char %q", char)
 }
 
 //------------------------------------------------------------------------------
 
-func tritToChar(t Trit) (byte, error) {
-	var char byte
-	switch t {
-	case tv_T:
-		char = tc_T
-	case tv_0:
-		char = tc_0
-	case tv_1:
-		char = tc_1
-	default:
-		return 0, errInvalidTrit(t)
-	}
-	return char, nil
-}
+// var (
+// 	tritChars1 = [...]byte{'T', '0', '1'}
+// 	tritChars2 = [...]byte{'N', '0', '1'}
+// 	tritChars3 = [...]byte{'N', 'Z', 'P'}
+// 	tritChars4 = [...]byte{'-', '0', '+'}
+// 	tritChars5 = [...]byte{'-', '|', '+'}
 
-// func mustTritToChar(t Trit) byte {
-// 	c, ok := tritToChar(t)
-// 	if !ok {
-// 		panic(errInvalidTrit(t))
+// 	tritChars = tritChars1
+// )
+
+// func tritToChar(t Trit) (char byte, err error) {
+// 	switch t {
+// 	case -1:
+// 		char = tritChars[0]
+// 	case 0:
+// 		char = tritChars[1]
+// 	case +1:
+// 		char = tritChars[2]
+// 	default:
+// 		return 0, fmt.Errorf("invalid trit value %d", t)
 // 	}
-// 	return c
+// 	return char, nil
 // }
 
-func charToTrit(char byte) (Trit, error) {
-	var t Trit
-	switch char {
-	case tc_T:
-		t = tv_T
-	case tc_0:
-		t = tv_0
-	case tc_1:
-		t = tv_1
-	default:
-		return 0, fmt.Errorf("invalid trit char %q", char)
-	}
-	return t, nil
-}
+// func charToTrit(char byte) (Trit, error) {
+// 	var t Trit
+// 	switch char {
+// 	case tritChars[0]:
+// 		t = -1
+// 	case tritChars[1]:
+// 		t = 0
+// 	case tritChars[2]:
+// 		t = +1
+// 	default:
+// 		return 0, fmt.Errorf("invalid trit char %q", char)
+// 	}
+// 	return t, nil
+// }
+
+//------------------------------------------------------------------------------
 
 // Converting bits to trit
+
+// trit bits:
 
 // +-------+------+
 // | bits: |      |
@@ -140,9 +121,11 @@ func charToTrit(char byte) (Trit, error) {
 // | trits |   3   |   2   |   1   |   0   |
 // +-------+-------+-------+-------+-------+
 
-func errInvalidTrit(t Trit) error {
-	return fmt.Errorf("invalid trit value %d", t)
-}
+const (
+	bitsPerTrit = 2
+
+	tbs_Mask = 0b_11
+)
 
 var tableBitsToTrit = [...]Trit{
 	0: 0,  // 0 (00) ->  0
@@ -155,9 +138,9 @@ func getTrit[T GenericTryte](x T, i int) Trit {
 
 	offset := i * bitsPerTrit
 
-	x = (x >> offset) & tbs_Mask
+	j := (x >> offset) & tbs_Mask
 
-	return tableBitsToTrit[x]
+	return tableBitsToTrit[j]
 }
 
 var tableTritToBits = [...]byte{
@@ -182,57 +165,61 @@ func setTrit[T GenericTryte](x T, i int, t Trit) T {
 
 //------------------------------------------------------------------------------
 
-// sum 4 trits: [-4..4]
+// sum of 4 trits: [-4..4]
+
 func splitTrits1(v int) (hi, lo Trit) {
 	const (
-		N = -1
-		Z = 0
-		P = +1
+		v0 = 0
 	)
 	switch v {
 	case -4:
-		return N, N
+		return -1, -1
 	case -3:
-		return N, Z
+		return -1, v0
 	case -2:
-		return N, P
+		return -1, +1
 	case -1:
-		return Z, N
+		return v0, -1
 	case 0:
-		return Z, Z
+		return v0, v0
 	case +1:
-		return Z, P
+		return v0, +1
 	case +2:
-		return P, N
+		return +1, -1
 	case +3:
-		return P, Z
+		return +1, v0
 	case +4:
-		return P, P
+		return +1, +1
 	default:
 		panic(fmt.Errorf("splitTrits1: invalid value %d", v))
 	}
 }
 
 func splitTrits2(v int) (hi, lo Trit) {
+	const (
+		vN = -1
+		vZ = 0
+		vP = +1
+	)
 	switch v {
 	case -4:
-		return tv_T, tv_T
+		return vN, vN
 	case -3:
-		return tv_T, tv_0
+		return vN, vZ
 	case -2:
-		return tv_T, tv_1
+		return vN, vP
 	case -1:
-		return tv_0, tv_T
+		return vZ, vN
 	case 0:
-		return tv_0, tv_0
+		return vZ, vZ
 	case +1:
-		return tv_0, tv_1
+		return vZ, vP
 	case +2:
-		return tv_1, tv_T
+		return vP, vN
 	case +3:
-		return tv_1, tv_0
+		return vP, vZ
 	case +4:
-		return tv_1, tv_1
+		return vP, vP
 	default:
 		panic(fmt.Errorf("splitTrits2: invalid value %d", v))
 	}

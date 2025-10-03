@@ -141,10 +141,10 @@ func addConsV2(a, b Trit) Trit {
 }
 
 func addConsV3(a, b Trit) Trit {
-	if v := Trit(tv_T); (a == v) && (b == v) {
+	if v := Trit(-1); (a == v) && (b == v) {
 		return v
 	}
-	if v := Trit(tv_1); (a == v) && (b == v) {
+	if v := Trit(+1); (a == v) && (b == v) {
 		return v
 	}
 	return 0

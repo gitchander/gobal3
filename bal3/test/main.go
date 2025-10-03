@@ -7,7 +7,7 @@ import (
 	"math/big"
 
 	"github.com/gitchander/gobal3/bal3"
-	"github.com/gitchander/gobal3/bal3/base27"
+	"github.com/gitchander/gobal3/bal3/base27/v1/base27"
 	"github.com/gitchander/gobal3/utils/random"
 )
 
@@ -22,7 +22,8 @@ func main() {
 	//testLimits()
 	//testQuoRemSimple()
 	//testQuoRemT32Random()
-	testBig()
+	//testBig()
+	testTryteLen()
 }
 
 func checkError(err error) {
@@ -431,4 +432,15 @@ func testBig() {
 	fmt.Println(b.IsNegative())
 	fmt.Println(b.IsZero())
 	fmt.Println(b.IsPositive())
+}
+
+func testTryteLen() {
+
+	tc := bal3.TC9
+
+	x, err := tc.Parse("TT1_10T_11T")
+	checkError(err)
+
+	fmt.Println(x)
+	fmt.Println(tc.Len(x))
 }

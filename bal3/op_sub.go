@@ -34,20 +34,20 @@ var (
 
 //------------------------------------------------------------------------------
 
-// c0 - carryIn
-// c1 - carryOut
+// c0 - carryIn (input carry trit)
+// c1 - carryOut (output carry trit)
 
-// s = x - y
+// z = (x - y) + c0
 
-func trytesSub[Tryte GenericTryte](n int, x, y Tryte, c0 Trit) (s Tryte, c1 Trit) {
+func trytesSub[Tryte GenericTryte](n int, x, y Tryte, c0 Trit) (z Tryte, c1 Trit) {
 	var (
 		carry, t Trit
 	)
 	carry = c0
 	for i := 0; i < n; i++ {
 		carry, t = tritsSub(getTrit(x, i), getTrit(y, i), carry)
-		s = setTrit(s, i, t)
+		z = setTrit(z, i, t)
 	}
 	c1 = carry
-	return s, c1
+	return z, c1
 }

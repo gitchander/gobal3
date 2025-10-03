@@ -1,9 +1,7 @@
 package bal3
 
-// ivl "github.com/gitchander/gobal3/utils/interval"
-
 type TryteCore[T GenericTryte] struct {
-	n int // number of trits
+	n int // Trits per tryte
 }
 
 func MakeTryteCore[T GenericTryte](n int) TryteCore[T] {
@@ -175,15 +173,17 @@ func (tc TryteCore[T]) Shr(a T, i int) T {
 
 //------------------------------------------------------------------------------
 
-// carryIn  - input carry trit
-// carryOut - output carry trit
+// c0 - carryIn (input carry trit)
+// c1 - carryOut (output carry trit)
 
-func (tc TryteCore[T]) Add(x, y T, carryIn Trit) (res T, carryOut Trit) {
-	return trytesAdd(tc.n, x, y, carryIn)
+// z = (x + y) + c0
+func (tc TryteCore[T]) Add(x, y T, c0 Trit) (z T, c1 Trit) {
+	return trytesAdd(tc.n, x, y, c0)
 }
 
-func (tc TryteCore[T]) Sub(x, y T, carryIn Trit) (res T, carryOut Trit) {
-	return trytesSub(tc.n, x, y, carryIn)
+// z = (x - y) + c0
+func (tc TryteCore[T]) Sub(x, y T, c0 Trit) (z T, c1 Trit) {
+	return trytesSub(tc.n, x, y, c0)
 }
 
 func (tc TryteCore[T]) Mul(a, b T) (hi, lo T) {

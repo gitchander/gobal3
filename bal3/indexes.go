@@ -6,7 +6,8 @@ package bal3
 // +1 -> 2
 
 func tritToIndex(t Trit) (index int) {
-	return int(t + 1)
+	index = int(t + 1)
+	return index
 }
 
 // indexToTrit:
@@ -15,5 +16,6 @@ func tritToIndex(t Trit) (index int) {
 // 2 -> +1
 
 func indexToTrit(index int) (t Trit) {
-	return Trit(index - 1)
+	t = Trit(index - 1)
+	return t
 }

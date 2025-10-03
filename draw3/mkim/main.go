@@ -24,8 +24,8 @@ func checkError(err error) {
 func makeImages() error {
 
 	var (
-		//colorBG = color.White
-		colorBG = draw3.DefaultColorBG
+		colorBG = draw3.ColorWhite
+		//colorBG = draw3.DefaultColorBG
 		colorFG = draw3.DefaultColorFG
 
 		dirName    = "images"

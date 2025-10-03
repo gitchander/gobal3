@@ -42,11 +42,13 @@ var (
 
 //------------------------------------------------------------------------------
 
+// a * b = (hi << n) + lo
+
 func trytesMul[Tryte GenericTryte](n int, a, b Tryte) (hi, lo Tryte) {
 	var (
-		w          Tryte
-		w_lo, w_hi Tryte
-		carry      Trit
+		w      Tryte
+		w1, w2 Tryte
+		carry  Trit
 	)
 	for i := 0; i < n; i++ {
 		ai := getTrit(a, i)
@@ -55,20 +57,22 @@ func trytesMul[Tryte GenericTryte](n int, a, b Tryte) (hi, lo Tryte) {
 			w = setTrit(w, j, tritsMul(ai, bj))
 		}
 
-		w_lo = tryteShl(n, w, i)       // w << i
-		w_hi = tryteShr(n, w, (n - i)) // w >> (n - i)
+		w1 = tryteShl(n, w, i)       // w << i
+		w2 = tryteShr(n, w, (n - i)) // w >> (n - i)
 
 		carry = 0
-		lo, carry = trytesAdd(n, lo, w_lo, carry)
-		hi, carry = trytesAdd(n, hi, w_hi, carry)
+		lo, carry = trytesAdd(n, lo, w1, carry)
+		hi, carry = trytesAdd(n, hi, w2, carry)
 	}
 	return hi, lo
 }
 
+// trytesMulLo returns only lo
+
 func trytesMulLo[Tryte GenericTryte](n int, a, b Tryte) (lo Tryte) {
 	var (
-		w    Tryte
-		w_lo Tryte
+		w  Tryte
+		w1 Tryte
 	)
 	for i := 0; i < n; i++ {
 		ai := getTrit(a, i)
@@ -77,9 +81,9 @@ func trytesMulLo[Tryte GenericTryte](n int, a, b Tryte) (lo Tryte) {
 			w = setTrit(w, j, tritsMul(ai, bj))
 		}
 
-		w_lo = tryteShl(n, w, i) // w << i
+		w1 = tryteShl(n, w, i) // w << i
 
-		lo, _ = trytesAdd(n, lo, w_lo, 0)
+		lo, _ = trytesAdd(n, lo, w1, 0)
 	}
 	return lo
 }

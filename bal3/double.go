@@ -263,13 +263,13 @@ func (dc doubleCore[T]) Limits() (min, max double[T]) {
 	n := dc.tc.TotalTrits()
 
 	min = double[T]{
-		Hi: tryteSetAllTrits[T](n, tv_T),
-		Lo: tryteSetAllTrits[T](n, tv_T),
+		Hi: tryteSetAllTrits[T](n, -1),
+		Lo: tryteSetAllTrits[T](n, -1),
 	}
 
 	max = double[T]{
-		Hi: tryteSetAllTrits[T](n, tv_1),
-		Lo: tryteSetAllTrits[T](n, tv_1),
+		Hi: tryteSetAllTrits[T](n, +1),
+		Lo: tryteSetAllTrits[T](n, +1),
 	}
 
 	return min, max

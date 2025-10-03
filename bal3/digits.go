@@ -4,7 +4,7 @@ import (
 	"github.com/gitchander/gobal3/utils/digits"
 )
 
-var digiter = digits.NewDigiter(tritMin, tritMax)
+var digiter = digits.NewDigiter(-1, +1)
 
 //------------------------------------------------------------------------------
 
