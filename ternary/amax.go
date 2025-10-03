@@ -1,6 +1,6 @@
 package ternary
 
-// Negative Max, Nmax, Amax, AntiMax
+// Inverse Max, Nmax, Amax, AntiMax
 
 // Amax table:
 
@@ -15,7 +15,7 @@ package ternary
 // +---+---+---+---+
 
 func amax(a, b Tri) Tri {
-	return Neg(Max(a, b))
+	return Inverse(Max(a, b))
 }
 
 var _ BinaryFunc = amax
@@ -25,7 +25,7 @@ type AmaxCore struct{}
 
 var _ Core = AmaxCore{}
 
-func (AmaxCore) Neg(a Tri) Tri {
+func (AmaxCore) Inverse(a Tri) Tri {
 	return amax(a, a)
 }
 

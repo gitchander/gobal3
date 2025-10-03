@@ -108,13 +108,13 @@ func (b *BigTryte) IsPositive() bool {
 
 //------------------------------------------------------------------------------
 
-func (p *BigTryte) Neg() *BigTryte {
+func (p *BigTryte) Inverse() *BigTryte {
 	ws := p.words
 	for i, w := range ws {
 		var v word
 		for j := 0; j < tritsPerWord; j++ {
 			t := getTrit(w, j)
-			t = tritNeg(t)
+			t = tritInverse(t)
 			v = setTrit(v, j, t)
 		}
 		ws[i] = v

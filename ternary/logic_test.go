@@ -54,20 +54,20 @@ func testBinaryFunc(vs []sampleBinaryFunc, wantFunc BinaryFunc) error {
 	return nil
 }
 
-func TestNeg(t *testing.T) {
+func TestInverse(t *testing.T) {
 
 	vs := []sampleUnaryFunc{
 		{
-			name:     "base-neg",
-			testFunc: BaseCore{}.Neg,
+			name:     "base-inverse",
+			testFunc: BaseCore{}.Inverse,
 		},
 		{
-			name:     "amin-neg",
-			testFunc: AminCore{}.Neg,
+			name:     "amin-inverse",
+			testFunc: AminCore{}.Inverse,
 		},
 		{
-			name:     "amax-neg",
-			testFunc: AmaxCore{}.Neg,
+			name:     "amax-inverse",
+			testFunc: AmaxCore{}.Inverse,
 		},
 	}
 

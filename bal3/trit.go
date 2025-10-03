@@ -22,7 +22,9 @@ var mapTritToChar = map[Trit]byte{
 
 var mapCharToTrit = map[byte]Trit{
 
+	//-----------------------------------------
 	// Representations of -1:
+
 	'T': -1,
 	'N': -1,
 	'-': -1,
@@ -30,15 +32,22 @@ var mapCharToTrit = map[byte]Trit{
 	// 'Θ' - Greek letter theta
 	// 'Θ': -1,
 
+	//-----------------------------------------
 	// Representations of 0:
+
 	'0': 0,
 	'Z': 0,
 	'|': 0,
 
+	//-----------------------------------------
 	// Representations of +1:
+
 	'1': 1,
 	'P': 1,
 	'+': 1,
+
+	//-----------------------------------------
+
 }
 
 func tritToChar(t Trit) (byte, error) {

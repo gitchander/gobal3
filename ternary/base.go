@@ -4,8 +4,8 @@ type BaseCore struct{}
 
 var _ Core = BaseCore{}
 
-func (BaseCore) Neg(a Tri) Tri {
-	return Neg(a)
+func (BaseCore) Inverse(a Tri) Tri {
+	return Inverse(a)
 }
 
 func (BaseCore) Min(a, b Tri) Tri {

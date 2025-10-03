@@ -12,7 +12,7 @@ Ternary logic axioms:
 Involution Property:
 
 -(-(a)) = a
-neg(neg(a)) = a
+inv(inv(a)) = a
 
 Idempotent Property:
 

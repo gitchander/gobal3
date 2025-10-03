@@ -19,7 +19,7 @@ package bal3
 //------------------------------------------------------------------------------
 
 func tritsSubV1(a, b Trit, c0 Trit) (hi, lo Trit) {
-	b = tritNeg(b)
+	b = tritInverse(b)
 	return tritsAdd(a, b, c0)
 }
 

@@ -152,9 +152,8 @@ func (tc TryteCore[T]) MustParse(s string) T {
 
 //------------------------------------------------------------------------------
 
-// Negative, Invert
-func (tc TryteCore[T]) Neg(a T) (b T) {
-	return tryteNeg(tc.n, a)
+func (tc TryteCore[T]) Inverse(a T) (b T) {
+	return tryteInverse(tc.n, a)
 }
 
 //------------------------------------------------------------------------------

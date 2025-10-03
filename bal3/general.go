@@ -3,7 +3,7 @@ package bal3
 type tryteGeneral[T GenericTryte] interface {
 	isTryte()
 
-	Neg() T
+	Inverse() T
 
 	ToInt64() int64
 	String() string

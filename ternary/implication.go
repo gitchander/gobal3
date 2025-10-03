@@ -13,5 +13,5 @@ package ternary
 // +---+---+---+---+
 
 func Imp(a, b Tri) Tri {
-	return Max(Neg(a), b)
+	return Max(Inverse(a), b)
 }

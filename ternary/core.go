@@ -1,7 +1,8 @@
 package ternary
 
 type Core interface {
-	Neg(a Tri) Tri    // bool: Not
+	Inverse(a Tri) Tri // bool: Not
+
 	Min(a, b Tri) Tri // bool: And
 	Max(a, b Tri) Tri // bool: Or
 

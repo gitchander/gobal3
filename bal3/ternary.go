@@ -11,8 +11,8 @@ type (
 
 type triCore struct{}
 
-func (triCore) Neg(a Trit) Trit {
-	c := ternary.Neg(ternary.Tri(a))
+func (triCore) Inverse(a Trit) Trit {
+	c := ternary.Inverse(ternary.Tri(a))
 	return Trit(c)
 }
 

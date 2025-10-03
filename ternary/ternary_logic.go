@@ -14,14 +14,17 @@ package ternary
 // | 1 | T |
 // +---+---+
 
-// NEG - NEGATIVE
 // Anti
 
-func Neg(a Tri) Tri {
+// Opp, Opposite
+// Inv, Inverse
+// Rev, Reverse
+
+func Inverse(a Tri) Tri {
 	return -a
 }
 
-var _ UnaryFunc = Neg
+var _ UnaryFunc = Inverse
 
 //------------------------------------------------------------------------------
 
@@ -142,15 +145,6 @@ func Is(a Tri, v Tri) Tri {
 
 //------------------------------------------------------------------------------
 
-func NegIs(a Tri, v Tri) Tri {
-	if a != v {
-		return 1
-	}
-	return -1
-}
-
-//------------------------------------------------------------------------------
-
 // https://en.wikipedia.org/wiki/XOR_gate
 
 // Xmax - Exclusive max (bool: xor)
@@ -168,7 +162,7 @@ func NegIs(a Tri, v Tri) Tri {
 // For binary logic: XOR = Nand(Nand(Nand(a, a), b), Nand(a, Nand(b, b)))
 
 func Xmax(a, b Tri) Tri {
-	return Max(Min(a, Neg(b)), Min(Neg(a), b))
+	return Max(Min(a, Inverse(b)), Min(Inverse(a), b))
 }
 
 //------------------------------------------------------------------------------
@@ -186,7 +180,7 @@ func Xmax(a, b Tri) Tri {
 // +---+---+---+---+
 
 func Xamax(a, b Tri) Tri {
-	return Min(Max(a, Neg(b)), Max(Neg(a), b))
+	return Min(Max(a, Inverse(b)), Max(Inverse(a), b))
 }
 
 //------------------------------------------------------------------------------

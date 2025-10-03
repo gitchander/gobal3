@@ -1,6 +1,6 @@
 package ternary
 
-// Negative Min, Nmin, Amin, AntiMin
+// Inverse Min, Nmin, Amin, AntiMin
 
 // Amin table:
 
@@ -15,7 +15,7 @@ package ternary
 // +---+---+---+---+
 
 func amin(a, b Tri) Tri {
-	return Neg(Min(a, b))
+	return Inverse(Min(a, b))
 }
 
 var _ BinaryFunc = amin
@@ -25,7 +25,7 @@ type AminCore struct{}
 
 var _ Core = AminCore{}
 
-func (AminCore) Neg(a Tri) Tri {
+func (AminCore) Inverse(a Tri) Tri {
 	return amin(a, a)
 }
 

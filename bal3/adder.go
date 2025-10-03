@@ -153,8 +153,8 @@ func addConsV3(a, b Trit) Trit {
 func addConsV4(a, b Trit) Trit {
 	var (
 		v1 = trico.Min(a, b)
-		v2 = trico.Min(trico.Neg(trico.Is(a, -1)), 0)
-		v3 = trico.Min(trico.Neg(trico.Is(b, -1)), 0)
+		v2 = trico.Min(trico.Inverse(trico.Is(a, -1)), 0)
+		v3 = trico.Min(trico.Inverse(trico.Is(b, -1)), 0)
 	)
 	return trico.Max(v1, trico.Max(v2, v3))
 }

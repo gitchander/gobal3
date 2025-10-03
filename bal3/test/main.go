@@ -424,7 +424,7 @@ func testBig() {
 	b, err := bal3.ParseBigTryte(s)
 	checkError(err)
 	fmt.Println(b)
-	b.Neg()
+	b.Inverse()
 	fmt.Println(b)
 
 	fmt.Println(b.ToBigInt())

@@ -17,8 +17,8 @@ func (a Tryte27) String() string {
 	return tc27.Format(a)
 }
 
-func (a Tryte27) Neg() (b Tryte27) {
-	return tc27.Neg(a)
+func (a Tryte27) Inverse() (b Tryte27) {
+	return tc27.Inverse(a)
 }
 
 func (a Tryte27) Add(b Tryte27) (c Tryte27) {
