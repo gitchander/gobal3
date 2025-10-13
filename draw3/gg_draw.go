@@ -52,7 +52,7 @@ func DrawDigits2D(c *gg.Context, dd DigitDrawer,
 
 			digit, _ := d2d.GetValueXY(x, y)
 
-			if true {
+			if digitSize.X <= stride.X {
 				if ((x + y) % 2) == 0 {
 					c.SetRGB(0.7, 0.9, 1.0)
 				} else {
@@ -65,12 +65,11 @@ func DrawDigits2D(c *gg.Context, dd DigitDrawer,
 			// draw text
 			if true {
 				c.SetRGB(0, 0, 0)
-				c.DrawString(fmt.Sprintf("%d", digit), b.Min.X, b.Min.Y+c.FontHeight())
+				c.DrawString(fmt.Sprintf("%+d", digit), b.Min.X, b.Min.Y+c.FontHeight())
 			}
 
 			c.SetRGB(0, 0, 0)
 			dd.DrawDigit(c, b, digit)
-
 		}
 	}
 }

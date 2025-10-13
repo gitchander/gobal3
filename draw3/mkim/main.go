@@ -49,7 +49,6 @@ func makeImages() error {
 
 	cs := []draw3.DigitsImageConfig{
 		{
-
 			ColorBG:     colorBG,
 			ColorFG:     colorFG,
 			DigitDrawer: draw3.DigitDrawer1{},

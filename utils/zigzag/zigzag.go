@@ -1,7 +1,11 @@
 package zigzag
 
-import (
-	"math"
+// https://en.wikipedia.org/wiki/Variable-length_quantity
+// Zigzag encoding
+
+const (
+	// from math:
+	intSize = 32 << (^uint(0) >> 63) // 32 or 64
 )
 
 //------------------------------------------------------------------------------
@@ -43,14 +47,14 @@ func DecodeInt64(ux uint64) int64 {
 //------------------------------------------------------------------------------
 
 func EncodeInt(x int) uint {
-	if math.MaxInt == math.MaxInt32 {
+	if intSize == 32 {
 		return uint(EncodeInt32(int32(x)))
 	}
 	return uint(EncodeInt64(int64(x)))
 }
 
 func DecodeInt(ux uint) int {
-	if math.MaxInt == math.MaxInt32 {
+	if intSize == 32 {
 		return int(DecodeInt32(uint32(ux)))
 	}
 	return int(DecodeInt64(uint64(ux)))

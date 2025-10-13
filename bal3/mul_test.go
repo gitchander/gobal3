@@ -8,6 +8,7 @@ import (
 func testMul[T GenericTryte](tc TryteCore[T], a, b T) error {
 
 	hi, lo := tc.Mul(a, b)
+	//fmt.Printf("%v * %v = (%v, %v)\n", a, b, hi, lo)
 
 	var (
 		have, _ = tc.TryteToInt64(lo, tc.ToInt64(hi))

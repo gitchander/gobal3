@@ -177,16 +177,13 @@ var (
 
 // c - carryOut
 
-func halfAdderV1(a, b Trit) (s, c Trit) {
-	t1, t0 := splitTrits(int(a + b))
-	s = t0
-	c = t1
-	return
+func halfAdderV1(a, b Trit) (hi, lo Trit) {
+	return splitTrits(int(a + b))
 }
 
-func halfAdderV2(a, b Trit) (s, c Trit) {
-	s = addSum(a, b)
-	c = addCons(a, b)
+func halfAdderV2(a, b Trit) (hi, lo Trit) {
+	hi = addCons(a, b)
+	lo = addSum(a, b)
 	return
 }
 
@@ -199,18 +196,15 @@ var (
 
 // Balanced Full Adder
 
-// c0 - carryIn
-// c1 - carryOut
-
-func fullAdder(a, b Trit, c0 Trit) (s, c1 Trit) {
+func fullAdder(a, b, c Trit) (hi, lo Trit) {
 	var (
-		s1, x1 = halfAdder(a, b)
-		s2, x2 = halfAdder(s1, c0)
+		x1, s1 = halfAdder(a, b)
+		x2, s2 = halfAdder(s1, c)
 		s3     = addSum(x1, x2)
 	)
-	s = s2
-	c1 = s3
-	return
+	hi = s3
+	lo = s2
+	return hi, lo
 }
 
 //------------------------------------------------------------------------------

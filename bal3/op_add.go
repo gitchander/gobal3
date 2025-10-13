@@ -18,17 +18,12 @@ package bal3
 
 //------------------------------------------------------------------------------
 
-func tritsAddV1(a, b Trit, c0 Trit) (hi, lo Trit) {
-	s, c1 := fullAdder(a, b, c0)
-
-	hi = c1
-	lo = s
-
-	return hi, lo
+func tritsAddV1(a, b, c Trit) (hi, lo Trit) {
+	return fullAdder(a, b, c)
 }
 
-func tritsAddV2(a, b Trit, c0 Trit) (hi, lo Trit) {
-	return splitTrits(int(a + b + c0))
+func tritsAddV2(a, b, c Trit) (hi, lo Trit) {
+	return splitTrits(int(a + b + c))
 }
 
 var (

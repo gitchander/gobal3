@@ -36,8 +36,8 @@ func (b Bounds) Dy() float64 {
 
 func (b Bounds) Size() Point2f {
 	return Point2f{
-		X: b.Max.X - b.Min.X,
-		Y: b.Max.Y - b.Min.Y,
+		X: b.Dx(),
+		Y: b.Dy(),
 	}
 }
 
