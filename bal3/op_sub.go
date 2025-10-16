@@ -20,16 +20,11 @@ package bal3
 
 func tritsSubV1(a, b Trit, c0 Trit) (hi, lo Trit) {
 	b = tritInverse(b)
-	return tritsAdd(a, b, c0)
-}
-
-func tritsSubV2(a, b Trit, c0 Trit) (hi, lo Trit) {
-	return splitTrits(int(a - b + c0))
+	return tritsAdd3(a, b, c0)
 }
 
 var (
-	//tritsSub = tritsSubV1
-	tritsSub = tritsSubV2
+	tritsSub = tritsSubV1
 )
 
 //------------------------------------------------------------------------------

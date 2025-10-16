@@ -66,27 +66,11 @@ var tableAddSum = mustParseTable(
 	"01T",
 )
 
-func addSumV1(a, b Trit) Trit {
+func tritsAddSumV1(a, b Trit) Trit {
 	return tritByTable(tableAddSum, a, b)
 }
 
-func addSumV2(a, b Trit) Trit {
-	_, t0 := splitTrits(int(a + b))
-	return t0
-}
-
-func addSumV3(a, b Trit) Trit {
-	c := a + b
-	if c < -1 {
-		c += 3
-	}
-	if c > +1 {
-		c -= 3
-	}
-	return c
-}
-
-func addSumV4(a, b Trit) Trit {
+func tritsAddSumV2(a, b Trit) Trit {
 
 	// (a + b) = ((a = -1) ∧ (b - 1)) ∨ ((a = 0) ∧ (b)) ∨ ((a = +1) ∧ (b + 1))
 	// where:
@@ -105,10 +89,8 @@ func addSumV4(a, b Trit) Trit {
 }
 
 var (
-	//addSum = addSumV1
-	addSum = addSumV2
-	//addSum = addSumV3
-	//addSum = addSumV4
+	//tritsAddSum = tritsAddSumV1
+	tritsAddSum = tritsAddSumV2
 )
 
 //------------------------------------------------------------------------------
@@ -131,16 +113,11 @@ var tableAddCons = mustParseTable(
 	"001",
 )
 
-func addConsV1(a, b Trit) Trit {
+func tritsAddConsV1(a, b Trit) Trit {
 	return tritByTable(tableAddCons, a, b)
 }
 
-func addConsV2(a, b Trit) Trit {
-	t1, _ := splitTrits(int(a + b))
-	return t1
-}
-
-func addConsV3(a, b Trit) Trit {
+func tritsAddConsV2(a, b Trit) Trit {
 	if v := Trit(-1); (a == v) && (b == v) {
 		return v
 	}
@@ -150,7 +127,7 @@ func addConsV3(a, b Trit) Trit {
 	return 0
 }
 
-func addConsV4(a, b Trit) Trit {
+func tritsAddConsV3(a, b Trit) Trit {
 	var (
 		v1 = trico.Min(a, b)
 		v2 = trico.Min(trico.Inverse(trico.Is(a, -1)), 0)
@@ -159,48 +136,42 @@ func addConsV4(a, b Trit) Trit {
 	return trico.Max(v1, trico.Max(v2, v3))
 }
 
-func addConsV5(a, b Trit) Trit {
+func tritsAddConsV4(a, b Trit) Trit {
 	return trico.Max(trico.Min(a, b), trico.Min(0, trico.Max(a, b)))
 }
 
 var (
-	//addCons = addConsV1
-	addCons = addConsV2
-	//addCons = addConsV3
-	//addCons = addConsV4
-	//addCons = addConsV5
+	//tritsAddCons = tritsAddConsV1
+	//tritsAddCons = tritsAddConsV2
+	//tritsAddCons = tritsAddConsV3
+	tritsAddCons = tritsAddConsV4
 )
 
 //------------------------------------------------------------------------------
 
-// A balanced ternary half adder
+// A balanced ternary "Half Adder"
 
-// c - carryOut
-
-func halfAdderV1(a, b Trit) (hi, lo Trit) {
-	return splitTrits(int(a + b))
-}
-
-func halfAdderV2(a, b Trit) (hi, lo Trit) {
-	hi = addCons(a, b)
-	lo = addSum(a, b)
+// halfAdder:
+// hi - carry
+// lo - sum
+func tritsAdd2(a, b Trit) (hi, lo Trit) {
+	hi = tritsAddCons(a, b)
+	lo = tritsAddSum(a, b)
 	return
 }
 
-var (
-	halfAdder = halfAdderV1
-	//halfAdder = halfAdderV2
-)
-
 //------------------------------------------------------------------------------
 
-// Balanced Full Adder
+// A balanced ternary "Full Adder"
 
-func fullAdder(a, b, c Trit) (hi, lo Trit) {
+// fullAdder:
+// hi - carry
+// lo - sum
+func tritsAdd3(a, b, c Trit) (hi, lo Trit) {
 	var (
-		x1, s1 = halfAdder(a, b)
-		x2, s2 = halfAdder(s1, c)
-		s3     = addSum(x1, x2)
+		x1, s1 = tritsAdd2(a, b)
+		x2, s2 = tritsAdd2(s1, c)
+		s3     = tritsAddSum(x1, x2)
 	)
 	hi = s3
 	lo = s2

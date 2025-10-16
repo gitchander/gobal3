@@ -52,33 +52,47 @@ func testBinaryFunc(vs []sampleBinaryFunc, wantFunc BinaryFunc) error {
 	return nil
 }
 
-func TestAddSum(t *testing.T) {
+func testSplitTrits2(v int) (hi, lo Trit) {
+	const (
+		vN = -1
+		vZ = 0
+		vP = +1
+	)
+	switch v {
+	case -2:
+		return vN, vP
+	case -1:
+		return vZ, vN
+	case 0:
+		return vZ, vZ
+	case +1:
+		return vZ, vP
+	case +2:
+		return vP, vN
+	default:
+		panic(fmt.Errorf("testSplitTrits2: invalid value %d", v))
+	}
+}
+
+func TestTritsAddSum(t *testing.T) {
 
 	vs := []sampleBinaryFunc{
 		{
-			name:     "addSum",
-			testFunc: addSum,
+			name:     "tritsAddSum",
+			testFunc: tritsAddSum,
 		},
 		{
-			name:     "addSumV1",
-			testFunc: addSumV1,
+			name:     "tritsAddSumV1",
+			testFunc: tritsAddSumV1,
 		},
 		{
-			name:     "addSumV2",
-			testFunc: addSumV2,
-		},
-		{
-			name:     "addSumV3",
-			testFunc: addSumV3,
-		},
-		{
-			name:     "addSumV4",
-			testFunc: addSumV4,
+			name:     "tritsAddSumV2",
+			testFunc: tritsAddSumV2,
 		},
 	}
 
 	wantFunc := func(a, b Trit) Trit {
-		_, t0 := splitTrits2(int(a + b))
+		_, t0 := testSplitTrits2(int(a + b))
 		return t0
 	}
 
@@ -88,37 +102,33 @@ func TestAddSum(t *testing.T) {
 	}
 }
 
-func TestAddCons(t *testing.T) {
+func TestTritsAddCons(t *testing.T) {
 
 	vs := []sampleBinaryFunc{
 		{
-			name:     "addCons",
-			testFunc: addCons,
+			name:     "tritsAddCons",
+			testFunc: tritsAddCons,
 		},
 		{
-			name:     "addConsV1",
-			testFunc: addConsV1,
+			name:     "tritsAddConsV1",
+			testFunc: tritsAddConsV1,
 		},
 		{
-			name:     "addConsV2",
-			testFunc: addConsV2,
+			name:     "tritsAddConsV2",
+			testFunc: tritsAddConsV2,
 		},
 		{
-			name:     "addConsV3",
-			testFunc: addConsV3,
+			name:     "tritsAddConsV3",
+			testFunc: tritsAddConsV3,
 		},
 		{
-			name:     "addConsV4",
-			testFunc: addConsV4,
-		},
-		{
-			name:     "addConsV5",
-			testFunc: addConsV5,
+			name:     "tritsAddConsV4",
+			testFunc: tritsAddConsV4,
 		},
 	}
 
 	wantFunc := func(a, b Trit) Trit {
-		t1, _ := splitTrits2(int(a + b))
+		t1, _ := testSplitTrits2(int(a + b))
 		return t1
 	}
 

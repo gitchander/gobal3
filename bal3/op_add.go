@@ -18,21 +18,6 @@ package bal3
 
 //------------------------------------------------------------------------------
 
-func tritsAddV1(a, b, c Trit) (hi, lo Trit) {
-	return fullAdder(a, b, c)
-}
-
-func tritsAddV2(a, b, c Trit) (hi, lo Trit) {
-	return splitTrits(int(a + b + c))
-}
-
-var (
-	//tritsAdd = tritsAddV1
-	tritsAdd = tritsAddV2
-)
-
-//------------------------------------------------------------------------------
-
 // c0 - carryIn (input carry trit)
 // c1 - carryOut (output carry trit)
 
@@ -44,7 +29,7 @@ func trytesAdd[Tryte GenericTryte](n int, x, y Tryte, c0 Trit) (z Tryte, c1 Trit
 	)
 	carry = c0
 	for i := 0; i < n; i++ {
-		carry, t = tritsAdd(getTrit(x, i), getTrit(y, i), carry)
+		carry, t = tritsAdd3(getTrit(x, i), getTrit(y, i), carry)
 		z = setTrit(z, i, t)
 	}
 	c1 = carry
