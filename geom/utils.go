@@ -25,3 +25,11 @@ func lerp(v0, v1 float64, t float64) float64 {
 }
 
 //------------------------------------------------------------------------------
+
+func Vmin(dx, dy float64) float64 {
+	return minFloat64(dx, dy) / 100.0
+}
+
+func Vmax(dx, dy float64) float64 {
+	return maxFloat64(dx, dy) / 100.0
+}

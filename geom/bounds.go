@@ -86,11 +86,11 @@ func (b Bounds) Grow(f Frame) Bounds {
 }
 
 func (b Bounds) Vmin() float64 {
-	return minFloat64(b.Dx(), b.Dy()) / 100.0
+	return Vmin(b.Dx(), b.Dy())
 }
 
 func (b Bounds) Vmax() float64 {
-	return maxFloat64(b.Dx(), b.Dy()) / 100.0
+	return Vmax(b.Dx(), b.Dy())
 }
 
 //------------------------------------------------------------------------------

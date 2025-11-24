@@ -84,6 +84,18 @@ func MakeDigitsImage2D(dic DigitsImageConfig, d2d *Digits2D) (image.Image, error
 
 	c.SetColor(dic.ColorFG)
 
+	// Set font size
+	{
+		var (
+			dX = dic.DigitSize.X
+			dY = dic.DigitSize.Y
+
+			ggc = NewGG_Context(c)
+		)
+
+		ggc.SetFontSizeFactor(dX, dY, 20.0)
+	}
+
 	DrawDigits2D(c, dic.DigitDrawer, dic.DigitSize, dic.Stride, d2d)
 
 	return c.Image(), nil

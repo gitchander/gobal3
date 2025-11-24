@@ -44,19 +44,20 @@ func (DigitDrawer5) DrawDigit(c *gg.Context, b geom.Bounds, digit int) {
 	var (
 		y0 = 105.0
 
-		dy = 20.0
+		dx = 20.0
+		dy = 25.0
 		// dy = 25.0
 	)
 
 	// Negative
 	if d == -1 {
-		c.DrawCircle(x0-20, y0+dy, 8)
+		c.DrawCircle(x0-dx, y0+dy, 8)
 		c.Fill()
 	}
 
 	// Positive
 	if d == +1 {
-		c.DrawCircle(x0-20, y0-dy, 8)
+		c.DrawCircle(x0-dx, y0-dy, 8)
 		c.Fill()
 	}
 }

@@ -444,3 +444,14 @@ func testTryteLen() {
 	fmt.Println(x)
 	fmt.Println(tc.Len(x))
 }
+
+func testTryte() {
+
+	tc := bal3.TC9
+
+	x, err := tc.Parse("TT1_10T_11T")
+	checkError(err)
+
+	fmt.Println(x)
+	fmt.Println(tc.Len(x))
+}

@@ -1,8 +1,6 @@
 package draw3
 
 import (
-	"fmt"
-
 	"github.com/fogleman/gg"
 
 	"github.com/gitchander/gobal3/geom"
@@ -65,7 +63,11 @@ func DrawDigits2D(c *gg.Context, dd DigitDrawer,
 			// draw text
 			if true {
 				c.SetRGB(0, 0, 0)
-				c.DrawString(fmt.Sprintf("%+d", digit), b.Min.X, b.Min.Y+c.FontHeight())
+				c.DrawString(
+					formatDigit(digit),
+					b.Min.X,
+					(b.Min.Y + c.FontHeight()),
+				)
 			}
 
 			c.SetRGB(0, 0, 0)
