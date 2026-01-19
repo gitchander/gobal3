@@ -229,7 +229,7 @@ func (dc doubleCore[T]) RandSh(r *Rand) double[T] {
 // c0 - carryIn
 // c1 - carryOut
 
-// s = a + b
+// s = a + b + c0
 
 func (dc doubleCore[T]) Add(a, b double[T], c0 Trit) (s double[T], c1 Trit) {
 	tc := dc.tc
@@ -243,7 +243,7 @@ func (dc doubleCore[T]) Add(a, b double[T], c0 Trit) (s double[T], c1 Trit) {
 
 //------------------------------------------------------------------------------
 
-// s = a - b
+// s = a - b + c0
 
 func (dc doubleCore[T]) Sub(a, b double[T], c0 Trit) (s double[T], c1 Trit) {
 	tc := dc.tc
