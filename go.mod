@@ -1,6 +1,6 @@
 module github.com/gitchander/gobal3
 
-go 1.25.1
+go 1.26
 
 require (
 	github.com/fogleman/gg v1.3.0

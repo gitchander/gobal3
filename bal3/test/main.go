@@ -20,10 +20,10 @@ func main() {
 	//testFormatBase27()
 	//testParseBase27()
 	//testLimits()
-	//testQuoRemSimple()
+	testQuoRemSimple()
 	//testQuoRemT32Random()
 	//testBig()
-	testTryteLen()
+	//testTryteLen()
 }
 
 func checkError(err error) {
@@ -238,6 +238,20 @@ func quoRem(a, b int) (quo, rem int) {
 }
 
 func testQuoRemSimple() {
+	var (
+		tc = bal3.TC32
+
+		a, _ = tc.Int64ToTrite(8)
+		b, _ = tc.Int64ToTrite(3)
+	)
+
+	quo, rem := tc.QuoRem(a, b)
+	fmt.Printf("(%s / %s) = (quo,rem) = bal3:(%s,%s)\n", a, b, quo, rem)
+	fmt.Printf("(quo,rem) = base10:(%d,%d)\n", tc.ToInt64(quo), tc.ToInt64(rem))
+
+}
+
+func testQuoRemRange() {
 
 	const (
 		b = 8

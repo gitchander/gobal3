@@ -136,6 +136,8 @@ const (
 	tbs_Mask = 0b_11
 )
 
+//------------------------------------------------------------------------------
+
 var tableBitsToTrit = [...]Trit{
 	0: 0,  // 0 (00) ->  0
 	1: -1, // 1 (01) -> -1
@@ -143,7 +145,7 @@ var tableBitsToTrit = [...]Trit{
 	3: 0,  // 3 (11) ->  0
 }
 
-func getTrit[T GenericTryte](x T, i int) Trit {
+func getTrit_v1[T GenericTryte](x T, i int) Trit {
 
 	offset := i * bitsPerTrit
 
@@ -152,13 +154,32 @@ func getTrit[T GenericTryte](x T, i int) Trit {
 	return tableBitsToTrit[j]
 }
 
+func getTrit_v2[T GenericTryte](x T, i int) Trit {
+
+	offset := i * bitsPerTrit
+
+	twoBits := (x >> offset) & tbs_Mask
+
+	bitHi := int(twoBits >> 1) // hi bit
+	bitLo := int(twoBits & 1)  // lo bit
+
+	return Trit(bitHi - bitLo)
+}
+
+func getTrit[T GenericTryte](x T, i int) Trit {
+	//return getTrit_v1(x, i)
+	return getTrit_v2(x, i)
+}
+
+//------------------------------------------------------------------------------
+
 var tableTritToBits = [...]byte{
 	0: 0b_01, // ((-1 + 1) = 0) -> 01
 	1: 0b_00, // (( 0 + 1) = 1) -> 00
 	2: 0b_10, // ((+1 + 1) = 2) -> 10
 }
 
-func setTrit[T GenericTryte](x T, i int, t Trit) T {
+func setTrit_v1[T GenericTryte](x T, i int, t Trit) T {
 
 	offset := i * bitsPerTrit
 
@@ -171,3 +192,56 @@ func setTrit[T GenericTryte](x T, i int, t Trit) T {
 
 	return x
 }
+
+func setTrit_v2[T GenericTryte](x T, i int, t Trit) T {
+
+	// -1 => 0 (00)
+	//  0 => 1 (01)
+	// +1 => 2 (10)
+	tx := T(t + 1)
+
+	bitHi := (tx >> 1) & 1
+	bitLo := (bitHi | (tx & 1)) ^ 1
+
+	// (00) => 01
+	// (01) => 00
+	// (10) => 10
+	twoBits := (bitHi << 1) | bitLo
+
+	offset := i * bitsPerTrit
+
+	x &^= T(tbs_Mask) << offset // reset trit bits
+
+	x |= twoBits << offset
+
+	return x
+}
+
+func setTrit_v3[T GenericTryte](x T, i int, t Trit) T {
+
+	// -1 => 0
+	//  0 => 1
+	// +1 => 2
+	tx := T(t + 1)
+
+	bitHi := tx & 2               //  tx & 2 = (hi_bit << 1)
+	bitLo := ((tx >> 1) | tx) ^ 1 // bit_not((hi_bit) | (lo_bit))
+
+	twoBits := T(bitHi | bitLo)
+
+	offset := i * bitsPerTrit
+
+	x &^= T(tbs_Mask) << offset // reset trit bits
+
+	x |= twoBits << offset
+
+	return x
+}
+
+func setTrit[T GenericTryte](x T, i int, t Trit) T {
+	// return setTrit_v1(x, i, t)
+	// return setTrit_v2(x, i, t)
+	return setTrit_v3(x, i, t)
+}
+
+//------------------------------------------------------------------------------
