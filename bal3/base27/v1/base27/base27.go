@@ -137,11 +137,12 @@ func FormatBase27[T genericTryte](tc bal3.TryteCore[T], a T) string {
 		count++
 
 		if count == tritsPerDigit {
-			digit, ok := tc.TryteToInt64(b, 0)
-			if !ok {
-				err := fmt.Errorf("invalid convert tryte %s to int64", tc.Format(b))
-				panic(err)
-			}
+			// digit, ok := tc.TryteToInt64(b, 0)
+			// if !ok {
+			// 	err := fmt.Errorf("invalid convert tryte %s to int64", tc.Format(b))
+			// 	panic(err)
+			// }
+			digit := tc.TryteToInt64(b)
 			writeDigit(int(digit))
 
 			// reset all
@@ -151,11 +152,12 @@ func FormatBase27[T genericTryte](tc bal3.TryteCore[T], a T) string {
 	}
 
 	if count > 0 {
-		digit, ok := tc.TryteToInt64(b, 0)
-		if !ok {
-			err := fmt.Errorf("invalid convert tryte %s to int64", tc.Format(b))
-			panic(err)
-		}
+		// digit, ok := tc.TryteToInt64(b, 0)
+		// if !ok {
+		// 	err := fmt.Errorf("invalid convert tryte %s to int64", tc.Format(b))
+		// 	panic(err)
+		// }
+		digit := tc.TryteToInt64(b)
 		writeDigit(int(digit))
 	}
 
@@ -179,7 +181,7 @@ func ParseBase27[T genericTryte](tc bal3.TryteCore[T], s string) (T, error) {
 		if !ok {
 			return 0, fmt.Errorf("invalid char %c", char)
 		}
-		b, _ := tc.Int64ToTrite(int64(digit))
+		b := tc.Int64ToTrite(int64(digit))
 
 		for i := tritsPerDigit; i > 0; { // backward iterate
 			i--

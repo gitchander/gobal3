@@ -53,7 +53,7 @@ func (tc TryteCore[T]) Less(a, b T) bool {
 
 // a > b
 func (tc TryteCore[T]) Greater(a, b T) bool {
-	return tc.Compare(a, b) == 1
+	return tc.Compare(a, b) == +1
 }
 
 // The "less than or equal to" sign: <=
@@ -94,7 +94,7 @@ func (tc TryteCore[T]) IsZero(x T) bool {
 
 // x > 0
 func (tc TryteCore[T]) IsPositive(x T) bool {
-	return tc.Sign(x) == 1
+	return tc.Sign(x) == +1
 }
 
 //------------------------------------------------------------------------------
@@ -105,24 +105,32 @@ func (tc TryteCore[T]) SetAllTrits(t Trit) T {
 
 //------------------------------------------------------------------------------
 
-func (tc TryteCore[T]) Int64ToTrite(v int64) (a T, rest int64) {
-	return int64ToTrite(tc, v)
+func (tc TryteCore[T]) Int64ToTriteRest(v int64) (a T, rest int64) {
+	return int64ToTriteRest(tc, v)
+}
+
+func (tc TryteCore[T]) TryteRestToInt64(a T, rest int64) (int64, bool) {
+	return tryteRestToInt64(tc, a, rest)
 }
 
 //------------------------------------------------------------------------------
 
-func (tc TryteCore[T]) TryteToInt64(a T, rest int64) (int64, bool) {
-	return tryteToInt64(tc, a, rest)
+func (tc TryteCore[T]) Int64ToTrite(v int64) T {
+	t, _ := tc.Int64ToTriteRest(v)
+	return t
 }
 
-func (tc TryteCore[T]) ToInt64(a T) int64 {
-	x, _ := tc.TryteToInt64(a, 0)
-	return x
+func (tc TryteCore[T]) TryteToInt64(a T) int64 {
+	v, ok := tc.TryteRestToInt64(a, 0)
+	if !ok {
+		panic("TryteToInt64")
+	}
+	return v
 }
 
 //------------------------------------------------------------------------------
 
-func (tc TryteCore[T]) Format(a T) string {
+func (tc TryteCore[T]) formatV1(a T) string {
 	s, err := tryteFormat(tc.n, a)
 	if err != nil {
 		panic(err)
@@ -136,6 +144,11 @@ func (tc TryteCore[T]) FormatAllTrits(a T) string {
 		panic(err)
 	}
 	return s
+}
+
+func (tc TryteCore[T]) Format(a T) string {
+	// return tc.formatV1(a)
+	return tc.FormatAllTrits(a)
 }
 
 func (tc TryteCore[T]) Parse(s string) (T, error) {
@@ -195,8 +208,8 @@ func (tc TryteCore[T]) MulLo(a, b T) (lo T) {
 
 //------------------------------------------------------------------------------
 
-func (tc TryteCore[T]) QuoRem(x, y T) (quo, rem T) {
-	return tryteQuoRem(tc, x, y)
+func (tc TryteCore[T]) QuoRem(hi, lo, y T) (quo, rem T) {
+	return tryteQuoRem(tc, hi, lo, y)
 }
 
 //------------------------------------------------------------------------------
@@ -237,8 +250,8 @@ func (tc TryteCore[T]) Limits() (min, max T) {
 
 func (tc TryteCore[T]) LimitsInt64() (min, max int64) {
 	tmin, tmax := tryteLimits[T](tc.n)
-	min = tc.ToInt64(tmin)
-	max = tc.ToInt64(tmax)
+	min = tc.TryteToInt64(tmin)
+	max = tc.TryteToInt64(tmax)
 	return min, max
 }
 

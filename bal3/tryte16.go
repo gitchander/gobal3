@@ -7,7 +7,7 @@ var tc16 = MakeTryteCore[Tryte16](16)
 var TC16 = tc16
 
 func (a Tryte16) ToInt64() int64 {
-	return tc16.ToInt64(a)
+	return tc16.TryteToInt64(a)
 }
 
 func (a Tryte16) String() string {
@@ -34,7 +34,7 @@ func (a Tryte16) Mul(b Tryte16) Tryte16 {
 }
 
 func (a Tryte16) Div(b Tryte16) Tryte16 {
-	quo, _ := tc16.QuoRem(a, b)
+	quo, _ := tc16.QuoRem(0, a, b)
 	return quo
 }
 

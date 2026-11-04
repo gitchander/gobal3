@@ -8,7 +8,7 @@ var digiter = digits.NewDigiter(-1, +1)
 
 //------------------------------------------------------------------------------
 
-func intToTriteV1[T GenericTryte](tc TryteCore[T], v int) (a T, rest int) {
+func intToTriteRestV1[T GenericTryte](tc TryteCore[T], v int) (a T, rest int) {
 	var t int
 	for i := 0; i < tc.n; i++ {
 		v, t = digiter.RestDigit(v)
@@ -18,7 +18,7 @@ func intToTriteV1[T GenericTryte](tc TryteCore[T], v int) (a T, rest int) {
 	return
 }
 
-func tryteToInt64V1[T GenericTryte](tc TryteCore[T], a T, rest int64) (int64, bool) {
+func tryteRestToInt64V1[T GenericTryte](tc TryteCore[T], a T, rest int64) (int64, bool) {
 	base := int64(digiter.Base())
 	v := rest
 	for i := tc.n; i > 0; { // backward iterate
@@ -31,7 +31,7 @@ func tryteToInt64V1[T GenericTryte](tc TryteCore[T], a T, rest int64) (int64, bo
 
 //------------------------------------------------------------------------------
 
-func intToTriteV2[T GenericTryte](tc TryteCore[T], v int) (a T, rest int) {
+func intToTriteRestV2[T GenericTryte](tc TryteCore[T], v int) (a T, rest int) {
 	ds := make([]int, tc.n)
 	rest = digiter.IntToDigits(v, ds)
 	for i, d := range ds {
@@ -41,7 +41,7 @@ func intToTriteV2[T GenericTryte](tc TryteCore[T], v int) (a T, rest int) {
 	return
 }
 
-func tryteToIntV2[T GenericTryte](tc TryteCore[T], a T, rest int) int {
+func tryteRestToIntV2[T GenericTryte](tc TryteCore[T], a T, rest int) int {
 	ds := make([]int, tc.n)
 	for i := range ds {
 		t := getTrit(a, i)
@@ -56,7 +56,7 @@ func tryteToIntV2[T GenericTryte](tc TryteCore[T], a T, rest int) int {
 
 //------------------------------------------------------------------------------
 
-func int64ToTriteV3[T GenericTryte](tc TryteCore[T], v int64) (a T, rest int64) {
+func int64ToTriteRestV3[T GenericTryte](tc TryteCore[T], v int64) (a T, rest int64) {
 	var t int64
 	for i := 0; i < tc.n; i++ {
 		v, t = quoRemBal3(v)
@@ -68,15 +68,15 @@ func int64ToTriteV3[T GenericTryte](tc TryteCore[T], v int64) (a T, rest int64) 
 
 //------------------------------------------------------------------------------
 
-func int64ToTrite[T GenericTryte](tc TryteCore[T], v int64) (a T, rest int64) {
-	//return intToTriteV1(tc, v)
-	//return intToTriteV2(tc, v)
-	return int64ToTriteV3(tc, v)
+func int64ToTriteRest[T GenericTryte](tc TryteCore[T], v int64) (a T, rest int64) {
+	//return intToTriteRestV1(tc, v)
+	//return intToTriteRestV2(tc, v)
+	return int64ToTriteRestV3(tc, v)
 }
 
-func tryteToInt64[T GenericTryte](tc TryteCore[T], a T, rest int64) (int64, bool) {
-	return tryteToInt64V1(tc, a, rest)
-	//return tryteToIntV2(tc, a, rest)
+func tryteRestToInt64[T GenericTryte](tc TryteCore[T], a T, rest int64) (int64, bool) {
+	return tryteRestToInt64V1(tc, a, rest)
+	//return tryteRestToIntV2(tc, a, rest)
 }
 
 //------------------------------------------------------------------------------

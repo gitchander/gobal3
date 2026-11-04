@@ -6,6 +6,50 @@ import (
 	"testing"
 )
 
+func TestQuoRemT9(t *testing.T) {
+
+	tc := TC9
+	type Tryte = Tryte9
+
+	type testSample struct {
+		hi, lo, b Tryte
+		quo, rem  Tryte
+	}
+	samples := []testSample{
+		{
+			hi: 0, lo: tc.Int64ToTrite(7), b: tc.Int64ToTrite(5),
+			quo: tc.Int64ToTrite(1), rem: tc.Int64ToTrite(2), // 7 = 5 * 1 + 2
+		},
+		{
+			hi: 0, lo: tc.Int64ToTrite(8), b: tc.Int64ToTrite(5),
+			quo: tc.Int64ToTrite(2), rem: tc.Int64ToTrite(-2), // 8 = 5 * 2 - 2
+		},
+		{
+			hi: 0, lo: tc.Int64ToTrite(9), b: tc.Int64ToTrite(5),
+			quo: tc.Int64ToTrite(2), rem: tc.Int64ToTrite(-1), // 9 = 5 * 2 - 1
+		},
+		{
+			hi: 0, lo: tc.Int64ToTrite(10), b: tc.Int64ToTrite(5),
+			quo: tc.Int64ToTrite(2), rem: tc.Int64ToTrite(0), // 10 = 5 * 2 + 0
+		},
+		{
+			hi: tc.Int64ToTrite(4920), lo: tc.Int64ToTrite(4921), // 9841 * 9841 = 96845281 = 4920 * (3^9) + 4921
+			b:   tc.Int64ToTrite(9841),
+			quo: tc.Int64ToTrite(9841), rem: tc.Int64ToTrite(0),
+		},
+	}
+	for i, sample := range samples {
+		//hi, lo := tc.Mul(sample.a, sample.b)
+		quo, rem := tc.QuoRem(sample.hi, sample.lo, sample.b)
+		if !(quo.Equal(sample.quo)) {
+			t.Fatalf("sample[%d] invalid %s: have %s, want %s", i, "quo", quo, sample.quo)
+		}
+		if !(rem.Equal(sample.rem)) {
+			t.Fatalf("sample[%d] invalid %s: have %s, want %s", i, "quo", rem, sample.rem)
+		}
+	}
+}
+
 func TestQuoRemT16Samples(t *testing.T) {
 
 	type tritsType = Tryte16
@@ -23,8 +67,8 @@ func TestQuoRemT16Samples(t *testing.T) {
 
 		fromInt64 = func(av, bv int64) sampleType {
 			var (
-				a, _ = tc.Int64ToTrite(av)
-				b, _ = tc.Int64ToTrite(bv)
+				a = tc.Int64ToTrite(av)
+				b = tc.Int64ToTrite(bv)
 			)
 			return sampleType{a, b}
 		}
@@ -58,12 +102,12 @@ func TestQuoRemT4All(t *testing.T) {
 	tc := TC4
 	min, max := tc.LimitsInt64()
 	for ai := min; ai <= max; ai++ {
-		a, _ := tc.Int64ToTrite(ai)
+		a := tc.Int64ToTrite(ai)
 		for bi := min; bi <= max; bi++ {
 			if bi == 0 {
 				continue
 			}
-			b, _ := tc.Int64ToTrite(bi)
+			b := tc.Int64ToTrite(bi)
 			err := testQuoRemDouble(tc, a, b)
 			if err != nil {
 				t.Fatal(err)
@@ -145,51 +189,9 @@ func testQuoRemRange[T GenericTryte](tc TryteCore[T]) error {
 	return nil
 }
 
-// func testQuoRemDouble_1[T GenericTryte](tc TryteCore[T], a, b T) error {
-
-// 	var (
-// 		av = tc.ToInt64(a)
-// 		bv = tc.ToInt64(b)
-// 	)
-
-// 	quo, rem := tc.QuoRem(a, b)
-// 	var (
-// 		haveQuo = tc.ToInt64(quo)
-// 		haveRem = tc.ToInt64(rem)
-// 	)
-
-// 	wantQuo, wantRem := quoRem(av, bv)
-
-// 	printAll := func() {
-// 		fmt.Printf("have: quoRem(%d, %d) => { quo: %d, rem: %d }\n", av, bv, haveQuo, haveRem)
-// 		fmt.Printf("want: quoRem(%d, %d) => { quo: %d, rem: %d }\n", av, bv, wantQuo, wantRem)
-// 	}
-
-// 	var (
-// 		haveA = bv*haveQuo + haveRem
-// 		wantA = av
-// 	)
-// 	if haveA != wantA {
-// 		printAll()
-// 		return fmt.Errorf("wrong (b*quo + rem) value: have %d, want %d", haveA, wantA)
-// 	}
-
-// 	if haveQuo != wantQuo {
-// 		printAll()
-// 		return fmt.Errorf("wrong quo: have %d, want %d", haveQuo, wantQuo)
-// 	}
-
-// 	if haveRem != wantRem {
-// 		printAll()
-// 		return fmt.Errorf("wrong rem: have %d, want %d", haveRem, wantRem)
-// 	}
-
-// 	return nil
-// }
-
 func testQuoRemDouble_2[T GenericTryte](tc TryteCore[T], a, b T) error {
 
-	quo, rem := tc.QuoRem(a, b)
+	quo, rem := tc.QuoRem(0, a, b)
 
 	hi, lo := tc.Mul(quo, b)
 

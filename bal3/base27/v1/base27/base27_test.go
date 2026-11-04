@@ -31,7 +31,7 @@ func testBase27[T genericTryte](tc bal3.TryteCore[T], a T) error {
 func testBase27Bounds[T genericTryte](tc bal3.TryteCore[T]) error {
 	min, max := tc.LimitsInt64()
 	for av := min; av <= max; av++ {
-		a, _ := tc.Int64ToTrite(av)
+		a := tc.Int64ToTrite(av)
 		err := testBase27(tc, a)
 		if err != nil {
 			return err

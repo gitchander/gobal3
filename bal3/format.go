@@ -6,6 +6,11 @@ import (
 	ivl "github.com/gitchander/gobal3/utils/interval"
 )
 
+const (
+	tritsPrefix    = "0t"
+	tritsBy3Prefix = "03t"
+)
+
 func tryteFormat[Tryte GenericTryte](n int, a Tryte) (string, error) {
 	var (
 		bs = make([]byte, n)

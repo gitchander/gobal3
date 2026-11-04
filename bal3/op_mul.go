@@ -68,18 +68,23 @@ func trytesMul_v1[Tryte GenericTryte](n int, a, b Tryte) (hi, lo Tryte) {
 }
 
 func trytesMul_v2[Tryte GenericTryte](n int, a, b Tryte) (hi, lo Tryte) {
+
 	var (
 		w      Tryte
 		w1, w2 Tryte
 		carry  Trit
 	)
+
+	// Precompute the inverse of b once, outside the loop
+	invB := tryteInverse(n, b)
+
 	for i := 0; i < n; i++ {
 
 		ai := getTrit(a, i)
 
 		switch ai {
 		case -1:
-			w = tryteInverse(n, b)
+			w = invB
 		case 0:
 			w = 0
 		case +1:
@@ -125,17 +130,22 @@ func trytesMulLo_v1[Tryte GenericTryte](n int, a, b Tryte) (lo Tryte) {
 }
 
 func trytesMulLo_v2[Tryte GenericTryte](n int, a, b Tryte) (lo Tryte) {
+
 	var (
 		w  Tryte
 		w1 Tryte
 	)
+
+	// Precompute the inverse of b once, outside the loop
+	invB := tryteInverse(n, b)
+
 	for i := 0; i < n; i++ {
 
 		ai := getTrit(a, i)
 
 		switch ai {
 		case -1:
-			w = tryteInverse(n, b)
+			w = invB
 		case 0:
 			w = 0
 		case +1:
@@ -144,7 +154,6 @@ func trytesMulLo_v2[Tryte GenericTryte](n int, a, b Tryte) (lo Tryte) {
 
 		if w != 0 {
 			w1 = tryteShl(n, w, i) // w << i
-
 			lo, _ = trytesAdd(n, lo, w1, 0)
 		}
 	}

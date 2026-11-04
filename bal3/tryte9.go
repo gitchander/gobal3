@@ -10,7 +10,7 @@ var (
 )
 
 func (a Tryte9) ToInt64() int64 {
-	return tc9.ToInt64(a)
+	return tc9.TryteToInt64(a)
 }
 
 func (a Tryte9) String() string {
@@ -37,7 +37,7 @@ func (a Tryte9) Mul(b Tryte9) Tryte9 {
 }
 
 func (a Tryte9) Div(b Tryte9) Tryte9 {
-	quo, _ := tc9.QuoRem(a, b)
+	quo, _ := tc9.QuoRem(0, a, b)
 	return quo
 }
 

@@ -7,7 +7,7 @@ var tc32 = MakeTryteCore[Tryte32](32)
 var TC32 = tc32
 
 func (a Tryte32) ToInt64() int64 {
-	return tc32.ToInt64(a)
+	return tc32.TryteToInt64(a)
 }
 
 func (a Tryte32) String() string {
@@ -34,7 +34,7 @@ func (a Tryte32) Mul(b Tryte32) Tryte32 {
 }
 
 func (a Tryte32) Div(b Tryte32) Tryte32 {
-	quo, _ := tc32.QuoRem(a, b)
+	quo, _ := tc32.QuoRem(0, a, b)
 	return quo
 }
 

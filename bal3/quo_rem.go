@@ -13,8 +13,13 @@ import (
 // Multi-trit division
 
 const (
-	EnableCorrectionQuoRem = false
-	//EnableCorrectionQuoRem = true
+	enableCorrectionQuoRem = false
+	// enableCorrectionQuoRem = true
+)
+
+const (
+	printDebug    = false
+	compareBefore = true
 )
 
 var errDivisionByZero = errors.New("division by zero")
@@ -54,12 +59,12 @@ type divParams[Tryte GenericTryte] struct {
 	r double[Tryte]
 }
 
-func makeDivParams[Tryte GenericTryte](tc TryteCore[Tryte], a, b Tryte) *divParams[Tryte] {
+func makeDivParams[Tryte GenericTryte](tc TryteCore[Tryte], hi, lo, b Tryte) *divParams[Tryte] {
 
 	dc := makeDoubleCore[Tryte](tc)
 
 	var (
-		r = makeDouble[Tryte](0, a)
+		r = makeDouble[Tryte](hi, lo)
 		d = makeDouble[Tryte](0, b)
 	)
 
@@ -93,6 +98,19 @@ func makeDivParams[Tryte GenericTryte](tc TryteCore[Tryte], a, b Tryte) *divPara
 
 	d = dc.Shl(d, tc.n) // d = d << n
 	hd, _ := dc.Add(d1, d2, 0)
+
+	// if printDebug {
+	// 	fmt.Println("hd:", hd)
+	// }
+
+	if compareBefore {
+		d = dc.Shr(d, 1)
+		hd = dc.Shr(hd, 1)
+	}
+
+	if printDebug {
+		fmt.Println("hd:", hd)
+	}
 
 	//--------------------------------------------------------------------------
 
@@ -177,6 +195,11 @@ func (p *divParams[T]) divIterV3() int {
 
 	dc := p.dc
 
+	if printDebug {
+		//fmt.Printf("Compare: r=%v, hd=%v\n", p.r, p.hd)
+		fmt.Printf("Compare: r=%v\n", p.r)
+	}
+
 	if dc.Compare(p.r, p.hd) == p.signD {
 		p.r, _ = dc.Sub(p.r, p.d, 0)
 		return +1
@@ -192,11 +215,18 @@ func (p *divParams[T]) divIterV3() int {
 
 func (p *divParams[T]) divIter() int {
 
-	p.r = p.dc.Shl(p.r, 1) // r = r << 1
+	if compareBefore {
+		t := p.divIterV3()
+		p.r = p.dc.Shl(p.r, 1) // r = r << 1
+		return t
+	} else {
 
-	//return p.divIterV1()
-	//return p.divIterV2()
-	return p.divIterV3()
+		p.r = p.dc.Shl(p.r, 1) // r = r << 1
+
+		//return p.divIterV1()
+		//return p.divIterV2()
+		return p.divIterV3()
+	}
 }
 
 func (p *divParams[T]) outRem() T {
@@ -208,7 +238,7 @@ func (p *divParams[T]) outRem() T {
 // correction q and r
 
 func correctionQuoRemV1[T GenericTryte](tc TryteCore[T], a, b T, q, r T) (cq, cr T) {
-	one, _ := tc.Int64ToTrite(1)
+	one, _ := tc.Int64ToTriteRest(1)
 	var (
 		signA = tc.Sign(a)
 		signB = tc.Sign(b)
@@ -277,27 +307,34 @@ func correctionQuoRem[Tryte GenericTryte](tc TryteCore[Tryte], a, b Tryte, q, r 
 
 //------------------------------------------------------------------------------
 
-func tryteQuoRem[Tryte GenericTryte](tc TryteCore[Tryte], a, b Tryte) (q, r Tryte) {
+// (hi * (3^n) + lo) / y
+
+func tryteQuoRem[Tryte GenericTryte](tc TryteCore[Tryte], hi, lo, b Tryte) (q, r Tryte) {
 
 	if tc.IsZero(b) {
 		panic(errDivisionByZero)
 	}
 
-	dp := makeDivParams(tc, a, b)
+	dp := makeDivParams(tc, hi, lo, b)
 
 	for i := tc.n; i > 0; { // backward iterate
 		i--
 
 		t := dp.divIter()
+
+		if printDebug {
+			fmt.Printf("t[%d] = %d\n", i, t)
+		}
+
 		q = setTrit(q, i, Trit(t)) // q[i] = t
 	}
 
 	r = dp.outRem()
 
 	// QuoRem correction
-	if EnableCorrectionQuoRem {
-		q, r = correctionQuoRem(tc, a, b, q, r)
-	}
+	// if enableCorrectionQuoRem {
+	// 	q, r = correctionQuoRem(tc, hi, b, q, r)
+	// }
 
 	return
 }

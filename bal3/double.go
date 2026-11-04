@@ -128,8 +128,8 @@ func (dc doubleCore[T]) GetTrit(a double[T], i int) Trit {
 func (dc doubleCore[T]) Int64ToDouble(v int64) (d double[T], rest int64) {
 	tc := dc.tc
 	var lo, hi T
-	lo, v = tc.Int64ToTrite(v)
-	hi, v = tc.Int64ToTrite(v)
+	lo, v = tc.Int64ToTriteRest(v)
+	hi, v = tc.Int64ToTriteRest(v)
 	d = makeDouble(hi, lo)
 	rest = v
 	return d, rest
@@ -139,11 +139,11 @@ func (dc doubleCore[T]) DoubleToInt64(a double[T], rest int64) (int64, bool) {
 	tc := dc.tc
 	v := rest
 	var ok bool
-	v, ok = tc.TryteToInt64(a.Hi, v)
+	v, ok = tc.TryteRestToInt64(a.Hi, v)
 	if !ok {
 		return 0, false
 	}
-	v, ok = tc.TryteToInt64(a.Lo, v)
+	v, ok = tc.TryteRestToInt64(a.Lo, v)
 	if !ok {
 		return 0, false
 	}
