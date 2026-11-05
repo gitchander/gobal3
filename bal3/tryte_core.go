@@ -222,6 +222,10 @@ func (tc TryteCore[T]) RandSh(r *Rand) T {
 	return randTryteSh[T](tc.n, r)
 }
 
+func (tc TryteCore[T]) randTryteForTest(r *Rand) T {
+	return randTryteForTest[T](tc.n, r)
+}
+
 //------------------------------------------------------------------------------
 
 // big.BitLen(), TritLen()

@@ -6,41 +6,144 @@ import (
 	"testing"
 )
 
+// func testQuoRem_v1[T GenericTryte](tc TryteCore[T], hi, lo, b T) error {
+
+// 	quo, rem := tc.QuoRem(hi, lo, b)
+
+// 	//hi, lo := tc.Mul(quo, b)
+
+// 	checkAll := false
+
+// 	if checkAll {
+// 		if !(tc.IsZero(hi)) {
+// 			return fmt.Errorf("(%s / %s): hi is not zero: it is %s",
+// 				tc.Format(a),
+// 				tc.Format(b),
+// 				tc.Format(hi))
+// 		}
+// 	}
+
+// 	aa, c1 := tc.Add(lo, rem, 0)
+
+// 	if checkAll {
+// 		if c1 != 0 {
+// 			return fmt.Errorf("c1 is not zero: it is %d", c1)
+// 		}
+// 	}
+
+// 	if !tc.Equal(aa, a) {
+// 		return fmt.Errorf("%s != %s", tc.Format(aa), tc.Format(a))
+// 	}
+
+// 	return nil
+// }
+
+func testQuoRem_v2[T GenericTryte](tc TryteCore[T], hi, lo, y T) error {
+
+	dc := makeDoubleCore(tc)
+
+	ab := makeDouble(hi, lo)
+
+	// quo = ab / y
+	// rem = ab % y
+	quo, rem := tc.QuoRem(ab.Hi, ab.Lo, y)
+
+	v1 := makeDouble(tc.Mul(quo, y)) // quo * y
+	v2 := makeDouble(0, rem)
+	v3, _ := dc.Add(v1, v2, 0) // quo * y + rem
+
+	cmp := dc.Compare(ab, v3)
+	if cmp != 0 {
+
+		if true {
+			dab, _ := dc.DoubleToInt64(ab, 0)
+			fmt.Println("dab:", dab)
+
+			fmt.Println("y:", tc.TryteToInt64(y))
+			fmt.Println("quo:", tc.TryteToInt64(quo))
+			fmt.Println("rem:", tc.TryteToInt64(rem))
+		}
+		return fmt.Errorf("%v != %v", ab, v3)
+	}
+
+	return nil
+}
+
+func testQuoRem[T GenericTryte](tc TryteCore[T], hi, lo, y T) error {
+	// return testQuoRem_v1(tc, hi, lo, y)
+	return testQuoRem_v2(tc, hi, lo, y)
+}
+
+func TestQuoRemT9Random(t *testing.T) {
+
+	// tc := TC9
+	// type Tryte = Tryte9
+
+	tc := TC27
+	type Tryte = Tryte27
+
+	var a, b Tryte
+
+	r := newRandNext()
+	for i := 0; i < 1000; i++ {
+
+		a = tc.randTryteForTest(r)
+		b = 0
+		for b.IsZero() {
+			b = tc.randTryteForTest(r)
+		}
+
+		hi, lo := tc.Mul(a, b)
+
+		err := testQuoRem(tc, hi, lo, b)
+		if err != nil {
+			t.Fatal(err)
+		}
+	}
+}
+
+//------------------------------------------------------------------------------
+
 func TestQuoRemT9(t *testing.T) {
 
 	tc := TC9
 	type Tryte = Tryte9
 
 	type testSample struct {
-		hi, lo, b Tryte
+		hi, lo, y Tryte
 		quo, rem  Tryte
 	}
 	samples := []testSample{
 		{
-			hi: 0, lo: tc.Int64ToTrite(7), b: tc.Int64ToTrite(5),
+			hi: 0, lo: tc.Int64ToTrite(7), y: tc.Int64ToTrite(5),
 			quo: tc.Int64ToTrite(1), rem: tc.Int64ToTrite(2), // 7 = 5 * 1 + 2
 		},
 		{
-			hi: 0, lo: tc.Int64ToTrite(8), b: tc.Int64ToTrite(5),
+			hi: 0, lo: tc.Int64ToTrite(8), y: tc.Int64ToTrite(5),
 			quo: tc.Int64ToTrite(2), rem: tc.Int64ToTrite(-2), // 8 = 5 * 2 - 2
 		},
 		{
-			hi: 0, lo: tc.Int64ToTrite(9), b: tc.Int64ToTrite(5),
+			hi: 0, lo: tc.Int64ToTrite(9), y: tc.Int64ToTrite(5),
 			quo: tc.Int64ToTrite(2), rem: tc.Int64ToTrite(-1), // 9 = 5 * 2 - 1
 		},
 		{
-			hi: 0, lo: tc.Int64ToTrite(10), b: tc.Int64ToTrite(5),
+			hi: 0, lo: tc.Int64ToTrite(10), y: tc.Int64ToTrite(5),
 			quo: tc.Int64ToTrite(2), rem: tc.Int64ToTrite(0), // 10 = 5 * 2 + 0
 		},
 		{
+			hi: tc.Int64ToTrite(-4920), lo: tc.Int64ToTrite(-4921), // 9841 * 9841 = 96845281 = 4920 * (3^9) + 4921
+			y:   tc.Int64ToTrite(9841),
+			quo: tc.Int64ToTrite(-9841), rem: tc.Int64ToTrite(0),
+		},
+		{
 			hi: tc.Int64ToTrite(4920), lo: tc.Int64ToTrite(4921), // 9841 * 9841 = 96845281 = 4920 * (3^9) + 4921
-			b:   tc.Int64ToTrite(9841),
+			y:   tc.Int64ToTrite(9841),
 			quo: tc.Int64ToTrite(9841), rem: tc.Int64ToTrite(0),
 		},
 	}
 	for i, sample := range samples {
-		//hi, lo := tc.Mul(sample.a, sample.b)
-		quo, rem := tc.QuoRem(sample.hi, sample.lo, sample.b)
+		//hi, lo := tc.Mul(sample.a, sample.y)
+		quo, rem := tc.QuoRem(sample.hi, sample.lo, sample.y)
 		if !(quo.Equal(sample.quo)) {
 			t.Fatalf("sample[%d] invalid %s: have %s, want %s", i, "quo", quo, sample.quo)
 		}
@@ -91,7 +194,7 @@ func TestQuoRemT16Samples(t *testing.T) {
 
 	for _, p := range ps {
 		//err := testQuoRemT16(p[0], p[1])
-		err := testQuoRemDouble(tc, p[0], p[1])
+		err := testQuoRem(tc, 0, p[0], p[1])
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -108,7 +211,7 @@ func TestQuoRemT4All(t *testing.T) {
 				continue
 			}
 			b := tc.Int64ToTrite(bi)
-			err := testQuoRemDouble(tc, a, b)
+			err := testQuoRem(tc, 0, a, b)
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -121,13 +224,13 @@ func TestQuoRemT16Random(t *testing.T) {
 	r := newRandNext()
 	for i := 0; i < 1000; i++ {
 
-		a := tc.RandSh(r)
+		a := tc.randTryteForTest(r)
 		var b Tryte16
 		for b.IsZero() {
-			b = tc.RandSh(r)
+			b = tc.randTryteForTest(r)
 		}
 
-		err := testQuoRemDouble(tc, a, b)
+		err := testQuoRem(tc, 0, a, b)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -166,7 +269,7 @@ func TestQuoRemT32Samples(t *testing.T) {
 			a = sample[0]
 			b = sample[1]
 		)
-		err := testQuoRemDouble(tc, a, b)
+		err := testQuoRem(tc, 0, a, b)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -176,54 +279,17 @@ func TestQuoRemT32Samples(t *testing.T) {
 func testQuoRemRange[T GenericTryte](tc TryteCore[T]) error {
 	r := newRandNext()
 	for i := 0; i < 1000; i++ {
-		a := tc.RandSh(r)
+		a := tc.randTryteForTest(r)
 		var b T
 		for tc.IsZero(b) {
-			b = tc.RandSh(r)
+			b = tc.randTryteForTest(r)
 		}
-		err := testQuoRemDouble(tc, a, b)
+		err := testQuoRem(tc, 0, a, b)
 		if err != nil {
 			return err
 		}
 	}
 	return nil
-}
-
-func testQuoRemDouble_2[T GenericTryte](tc TryteCore[T], a, b T) error {
-
-	quo, rem := tc.QuoRem(0, a, b)
-
-	hi, lo := tc.Mul(quo, b)
-
-	checkAll := false
-
-	if checkAll {
-		if !(tc.IsZero(hi)) {
-			return fmt.Errorf("(%s / %s): hi is not zero: it is %s",
-				tc.Format(a),
-				tc.Format(b),
-				tc.Format(hi))
-		}
-	}
-
-	aa, c1 := tc.Add(lo, rem, 0)
-
-	if checkAll {
-		if c1 != 0 {
-			return fmt.Errorf("c1 is not zero: it is %d", c1)
-		}
-	}
-
-	if !tc.Equal(aa, a) {
-		return fmt.Errorf("%s != %s", tc.Format(aa), tc.Format(a))
-	}
-
-	return nil
-}
-
-func testQuoRemDouble[T GenericTryte](tc TryteCore[T], a, b T) error {
-	// return testQuoRemDouble_1(tc, a, b)
-	return testQuoRemDouble_2(tc, a, b)
 }
 
 func TestQuoRemBal3Samples(t *testing.T) {

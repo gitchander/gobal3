@@ -47,8 +47,8 @@ func testAddSubRand[T GenericTryte](tc TryteCore[T]) error {
 	r := newRandNext()
 	for i := 0; i < 1000; i++ {
 		var (
-			a       = tc.RandSh(r)
-			b       = tc.RandSh(r)
+			a       = tc.randTryteForTest(r)
+			b       = tc.randTryteForTest(r)
 			carryIn = randTrit(r)
 		)
 		err := testTritsAddSub(tc, a, b, carryIn)
@@ -134,8 +134,8 @@ func TestSubTryte8(t *testing.T) {
 	r := newRandNext()
 	for i := 0; i < 1000; i++ {
 		var (
-			a       = tc.RandSh(r)
-			b       = tc.RandSh(r)
+			a       = tc.randTryteForTest(r)
+			b       = tc.randTryteForTest(r)
 			carryIn = randTrit(r)
 		)
 		err := testTritsAddSub(tc, a, b, carryIn)

@@ -28,3 +28,10 @@ func randTryteSh[Tryte GenericTryte](n int, r *Rand) Tryte {
 	a := randTryte[Tryte](n, r)
 	return tryteShr(n, a, r.Intn(n))
 }
+
+func randTryteForTest[Tryte GenericTryte](n int, r *Rand) Tryte {
+	if r.Intn(100) > 95 {
+		return tryteSetAllTrits[Tryte](n, randTrit(r))
+	}
+	return randTryteSh[Tryte](n, r)
+}

@@ -42,8 +42,8 @@ func testMulRand[T GenericTryte](tc TryteCore[T]) error {
 	r := newRandNext()
 	for i := 0; i < 1000; i++ {
 		var (
-			a = tc.RandSh(r)
-			b = tc.RandSh(r)
+			a = tc.randTryteForTest(r)
+			b = tc.randTryteForTest(r)
 		)
 		err := testMul(tc, a, b)
 		if err != nil {

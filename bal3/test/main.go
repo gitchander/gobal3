@@ -474,8 +474,8 @@ func testTryte() {
 func testMulMax() {
 
 	var (
-		tc = bal3.TC9
-		//tc = bal3.TC27
+		// tc = bal3.TC9
+		tc = bal3.TC27
 	)
 
 	var (
@@ -492,8 +492,6 @@ func testMulMax() {
 	printTryteField("a", tc, a)
 	printTryteField("b", tc, b)
 
-	//	fmt.Printf("a = (base10)_%d = %s (bal3)\n", tc.ToInt64(a), tc.Format(a))
-
 	hi, lo := tc.Mul(a, b)
 
 	printTryteField("(a * b).hi", tc, hi)
@@ -506,5 +504,5 @@ func testMulMax() {
 }
 
 func printTryteField[T bal3.GenericTryte](fieldName string, tc bal3.TryteCore[T], t T) {
-	fmt.Printf("%s = (base10) %d = 0t%s\n", fieldName, tc.TryteToInt64(t), tc.Format(t))
+	fmt.Printf("%s = (base10) %d = (bal3) %s\n", fieldName, tc.TryteToInt64(t), tc.Format(t))
 }

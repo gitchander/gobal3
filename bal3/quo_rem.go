@@ -59,13 +59,13 @@ type divParams[Tryte GenericTryte] struct {
 	r double[Tryte]
 }
 
-func makeDivParams[Tryte GenericTryte](tc TryteCore[Tryte], hi, lo, b Tryte) *divParams[Tryte] {
+func makeDivParams[Tryte GenericTryte](tc TryteCore[Tryte], hi, lo, y Tryte) *divParams[Tryte] {
 
 	dc := makeDoubleCore[Tryte](tc)
 
 	var (
 		r = makeDouble[Tryte](hi, lo)
-		d = makeDouble[Tryte](0, b)
+		d = makeDouble[Tryte](0, y)
 	)
 
 	//--------------------------------------------------------------------------
@@ -99,9 +99,26 @@ func makeDivParams[Tryte GenericTryte](tc TryteCore[Tryte], hi, lo, b Tryte) *di
 	d = dc.Shl(d, tc.n) // d = d << n
 	hd, _ := dc.Add(d1, d2, 0)
 
-	// if printDebug {
-	// 	fmt.Println("hd:", hd)
-	// }
+	//---------------------------------
+
+	signD := dc.Sign(d)
+	switch {
+	case (signD == +1):
+		if c := dc.Compare(hd, r); c < 0 {
+
+			fmt.Println("d: ", d)
+			fmt.Println("hd:", hd)
+			fmt.Println("r: ", r)
+
+			panic("quotient overflow")
+		}
+	case (signD == -1):
+		if c := dc.Compare(r, hd); c < 0 {
+			panic("quotient overflow")
+		}
+	}
+
+	//---------------------------------
 
 	if compareBefore {
 		d = dc.Shr(d, 1)
@@ -109,6 +126,7 @@ func makeDivParams[Tryte GenericTryte](tc TryteCore[Tryte], hi, lo, b Tryte) *di
 	}
 
 	if printDebug {
+		fmt.Println("d:", d)
 		fmt.Println("hd:", hd)
 	}
 
@@ -194,11 +212,6 @@ func (p *divParams[T]) divIterV2() int {
 func (p *divParams[T]) divIterV3() int {
 
 	dc := p.dc
-
-	if printDebug {
-		//fmt.Printf("Compare: r=%v, hd=%v\n", p.r, p.hd)
-		fmt.Printf("Compare: r=%v\n", p.r)
-	}
 
 	if dc.Compare(p.r, p.hd) == p.signD {
 		p.r, _ = dc.Sub(p.r, p.d, 0)
@@ -309,13 +322,13 @@ func correctionQuoRem[Tryte GenericTryte](tc TryteCore[Tryte], a, b Tryte, q, r 
 
 // (hi * (3^n) + lo) / y
 
-func tryteQuoRem[Tryte GenericTryte](tc TryteCore[Tryte], hi, lo, b Tryte) (q, r Tryte) {
+func tryteQuoRem[Tryte GenericTryte](tc TryteCore[Tryte], hi, lo, y Tryte) (quo, rem Tryte) {
 
-	if tc.IsZero(b) {
+	if tc.IsZero(y) {
 		panic(errDivisionByZero)
 	}
 
-	dp := makeDivParams(tc, hi, lo, b)
+	dp := makeDivParams(tc, hi, lo, y)
 
 	for i := tc.n; i > 0; { // backward iterate
 		i--
@@ -324,16 +337,18 @@ func tryteQuoRem[Tryte GenericTryte](tc TryteCore[Tryte], hi, lo, b Tryte) (q, r
 
 		if printDebug {
 			fmt.Printf("t[%d] = %d\n", i, t)
+			fmt.Printf("r=%v\n", dp.r)
+			fmt.Println()
 		}
 
-		q = setTrit(q, i, Trit(t)) // q[i] = t
+		quo = setTrit(quo, i, Trit(t)) // quo[i] = t
 	}
 
-	r = dp.outRem()
+	rem = dp.outRem()
 
 	// QuoRem correction
 	// if enableCorrectionQuoRem {
-	// 	q, r = correctionQuoRem(tc, hi, b, q, r)
+	// 	quo, rem = correctionQuoRem(tc, hi, b, quo, rem)
 	// }
 
 	return
