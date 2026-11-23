@@ -21,17 +21,17 @@ package bal3
 // c0 - carryIn (input carry trit)
 // c1 - carryOut (output carry trit)
 
-// z = (x + y) + c0
+// sum + (3^n)*c1 = x + y + c0
 
-func trytesAdd[Tryte GenericTryte](n int, x, y Tryte, c0 Trit) (z Tryte, c1 Trit) {
+func trytesAdd[Tryte GenericTryte](n int, x, y Tryte, c0 Trit) (sum Tryte, c1 Trit) {
 	var (
 		carry, t Trit
 	)
 	carry = c0
 	for i := 0; i < n; i++ {
-		carry, t = tritsAdd3(getTrit(x, i), getTrit(y, i), carry)
-		z = setTrit(z, i, t)
+		t, carry = tritsAdd3(getTrit(x, i), getTrit(y, i), carry)
+		sum = setTrit(sum, i, t)
 	}
 	c1 = carry
-	return z, c1
+	return sum, c1
 }

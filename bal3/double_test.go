@@ -25,8 +25,8 @@ func testDoubleSub[T GenericTryte](dc doubleCore[T], a, b double[T], carryIn Tri
 	res, carryOut := dc.Sub(a, b, carryIn)
 
 	var (
-		have = dc.doubleToInt64(res, int64(carryOut))
-		want = (dc.doubleToInt64(a, 0) - dc.doubleToInt64(b, 0)) + int64(carryIn)
+		have = dc.doubleToInt64(res, -int64(carryOut))
+		want = (dc.doubleToInt64(a, 0) - dc.doubleToInt64(b, 0)) - int64(carryIn)
 	)
 
 	if have != want {

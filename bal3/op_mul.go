@@ -42,7 +42,7 @@ var (
 
 //------------------------------------------------------------------------------
 
-// a * b = (hi << n) + lo
+// a * b = (hi * 3^n) + lo
 
 func trytesMul_v1[Tryte GenericTryte](n int, a, b Tryte) (hi, lo Tryte) {
 	var (

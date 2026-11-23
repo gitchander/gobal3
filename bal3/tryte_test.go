@@ -25,8 +25,8 @@ func testTritsSub[T GenericTryte](tc TryteCore[T], a, b T, carryIn Trit) error {
 	res, carryOut := tc.Sub(a, b, carryIn)
 
 	var (
-		have, _ = tc.TryteRestToInt64(res, int64(carryOut))
-		want    = tc.TryteToInt64(a) - tc.TryteToInt64(b) + int64(carryIn)
+		have, _ = tc.TryteRestToInt64(res, -int64(carryOut))
+		want    = tc.TryteToInt64(a) - tc.TryteToInt64(b) - int64(carryIn)
 	)
 
 	if have != want {

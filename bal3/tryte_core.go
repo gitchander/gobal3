@@ -185,18 +185,21 @@ func (tc TryteCore[T]) Shr(a T, i int) T {
 
 //------------------------------------------------------------------------------
 
-// c0 - carryIn (input carry trit)
-// c1 - carryOut (output carry trit)
+// sum + (3^n) * c1 = x + y + c0
 
-// z = (x + y) + c0
-func (tc TryteCore[T]) Add(x, y T, c0 Trit) (z T, c1 Trit) {
+func (tc TryteCore[T]) Add(x, y T, c0 Trit) (sum T, c1 Trit) {
 	return trytesAdd(tc.n, x, y, c0)
 }
 
-// z = (x - y) + c0
-func (tc TryteCore[T]) Sub(x, y T, c0 Trit) (z T, c1 Trit) {
-	return trytesSub(tc.n, x, y, c0)
+//------------------------------------------------------------------------------
+
+// diff - (3^n) * b1 = x - y - b0
+
+func (tc TryteCore[T]) Sub(x, y T, b0 Trit) (diff T, b1 Trit) {
+	return trytesSub(tc.n, x, y, b0)
 }
+
+//------------------------------------------------------------------------------
 
 func (tc TryteCore[T]) Mul(a, b T) (hi, lo T) {
 	return trytesMul(tc.n, a, b)

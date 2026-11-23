@@ -106,9 +106,9 @@ func makeDivParams[Tryte GenericTryte](tc TryteCore[Tryte], hi, lo, y Tryte) *di
 	case (signD == +1):
 		if c := dc.Compare(hd, r); c < 0 {
 
-			fmt.Println("d: ", d)
-			fmt.Println("hd:", hd)
-			fmt.Println("r: ", r)
+			// fmt.Println("d: ", d)
+			// fmt.Println("hd:", hd)
+			// fmt.Println("r: ", r)
 
 			panic("quotient overflow")
 		}

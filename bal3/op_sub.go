@@ -18,31 +18,45 @@ package bal3
 
 //------------------------------------------------------------------------------
 
-func tritsSubV1(a, b Trit, c0 Trit) (hi, lo Trit) {
-	b = tritInverse(b)
-	return tritsAdd3(a, b, c0)
-}
+// b0 - borrowIn (input borrow trit)
+// b1 - borrowOut (output borrow trit)
+// diff - difference
 
-var (
-	tritsSub = tritsSubV1
-)
+// diff - 3 * b1 = x - y - b0
+// diff + 3 * (-b1) = x + (-y) + (-b0)
+
+func tritsSub(x, y Trit, b0 Trit) (diff, b1 Trit) {
+
+	y = tritInverse(y)
+	b0 = tritInverse(b0)
+
+	diff, b1 = tritsAdd3(x, y, b0)
+
+	b1 = tritInverse(b1)
+
+	return diff, b1
+}
 
 //------------------------------------------------------------------------------
 
-// c0 - carryIn (input carry trit)
-// c1 - carryOut (output carry trit)
+// b0 - borrowIn (input borrow trit)
+// b1 - borrowOut (output borrow trit)
+// diff - difference
 
-// z = (x - y) + c0
+// diff - (3^n) * b1 = x - y - b0
+// diff + (3^n) * (-b1) = x + (-y) + (-b0)
 
-func trytesSub[Tryte GenericTryte](n int, x, y Tryte, c0 Trit) (z Tryte, c1 Trit) {
+func trytesSub[Tryte GenericTryte](n int, x, y Tryte, b0 Trit) (diff Tryte, b1 Trit) {
 	var (
-		carry, t Trit
+		borrow, t Trit
 	)
-	carry = c0
+	borrow = b0
 	for i := 0; i < n; i++ {
-		carry, t = tritsSub(getTrit(x, i), getTrit(y, i), carry)
-		z = setTrit(z, i, t)
+		t, borrow = tritsSub(getTrit(x, i), getTrit(y, i), borrow)
+		diff = setTrit(diff, i, t)
 	}
-	c1 = carry
-	return z, c1
+	b1 = borrow
+	return diff, b1
 }
+
+//------------------------------------------------------------------------------

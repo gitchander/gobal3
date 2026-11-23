@@ -226,33 +226,32 @@ func (dc doubleCore[T]) RandSh(r *Rand) double[T] {
 
 //------------------------------------------------------------------------------
 
-// c0 - carryIn
-// c1 - carryOut
+// sum + (W^2)*c1 = a + b + c0
 
-// s = a + b + c0
-
-func (dc doubleCore[T]) Add(a, b double[T], c0 Trit) (s double[T], c1 Trit) {
+func (dc doubleCore[T]) Add(a, b double[T], c0 Trit) (sum double[T], c1 Trit) {
 	tc := dc.tc
 	var lo, hi T
 	carry := c0
 	lo, carry = tc.Add(a.Lo, b.Lo, carry)
 	hi, carry = tc.Add(a.Hi, b.Hi, carry)
 	c1 = carry
-	return makeDouble(hi, lo), c1
+	sum = makeDouble(hi, lo)
+	return sum, c1
 }
 
 //------------------------------------------------------------------------------
 
-// s = a - b + c0
+// diff - (W^2)*b1 = a - b - b0
 
-func (dc doubleCore[T]) Sub(a, b double[T], c0 Trit) (s double[T], c1 Trit) {
+func (dc doubleCore[T]) Sub(a, b double[T], b0 Trit) (diff double[T], b1 Trit) {
 	tc := dc.tc
 	var lo, hi T
-	carry := c0
-	lo, carry = tc.Sub(a.Lo, b.Lo, carry)
-	hi, carry = tc.Sub(a.Hi, b.Hi, carry)
-	c1 = carry
-	return makeDouble(hi, lo), c1
+	borrow := b0
+	lo, borrow = tc.Sub(a.Lo, b.Lo, borrow)
+	hi, borrow = tc.Sub(a.Hi, b.Hi, borrow)
+	b1 = borrow
+	diff = makeDouble(hi, lo)
+	return diff, b1
 }
 
 //------------------------------------------------------------------------------

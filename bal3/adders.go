@@ -18,20 +18,6 @@ package bal3
 
 //------------------------------------------------------------------------------
 
-// Sub table:
-
-// +----+----+----+----+
-// |  - |  T |  0 |  1 |
-// +----+----+----+----+
-// |  T | 00 | 0T | T1 |
-// +----+----+----+----+
-// |  0 | 01 | 00 | 0T |
-// +----+----+----+----+
-// |  1 | 1T | 01 | 00 |
-// +----+----+----+----+
-
-//------------------------------------------------------------------------------
-
 // +---+---+----+---+---+
 // | A | B |A+B |con|sum|
 // +---+---+----+---+---+
@@ -152,11 +138,12 @@ var (
 // A balanced ternary "Half Adder"
 
 // halfAdder:
-// hi - carry
-// lo - sum
-func tritsAdd2(a, b Trit) (hi, lo Trit) {
-	hi = tritsAddCons(a, b)
-	lo = tritsAddSum(a, b)
+
+// c - carry out
+
+func tritsAdd2(a, b Trit) (sum, c Trit) {
+	sum = tritsAddSum(a, b)
+	c = tritsAddCons(a, b)
 	return
 }
 
@@ -165,17 +152,19 @@ func tritsAdd2(a, b Trit) (hi, lo Trit) {
 // A balanced ternary "Full Adder"
 
 // fullAdder:
-// hi - carry
-// lo - sum
-func tritsAdd3(a, b, c Trit) (hi, lo Trit) {
+
+// c0 - carryIn (input carry trit)
+// c1 - carryOut (output carry trit)
+
+func tritsAdd3(a, b, c0 Trit) (sum, c1 Trit) {
 	var (
-		x1, s1 = tritsAdd2(a, b)
-		x2, s2 = tritsAdd2(s1, c)
+		s1, x1 = tritsAdd2(a, b)
+		s2, x2 = tritsAdd2(s1, c0)
 		s3     = tritsAddSum(x1, x2)
 	)
-	hi = s3
-	lo = s2
-	return hi, lo
+	sum = s2
+	c1 = s3
+	return sum, c1
 }
 
 //------------------------------------------------------------------------------
