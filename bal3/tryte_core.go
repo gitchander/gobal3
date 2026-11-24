@@ -7,7 +7,7 @@ type TryteCore[T GenericTryte] struct {
 func MakeTryteCore[T GenericTryte](n int) TryteCore[T] {
 	bits := bitsPerUnsigned[T]()
 	maxTrits := bits / 2
-	if n > maxTrits {
+	if (n < 0) || (maxTrits < n) {
 		panic("invalid number of trits")
 	}
 	return TryteCore[T]{n}
@@ -41,7 +41,7 @@ func (tc TryteCore[T]) Compare(a, b T) int {
 	return trytesCompare(tc.n, a, b)
 }
 
-// a == n
+// a == b
 func (tc TryteCore[T]) Equal(a, b T) bool {
 	return tc.Compare(a, b) == 0
 }
@@ -205,7 +205,7 @@ func (tc TryteCore[T]) Mul(a, b T) (hi, lo T) {
 	return trytesMul(tc.n, a, b)
 }
 
-func (tc TryteCore[T]) MulLo(a, b T) (lo T) {
+func (tc TryteCore[T]) MulLo(a, b T) (lo T, overflow bool) {
 	return trytesMulLo(tc.n, a, b)
 }
 
@@ -251,15 +251,15 @@ func (tc TryteCore[T]) DoBinary(a, b T, f BinaryFunc) T {
 //------------------------------------------------------------------------------
 
 // Bounds
-func (tc TryteCore[T]) Limits() (min, max T) {
+func (tc TryteCore[T]) Limits() (minValue, maxValue T) {
 	return tryteLimits[T](tc.n)
 }
 
-func (tc TryteCore[T]) LimitsInt64() (min, max int64) {
+func (tc TryteCore[T]) LimitsInt64() (minValue, maxValue int64) {
 	tmin, tmax := tryteLimits[T](tc.n)
-	min = tc.TryteToInt64(tmin)
-	max = tc.TryteToInt64(tmax)
-	return min, max
+	minValue = tc.TryteToInt64(tmin)
+	maxValue = tc.TryteToInt64(tmax)
+	return minValue, maxValue
 }
 
 func (tc TryteCore[T]) ToBigInt(a T) *BigInt {

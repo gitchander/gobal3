@@ -110,60 +110,11 @@ func trytesMul[Tryte GenericTryte](n int, a, b Tryte) (hi, lo Tryte) {
 
 //------------------------------------------------------------------------------
 
-func trytesMulLo_v1[Tryte GenericTryte](n int, a, b Tryte) (lo Tryte) {
-	var (
-		w  Tryte
-		w1 Tryte
-	)
-	for i := 0; i < n; i++ {
-		ai := getTrit(a, i)
-		for j := 0; j < n; j++ {
-			bj := getTrit(b, j)
-			w = setTrit(w, j, tritsMul(ai, bj))
-		}
-
-		w1 = tryteShl(n, w, i) // w << i
-
-		lo, _ = trytesAdd(n, lo, w1, 0)
-	}
-	return lo
-}
-
-func trytesMulLo_v2[Tryte GenericTryte](n int, a, b Tryte) (lo Tryte) {
-
-	var (
-		w  Tryte
-		w1 Tryte
-	)
-
-	// Precompute the inverse of b once, outside the loop
-	invB := tryteInverse(n, b)
-
-	for i := 0; i < n; i++ {
-
-		ai := getTrit(a, i)
-
-		switch ai {
-		case -1:
-			w = invB
-		case 0:
-			w = 0
-		case +1:
-			w = b
-		}
-
-		if w != 0 {
-			w1 = tryteShl(n, w, i) // w << i
-			lo, _ = trytesAdd(n, lo, w1, 0)
-		}
-	}
-	return lo
-}
-
-// trytesMulLo returns only lo
-func trytesMulLo[Tryte GenericTryte](n int, a, b Tryte) (lo Tryte) {
-	// return trytesMulLo_v1(n, a, b)
-	return trytesMulLo_v2(n, a, b)
+// trytesMulLo returns lo tryte and overflow
+func trytesMulLo[Tryte GenericTryte](n int, a, b Tryte) (lo Tryte, overflow bool) {
+	hi, lo := trytesMul(n, a, b)
+	overflow = hi != 0
+	return lo, overflow
 }
 
 //------------------------------------------------------------------------------

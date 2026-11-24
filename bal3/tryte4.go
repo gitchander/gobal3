@@ -3,8 +3,11 @@ package bal3
 // 4 trits
 type Tryte4 uint8
 
-var tc4 = MakeTryteCore[Tryte4](4)
-var TC4 = tc4
+var (
+	tc4 = MakeTryteCore[Tryte4](4)
+
+	TC4 = tc4
+)
 
 func (a Tryte4) ToInt64() int64 {
 	return tc4.TryteToInt64(a)
@@ -14,16 +17,16 @@ func (a Tryte4) String() string {
 	return tc4.Format(a)
 }
 
-func (a Tryte4) Inverse() (b Tryte4) {
+func (a Tryte4) Inverse() Tryte4 {
 	return tc4.Inverse(a)
 }
 
-func (a Tryte4) Add(b Tryte4) (c Tryte4) {
+func (a Tryte4) Add(b Tryte4) Tryte4 {
 	sum, _ := tc4.Add(a, b, 0)
 	return sum
 }
 
-func (a Tryte4) Sub(b Tryte4) (c Tryte4) {
+func (a Tryte4) Sub(b Tryte4) Tryte4 {
 	sum, _ := tc4.Sub(a, b, 0)
 	return sum
 }

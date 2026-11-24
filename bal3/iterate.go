@@ -1,5 +1,44 @@
 package bal3
 
+import (
+	"iter"
+)
+
+//------------------------------------------------------------------------------
+
+// forward iterate
+func forward(n int) iter.Seq[int] {
+	return func(yield func(int) bool) {
+		for i := 0; i < n; i++ {
+			if !(yield(i)) {
+				return
+			}
+		}
+	}
+}
+
+// backward iterate
+func backward(n int) iter.Seq[int] {
+	return func(yield func(int) bool) {
+		for i := n; i > 0; {
+			i--
+
+			if !(yield(i)) {
+				return
+			}
+		}
+	}
+}
+
+func _() {
+	for i := range forward(5) {
+		_ = i
+	}
+	for i := range backward(5) {
+		_ = i
+	}
+}
+
 //------------------------------------------------------------------------------
 
 func forwardIterate(n int, f func(i int) bool) {

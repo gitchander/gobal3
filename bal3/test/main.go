@@ -24,7 +24,9 @@ func main() {
 	//testQuoRemT32Random()
 	//testBig()
 	//testTryteLen()
-	testMulMax()
+	//testMulMax()
+	//exampleMulLo()
+	exampleBig()
 }
 
 func checkError(err error) {
@@ -505,4 +507,77 @@ func testMulMax() {
 
 func printTryteField[T bal3.GenericTryte](fieldName string, tc bal3.TryteCore[T], t T) {
 	fmt.Printf("%s = (base10) %d = (bal3) %s\n", fieldName, tc.TryteToInt64(t), tc.Format(t))
+}
+
+func exampleMulLo() {
+	tc := bal3.TC9
+	minValue, maxValue := tc.LimitsInt64() // -9841 9841
+	fmt.Println("Limits:", minValue, maxValue)
+
+	var (
+		a = tc.Int64ToTrite(3)
+		b = tc.Int64ToTrite(4920)
+	)
+
+	fmt.Println(a, b)
+
+	c, overflow := tc.MulLo(a, b)
+	fmt.Println(c, overflow)
+	fmt.Println(tc.TryteToInt64(c))
+
+	hi, lo := tc.Mul(a, b)
+	fmt.Println(a, b)
+	fmt.Println(hi, lo)
+}
+
+func exampleBig() {
+	{
+		b := bal3.NewBigTryteInt64(1245)
+		fmt.Println(b)
+		fmt.Println()
+	}
+
+	{
+		values := []int64{
+			math.MinInt64 + 0,
+			math.MinInt64 + 1,
+			math.MinInt64 + 2,
+			math.MinInt64 + 3,
+
+			-5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5,
+
+			math.MaxInt64 - 2,
+			math.MaxInt64 - 1,
+			math.MaxInt64 - 0,
+		}
+
+		for _, value := range values {
+			b := bal3.NewBigTryteInt64(value)
+			y, err := b.ToInt64Err()
+			checkError(err)
+
+			if y != value {
+				panic(fmt.Sprintf("%d != %d", y, value))
+			}
+			fmt.Println(b, y)
+		}
+		fmt.Println()
+	}
+
+	{
+		var (
+			a int64 = 1243454654635
+			b int64 = 763423534534452
+
+			ba = bal3.NewBigTryteInt64(a)
+			bb = bal3.NewBigTryteInt64(b)
+			bc = bal3.NewBigTryte()
+		)
+		bc.Add(ba, bb)
+
+		fmt.Println(bc, bc.ToBigInt())
+
+		fmt.Println(a + b)
+		fmt.Println()
+	}
 }

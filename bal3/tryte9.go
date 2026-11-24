@@ -17,16 +17,16 @@ func (a Tryte9) String() string {
 	return tc9.Format(a)
 }
 
-func (a Tryte9) Inverse() (b Tryte9) {
+func (a Tryte9) Inverse() Tryte9 {
 	return tc9.Inverse(a)
 }
 
-func (a Tryte9) Add(b Tryte9) (c Tryte9) {
+func (a Tryte9) Add(b Tryte9) Tryte9 {
 	sum, _ := tc9.Add(a, b, 0)
 	return sum
 }
 
-func (a Tryte9) Sub(b Tryte9) (c Tryte9) {
+func (a Tryte9) Sub(b Tryte9) Tryte9 {
 	sum, _ := tc9.Sub(a, b, 0)
 	return sum
 }

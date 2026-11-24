@@ -1,10 +1,22 @@
 package bal3
 
 import (
+	"fmt"
 	"math/big"
 )
 
 type BigInt = big.Int
+
+func newBigInt(x int64) *BigInt {
+	return big.NewInt(x)
+}
+
+func bigIntToInt64(b *BigInt) (int64, error) {
+	if !(b.IsInt64()) {
+		return 0, fmt.Errorf("big int value (%v) is not int64", b)
+	}
+	return b.Int64(), nil
+}
 
 var (
 	bigBase = big.NewInt(3)
@@ -37,23 +49,10 @@ func tryteToBigInt[T GenericTryte](n int, a T, rest *BigInt) *BigInt {
 	return v
 }
 
-func bigTryteToBigInt(b *BigTryte, rest *BigInt) *BigInt {
-
+func trytesToBigInt[T GenericTryte](n int, as []T, rest *BigInt) *BigInt {
 	v := rest
-	if v == nil {
-		v = big.NewInt(0)
+	for i := range backward(len(as)) {
+		v = tryteToBigInt(n, as[i], v)
 	}
-
-	b.backward(func(i int, t Trit) bool {
-
-		index := tritToIndex(t)
-		bt := bigAllTrits[index]
-
-		v.Mul(v, bigBase)
-		v.Add(v, bt)
-
-		return true
-	})
-
 	return v
 }
