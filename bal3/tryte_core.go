@@ -99,6 +99,29 @@ func (tc TryteCore[T]) IsPositive(x T) bool {
 
 //------------------------------------------------------------------------------
 
+func (tc TryteCore[T]) SetSign(x T, sign int) (T, bool) {
+	return tryteSetSign(tc.n, x, sign)
+}
+
+// Negative magnitude (-abs)
+func (tc TryteCore[T]) SetNegative(x T) (T, bool) {
+	return tc.SetSign(x, -1)
+}
+
+// Zero out all trits in range 0..n-1.
+// Zeroing always succeeds and sets trits to zero
+// (zeroing)
+func (tc TryteCore[T]) SetZero(x T) (T, bool) {
+	return tc.SetSign(x, 0)
+}
+
+// Abs - absolute
+func (tc TryteCore[T]) SetPositive(x T) (T, bool) {
+	return tc.SetSign(x, +1)
+}
+
+//------------------------------------------------------------------------------
+
 func (tc TryteCore[T]) SetAllTrits(t Trit) T {
 	return tryteSetAllTrits[T](tc.n, t)
 }

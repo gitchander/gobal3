@@ -46,30 +46,6 @@ func tryteDoBinary[T GenericTryte](n int, a, b T, f BinaryFunc) T {
 
 //------------------------------------------------------------------------------
 
-//           /
-//           | -1: x < 0
-// sign(x) = |  0: x = 0
-//           | +1: x > 0
-//           \
-
-func tryteSign[Tryte GenericTryte](n int, x Tryte) int {
-
-	for i := n; i > 0; { // backward iterate
-		i--
-
-		t := getTrit(x, i)
-		switch {
-		case t < 0:
-			return -1
-		case t > 0:
-			return +1
-		}
-	}
-	return 0
-}
-
-//------------------------------------------------------------------------------
-
 func tryteSetAllTrits[Tryte GenericTryte](n int, t Trit) Tryte {
 	var x Tryte
 	for i := 0; i < n; i++ {
